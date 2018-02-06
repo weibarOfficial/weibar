@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration
+        PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+        "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+
+<generatorConfiguration>
+
+    <!-- run
+    mybatis-generator:generate
+    mvn -Dmybatis.generator.overwrite=true mybatis-generator:generate
+    -->
+    <classPathEntry
+            location="C:\Users\nixiaoming\.m2\repository\mysql\mysql-connector-java\5.1.6\mysql-connector-java-5.1.6.jar"/>
+    <context id="context1">
+        <plugin type="org.mybatis.generator.plugins.CaseInsensitiveLikePlugin"/>
+        <plugin type="org.mybatis.generator.plugins.RenameExampleClassPlugin">
+            <property name="searchString" value="Example$"/>
+            <property name="replaceString" value="Criteria"/>
+        </plugin>
+
+        <plugin type="com.qiukeke.mybatis.plugins.MySQLLimitPlugin"></plugin>
+
+
+        <!--<jdbcConnection driverClass="com.mysql.jdbc.Driver"
+                        connectionURL="jdbc:mysql://113.108.231.195:6208/weiba?useUnicode=true&amp;characterEncoding=UTF-8&amp;autoReconnect=true"
+                        userId="web_pay_data" password="FE233,dMN342" />-->
+        <!--  mysql -hrm-wz9l3k9adb590oksvo.mysql.rds.aliyuncs.com -P3306 -uroot -pWeibar2017 weibar -->
+
+
+        <jdbcConnection driverClass="com.mysql.jdbc.Driver"
+                        connectionURL="jdbc:mysql://rm-wz9l3k9adb590oksvo.mysql.rds.aliyuncs.com:3306/weibar?useUnicode=true&amp;characterEncoding=UTF-8&amp;autoReconnect=true"
+                        userId="root" password="Weibar2017"/>
+        <!--
+        <javaModelGenerator targetPackage="com.weibar.pojo.db"
+            targetProject="C:\work\weiba\trunk\springbootWeb\src\main\java">
+            <property name="enableSubPackages" value="true" />
+            <property name="trimStrings" value="true" />
+        </javaModelGenerator>
+
+        <sqlMapGenerator targetPackage="com.weibar.service.mapper"
+            targetProject="C:\work\weiba\trunk\springbootWeb\src\main\resources">
+            <property name="enableSubPackages" value="true" />
+        </sqlMapGenerator>
+
+        <javaClientGenerator targetPackage="com.weibar.service.mapper"
+            targetProject="C:\work\weiba\trunk\springbootWeb\src\main\java" type="XMLMAPPER">
+            <property name="enableSubPackages" value="true" />
+        </javaClientGenerator>
+
+-->
+        <javaModelGenerator targetPackage="com.weibar.pojo.db"
+                            targetProject="C:\work\代码\daka\weibar1\trunk\weibar\service\src\main\java">
+            <property name="enableSubPackages" value="true"/>
+            <property name="trimStrings" value="true"/>
+        </javaModelGenerator>
+
+        <sqlMapGenerator targetPackage="com.weibar.service.mapper"
+                         targetProject="C:\work\代码\daka\weibar1\trunk\weibar\service\src\main\resources">
+            <property name="enableSubPackages" value="true"/>
+        </sqlMapGenerator>
+
+        <javaClientGenerator targetPackage="com.weibar.service.mapper"
+                             targetProject="C:\work\代码\daka\weibar1\trunk\weibar\service\src\main\java"
+                             type="XMLMAPPER">
+            <property name="enableSubPackages" value="true"/>
+        </javaClientGenerator>
+
+        <table schema="" tableName="user_consume_order" domainObjectName="UserConsumeOrder">
+            <generatedKey column="id" sqlStatement="MySql"
+                          identity="true"/>
+        </table>
+
+
+        <table schema="" tableName="weibar_wechat_login_log" domainObjectName="WeibarWechatLoginLog">
+            <generatedKey column="id" sqlStatement="MySql"
+                          identity="true"/>
+        </table>
+        <table schema="" tableName="weibar_private_chat" domainObjectName="WeibarPrivateChat">
+            <generatedKey column="id" sqlStatement="MySql"
+                          identity="true"/>
+        </table>
+
+        <table schema="" tableName="weibar_merchants_artist" domainObjectName="WeibarMerchantsArtist">
+            <generatedKey column="id" sqlStatement="MySql"
+                          identity="true"/>
+        </table>
+
+        <table schema="" tableName="weibar_pay_attach" domainObjectName="WeibarPayAttach">
+            <generatedKey column="id" sqlStatement="MySql"
+                          identity="true"/>
+        </table>
+
+        <table schema="" tableName="weibar_private_chat_id_map" domainObjectName="WeibarPrivateChatIdMap">
+        </table>
+
+
+        <table schema="" tableName="merchant_account_balance" domainObjectName="MerchantAccountBalance">
+        </table>
+        <table schema="" tableName="merchant_commission_issue" domainObjectName="MerchantCommissionIssue">
+            <!--<generatedKey column="test_id" sqlStatement="MySql"
+                          identity="true" />-->
+        </table>
+        <table schema="" tableName="merchant_withdraw_log" domainObjectName="MerchantWithdrawLog">
+        </table>
+        <table schema="" tableName="merchants_login_info" domainObjectName="MerchantsLoginInfo">
+        </table>
+
+
+        <table schema="" tableName="merchants_user_base_info" domainObjectName="MerchantsUserBaseInfo">
+        </table>
+
+        <table schema="" tableName="user_account_balance" domainObjectName="UserAccountBalance">
+        </table>
+
+
+        <table schema="" tableName="user_base_info" domainObjectName="UserBaseInfo">
+        </table>
+
+
+        <table schema="" tableName="user_commission_issue" domainObjectName="UserCommissionIssue">
+        </table>
+
+        <table schema="" tableName="user_recharge_order" domainObjectName="UserRechargeOrder">
+            <generatedKey column="id" sqlStatement="MySql"
+                          identity="true"/>
+        </table>
+
+
+        <table schema="" tableName="user_transaction" domainObjectName="UserTransaction">
+        </table>
+
+
+        <table schema="" tableName="weibar_ws_cache" domainObjectName="WeibarWsCache">
+        </table>
+
+        <table schema="" tableName="user_withdraw_log" domainObjectName="UserWithdrawLog">
+        </table>
+
+
+        <table schema="" tableName="weibar_goods_setting_info" domainObjectName="WeibarGoodsSettingInfo">
+        </table>
+
+        <table schema="" tableName="weibar_price_time_setting_info" domainObjectName="WeibarPriceTimeSettingInfo">
+        </table>
+
+        <table schema="" tableName="weibar_merchants_game_setting_info"
+               domainObjectName="WeibarMerchantsGameSettingInfo">
+        </table>
+
+
+        <table schema="" tableName="weibar_merchants_barrage_info" domainObjectName="WeibarMerchantsBarrageInfo">
+            <generatedKey column="id" sqlStatement="MySql"
+                          identity="true"/>
+        </table>
+
+
+        <table schema="" tableName="weibar_merchants_barrage_setting_info"
+               domainObjectName="WeibarMerchantsBarrageSettingInfo">
+        </table>
+
+        <table schema="" tableName="weibar_merchants_base_info" domainObjectName="WeibarMerchantsBaseInfo">
+        </table>
+
+        <table schema="" tableName="weibar_merchants_ext_info" domainObjectName="WeibarMerchantsExtInfo">
+        </table>
+
+        <table schema="" tableName="weibar_merchants_goods_setting_info"
+               domainObjectName="WeibarMerchantsGoodsSettingInfo">
+        </table>
+
+        <!--<table schema="" tableName="weibar_merchants_horse_race_lamp_setting_info" domainObjectName="WeibarMerchantsHorseRaceLampSettingInfo">
+        </table>-->
+
+        <table schema="" tableName="weibar_merchants_mtv_setting_info" domainObjectName="WeibarMerchantsMtvSettingInfo">
+        </table>
+
+        <table schema="" tableName="weibar_merchants_price_time_setting_info"
+               domainObjectName="WeibarMerchantsPriceTimeSettingInfo">
+        </table>
+
+        <table schema="" tableName="weibar_merchants_seat_setting_info"
+               domainObjectName="WeibarMerchantsSeatSettingInfo">
+        </table>
+
+        <table schema="" tableName="weibar_merchants_setting_info" domainObjectName="WeibarMerchantsSettingInfo">
+        </table>
+
+
+        <table schema="" tableName="weibar_merchants_login_log" domainObjectName="WeibarMerchantsLoginLog">
+        </table>
+
+
+        <table schema="" tableName="weibar_redpackage_deposit_temp" domainObjectName="WeibarRedpackageDepositTemp">
+        </table>
+
+        <table schema="" tableName="weibar_redpackage_deposit" domainObjectName="WeibarRedpackageDeposit">
+        </table>
+
+        <table schema="" tableName="weibar_redpackage_deposit_detail" domainObjectName="WeibarRedpackageDepositDetail">
+        </table>
+
+        <table schema="" tableName="weibar_red_packet_order" domainObjectName="WeibarRedpackageOrder">
+        </table>
+
+
+        <table schema="" tableName="daka_order" domainObjectName="DakaOrder">
+        </table>
+
+
+        <table schema="" tableName="daka_user" domainObjectName="DakaUser">
+        </table>
+
+        <table schema="" tableName="daka_day_summary" domainObjectName="DakaDaySummary">
+            <generatedKey column="id" sqlStatement="MySql"
+                          identity="true"/>
+        </table>
+
+    </context>
+</generatorConfiguration>
