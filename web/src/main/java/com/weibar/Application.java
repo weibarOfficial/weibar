@@ -20,7 +20,7 @@ import org.springframework.context.annotation.ComponentScan;
  * 修改启动类，继承 SpringBootServletInitializer 并重写 configure 方法
  */
 
-@ComponentScan({"com.github.binarywang","me.chanjar.weixin"})
+@ComponentScan({"com.weibar","com.github.binarywang","me.chanjar.weixin"})
 @SpringBootApplication
 public class Application extends SpringBootServletInitializer {
 

@@ -1,0 +1,11 @@
+
+.idea/*
+
+.svn/*
+
+.svn1/*
+
+/web/target/
+/shedu/target/
+/daka/target/
+/ws/target/
