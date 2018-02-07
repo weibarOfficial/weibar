@@ -3,6 +3,15 @@
 
 .svn/*
 
-.svn1/*
+
 
 .ssh/*
+
+        
+		
+service/target/
+/web/target/
+/shedu/target/
+/daka/target/
+/ws/target/
+
