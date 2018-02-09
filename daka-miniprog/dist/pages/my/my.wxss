@@ -1,0 +1,42 @@
+/* pages/my/my.wxss */
+
+.my-head-flex {
+  margin-bottom: 0.6rem;
+}
+
+.my-head {
+    background-color: #336666;
+    color:#FFFFFF;
+}
+
+.my-head-my {
+    padding-top: 0.6rem;
+    font-size: 45rpx;
+    color:#FFFFFF;
+}
+
+.my-head-desc {
+    font-size: 25rpx;
+    color:#FFFFFF;
+}
+
+.my-head-yuan {
+    font-size: 37rpx;
+    color:#FFFFFF;
+}
+
+
+.my-list{
+    font-size: 25rpx;
+    color:#FF6600;
+}
+
+.my-list-date{
+    font-size: 25rpx;
+    color:#646464;
+    padding-right: 0.3rem;
+}
+
+
+
+

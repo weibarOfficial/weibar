@@ -1,0 +1,9 @@
+/* pages/index/index.wxss */
+.daka-money {
+    color: #FF6600;
+    font-size: 80rpx;
+}
+
+.daka-zhankuang {
+    font-size: 30rpx;
+}
