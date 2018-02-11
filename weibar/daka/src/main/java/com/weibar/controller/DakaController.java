@@ -34,6 +34,12 @@ public class DakaController {
         return BaseResult.getSuccessfulResult(dakaService.createDakaOrder(sessionKey,new BigDecimal(amount), IpUtil.getRequestIp(request)));
     }
 
+    @RequestMapping(value = "/daka/daka" ,method = {RequestMethod.POST,RequestMethod.GET})
+    public Object daka(@RequestParam String sessionKey,HttpServletRequest request) throws BaseException {
+        dakaService.daka(sessionKey);
+        return BaseResult.getSuccessfulResult(null);
+    }
+
 
     @RequestMapping(value = "/daka/getIndexSummary" ,method = {RequestMethod.POST,RequestMethod.GET})
     public Object getIndexSummary() throws BaseException {

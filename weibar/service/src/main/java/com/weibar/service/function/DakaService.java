@@ -79,12 +79,43 @@ public class DakaService {
     }
 
 
+    /**
+     * 打卡接口
+     * @param sessionKey
+     * @throws BaseException
+     */
     public void daka(String sessionKey) throws BaseException {
+
+        //更新打卡订单
         Date now = new Date();
         UserBaseInfo user = getUserInfoBySessionKey(sessionKey);
         DakaOrder dakaOrder = getDakaOrderByDate(user.getUserId(),now);
         dakaOrder.setUpdateTime(now);
-        //dakaOrder.setStatus(DakaOrderStatusEnum.PAYED);
+        dakaOrder.setDakaTime(now);
+        dakaOrder.setStatus(DakaOrderStatusEnum.DAKA.getState());
+        dakaOrderMapper.updateByPrimaryKey(dakaOrder);
+
+        //更新用户收入表
+        DakaUser dakaUser = getDakaUser(dakaOrder.getUserId());
+        dakaUser.setScount(dakaUser.getScount() + 1);
+        dakaUser.setUpdateTime(now);
+        dakaUserMapper.updateByPrimaryKey(dakaUser);
+
+        //更新统计表
+        DakaDaySummary dakaDaySummary = getTomorrowDakaDaySummary(now);
+        dakaDaySummary.setScount(dakaDaySummary.getScount() + 1);
+
+        //早起之星
+        if(dakaDaySummary.getScount() == 1){
+            dakaDaySummary.setEarlyOpenId(dakaUser.getOpenid());
+            dakaDaySummary.setEarlyTime(now);
+            dakaDaySummary.setEarlyUserId(dakaUser.getUserId());
+            dakaDaySummary.setEarlyOpenId(dakaUser.getOpenid());
+            dakaDaySummary.setEarlyUserPicture(dakaUser.getUserPicture());
+        }
+
+        dakaDaySummary.setUpdateTime(now);
+        dakaDaySummaryMapper.updateByPrimaryKey(dakaDaySummary);
     }
 
 
@@ -115,6 +146,7 @@ public class DakaService {
         DakaDaySummary dakaDaySummary = getTomorrowDakaDaySummary(now);
         dakaDaySummary.setUpdateTime(now);
         dakaDaySummary.setPayAmount(dakaDaySummary.getPayAmount().add(dakaOrder.getPayAmount()));
+        dakaDaySummaryMapper.updateByPrimaryKey(dakaDaySummary);
     }
 
 

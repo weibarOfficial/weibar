@@ -49,18 +49,18 @@
 
 -->
         <javaModelGenerator targetPackage="com.weibar.pojo.db"
-                            targetProject="F:\now\svn_object\weibar3\weibar\service\src\main\java">
+                            targetProject="F:\now\svn_object\weibar3\weibar\weibar\service\src\main\java">
             <property name="enableSubPackages" value="true"/>
             <property name="trimStrings" value="true"/>
         </javaModelGenerator>
 
         <sqlMapGenerator targetPackage="com.weibar.service.mapper"
-                         targetProject="F:\now\svn_object\weibar3\weibar\service\src\main\resources">
+                         targetProject="F:\now\svn_object\weibar3\weibar\weibar\service\src\main\resources">
             <property name="enableSubPackages" value="true"/>
         </sqlMapGenerator>
 
         <javaClientGenerator targetPackage="com.weibar.service.mapper"
-                             targetProject="F:\now\svn_object\weibar3\weibar\service\src\main\java"
+                             targetProject="F:\now\svn_object\weibar3\weibar\weibar\service\src\main\java"
                              type="XMLMAPPER">
             <property name="enableSubPackages" value="true"/>
         </javaClientGenerator>
