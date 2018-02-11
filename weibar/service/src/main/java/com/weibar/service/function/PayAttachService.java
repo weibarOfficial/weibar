@@ -84,6 +84,7 @@ public class PayAttachService {
     public String generateDakaOrderAttach(Long dakaOrderId) throws BaseException {
         PayAttach payAttach = new PayAttach();
         payAttach.setDakaOrderId(dakaOrderId);
+        payAttach.setRechargeScene(RechargeSceneTypeEnum.DAKA_ORDER.getType());
         return insertPayAttach(JsonConverter.toJson(payAttach));
     }
 
@@ -127,11 +128,12 @@ public class PayAttachService {
 
             case RED_PACKAGE:
                 redPackageService.createRedPackage(payAttach.getRedPackageId());
-
+                break;
             case DAKA_ORDER:
                 dakaService.payForDaka(payAttach.getDakaOrderId());
-                default:
-                    break;
+                break;
+            default:
+
         }
 
     }
