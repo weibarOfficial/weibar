@@ -34,6 +34,8 @@ public class PayAttachService {
     private RedPackageService redPackageService;
     @Autowired
     private WeibarPayAttachMapper weibarPayAttachMapper;
+    @Autowired
+    private DakaService dakaService;
 
     public String generatePurePayAttach() throws BaseException {
         PayAttach payAttach = new PayAttach();
@@ -125,6 +127,9 @@ public class PayAttachService {
 
             case RED_PACKAGE:
                 redPackageService.createRedPackage(payAttach.getRedPackageId());
+
+            case DAKA_ORDER:
+                dakaService.payForDaka(payAttach.getDakaOrderId());
                 default:
                     break;
         }

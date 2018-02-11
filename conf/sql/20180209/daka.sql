@@ -34,6 +34,7 @@ CREATE TABLE `daka_order` (
   `status` int(11) DEFAULT NULL COMMENT '订单状态（未付款，已付款，已分配金额）',
   `order_date` DATE NOT NULL  COMMENT '这个订单所属结算日期（可以支付下单明天的日期）',  
   `pay_time` datetime DEFAULT NULL  COMMENT '支付时间时间',
+  `daka_time` datetime DEFAULT NULL  COMMENT '打卡时间',
   `create_time` datetime NOT NULL   COMMENT '创建时间',
   `update_time` datetime NOT NULL   COMMENT '更新时间',
   PRIMARY KEY (`orderid`),

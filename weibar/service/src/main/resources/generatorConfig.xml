@@ -10,7 +10,7 @@
     mvn -Dmybatis.generator.overwrite=true mybatis-generator:generate
     -->
     <classPathEntry
-            location="C:\Users\nixiaoming\.m2\repository\mysql\mysql-connector-java\5.1.6\mysql-connector-java-5.1.6.jar"/>
+            location="C:\Users\Administrator\.m2\repository\mysql\mysql-connector-java\5.1.6\mysql-connector-java-5.1.6.jar"/>
     <context id="context1">
         <plugin type="org.mybatis.generator.plugins.CaseInsensitiveLikePlugin"/>
         <plugin type="org.mybatis.generator.plugins.RenameExampleClassPlugin">
@@ -32,35 +32,35 @@
                         userId="root" password="Weibar2017"/>
         <!--
         <javaModelGenerator targetPackage="com.weibar.pojo.db"
-            targetProject="C:\work\weiba\trunk\springbootWeb\src\main\java">
+            targetProject="C:\work\weiba\springbootWeb\src\main\java">
             <property name="enableSubPackages" value="true" />
             <property name="trimStrings" value="true" />
         </javaModelGenerator>
 
         <sqlMapGenerator targetPackage="com.weibar.service.mapper"
-            targetProject="C:\work\weiba\trunk\springbootWeb\src\main\resources">
+            targetProject="C:\work\weiba\springbootWeb\src\main\resources">
             <property name="enableSubPackages" value="true" />
         </sqlMapGenerator>
 
         <javaClientGenerator targetPackage="com.weibar.service.mapper"
-            targetProject="C:\work\weiba\trunk\springbootWeb\src\main\java" type="XMLMAPPER">
+            targetProject="C:\work\weiba\springbootWeb\src\main\java" type="XMLMAPPER">
             <property name="enableSubPackages" value="true" />
         </javaClientGenerator>
 
 -->
         <javaModelGenerator targetPackage="com.weibar.pojo.db"
-                            targetProject="C:\work\代码\daka\weibar1\trunk\weibar\service\src\main\java">
+                            targetProject="F:\now\svn_object\weibar3\weibar\service\src\main\java">
             <property name="enableSubPackages" value="true"/>
             <property name="trimStrings" value="true"/>
         </javaModelGenerator>
 
         <sqlMapGenerator targetPackage="com.weibar.service.mapper"
-                         targetProject="C:\work\代码\daka\weibar1\trunk\weibar\service\src\main\resources">
+                         targetProject="F:\now\svn_object\weibar3\weibar\service\src\main\resources">
             <property name="enableSubPackages" value="true"/>
         </sqlMapGenerator>
 
         <javaClientGenerator targetPackage="com.weibar.service.mapper"
-                             targetProject="C:\work\代码\daka\weibar1\trunk\weibar\service\src\main\java"
+                             targetProject="F:\now\svn_object\weibar3\weibar\service\src\main\java"
                              type="XMLMAPPER">
             <property name="enableSubPackages" value="true"/>
         </javaClientGenerator>

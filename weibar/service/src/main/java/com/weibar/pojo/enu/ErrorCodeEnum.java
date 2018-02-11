@@ -111,6 +111,7 @@ public enum ErrorCodeEnum {
 
     DAKA_ERROR_BEGIN(-140001,"打卡相关错误开始段"),
     DAKA_USER_NOT_EXIST(-140002,"打卡用户不存在"),
+    DAKA_ORDER_NOT_EXIST(-140003,"打卡订单不存在"),
     DAKA_ERROR_END(-150000,"打卡相关错误结束段"),
 
     MINIPRAGRAM_ERROR_BEGIN(-150001,"小程序相关错误开始段"),

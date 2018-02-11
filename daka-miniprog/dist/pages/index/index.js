@@ -28,7 +28,7 @@ Page({
       success : function(res){
         
         wx.request({
-          url: that.app.BASE_URL + "/daka/daka",
+          url: that.app.BASE_URL + "/daka/pay",
           method: "GET",
           dataType: "json",
           data: {

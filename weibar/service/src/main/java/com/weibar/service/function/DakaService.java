@@ -45,6 +45,15 @@ public class DakaService {
     @Autowired
     private UserService userService;
 
+
+    /**
+     * 下打卡订单，返回支付相关信息
+     * @param sessionKey
+     * @param amount
+     * @param clientIp
+     * @return
+     * @throws BaseException
+     */
     public DakaOrderPrePay createDakaOrder(String sessionKey, BigDecimal amount, String clientIp) throws BaseException {
         DakaOrder dakaOrder = new DakaOrder();
         Date now = new Date();
@@ -68,6 +77,74 @@ public class DakaService {
         dakaOrderPrePay.setWechatPrePay(wechatPrePay);
         return dakaOrderPrePay;
     }
+
+
+    public void daka(String sessionKey) throws BaseException {
+        Date now = new Date();
+        UserBaseInfo user = getUserInfoBySessionKey(sessionKey);
+        DakaOrder dakaOrder = getDakaOrderByDate(user.getUserId(),now);
+        dakaOrder.setUpdateTime(now);
+        //dakaOrder.setStatus(DakaOrderStatusEnum.PAYED);
+    }
+
+
+
+
+
+    /**
+     * 支付成功之后回调打卡
+     * @param orderId
+     */
+    public void payForDaka(Long orderId) throws BaseException {
+
+        //更新打卡订单
+        DakaOrder dakaOrder = getDakaOrder(orderId);
+        Date now = new Date();
+        dakaOrder.setPayTime(now);
+        dakaOrder.setStatus(DakaOrderStatusEnum.PAYED.getState());
+        dakaOrder.setUpdateTime(now);
+        dakaOrderMapper.updateByPrimaryKey(dakaOrder);
+
+        //更新用户收入表
+        DakaUser dakaUser = getDakaUser(dakaOrder.getUserId());
+        dakaUser.setUpdateTime(now);
+        dakaUser.setPaySumAmount(dakaUser.getPaySumAmount().add(dakaOrder.getPayAmount()));
+        dakaUserMapper.updateByPrimaryKey(dakaUser);
+
+        //更新统计表
+        DakaDaySummary dakaDaySummary = getTomorrowDakaDaySummary(now);
+        dakaDaySummary.setUpdateTime(now);
+        dakaDaySummary.setPayAmount(dakaDaySummary.getPayAmount().add(dakaOrder.getPayAmount()));
+    }
+
+
+    public DakaOrder getDakaOrder(Long orderId) throws BaseException {
+        DakaOrderCriteria dakaOrderCriteria = new DakaOrderCriteria();
+        DakaOrderCriteria.Criteria criteria = dakaOrderCriteria.createCriteria();
+        criteria.andOrderidEqualTo(orderId);
+        List<DakaOrder> list = dakaOrderMapper.selectByExample(dakaOrderCriteria);
+        if(list != null && list.size() != 0){
+            return list.get(0);
+        }else{
+            throw BaseException.getException(ErrorCodeEnum.DAKA_ORDER_NOT_EXIST.getCode());
+        }
+    }
+
+    public DakaOrder getDakaOrderByDate(long userId,Date date) throws BaseException {
+        DakaOrderCriteria dakaOrderCriteria = new DakaOrderCriteria();
+        DakaOrderCriteria.Criteria criteria = dakaOrderCriteria.createCriteria();
+        criteria.andOrderDateEqualTo(date);
+        criteria.andUserIdEqualTo(userId);
+        List<DakaOrder> list = dakaOrderMapper.selectByExample(dakaOrderCriteria);
+        if(list != null && list.size() != 0){
+            return list.get(0);
+        }else{
+            throw BaseException.getException(ErrorCodeEnum.DAKA_ORDER_NOT_EXIST.getCode());
+        }
+    }
+
+
+
 
 
     public DakaUser getDakaUser(Long userId) throws BaseException {
@@ -153,6 +230,10 @@ public class DakaService {
         }else{
             return daySummaryList.get(0);
         }
+    }
+
+    private DakaDaySummary getTomorrowDakaDaySummary(Date date){
+        return getDakaDaySummary(DateUtils.addDays(date,1));
     }
 
 
