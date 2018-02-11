@@ -36,7 +36,7 @@ public class DakaController {
 
     @RequestMapping(value = "/daka/daka" ,method = {RequestMethod.POST,RequestMethod.GET})
     public Object daka(@RequestParam String sessionKey,HttpServletRequest request) throws BaseException {
-        dakaService.daka(sessionKey);
+        dakaService.daka(sessionKey,IpUtil.getRequestIp(request));
         return BaseResult.getSuccessfulResult(null);
     }
 

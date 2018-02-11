@@ -3,6 +3,7 @@ package com.weibar.service.function;
 import com.weibar.pojo.db.*;
 import com.weibar.pojo.enu.DakaOrderStatusEnum;
 import com.weibar.pojo.enu.ErrorCodeEnum;
+import com.weibar.pojo.enu.RedPackageSceneIdEnum;
 import com.weibar.pojo.exception.BaseException;
 import com.weibar.pojo.result.*;
 import com.weibar.service.mapper.DakaDaySummaryMapper;
@@ -11,10 +12,13 @@ import com.weibar.service.mapper.DakaUserMapper;
 import com.weibar.utils.IdGenerator;
 import com.weibar.utils.SignUtils;
 import org.apache.commons.lang3.time.DateUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -45,6 +49,20 @@ public class DakaService {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private RedPackageService redPackageService;
+
+    @Autowired
+    private UserBalanceService userBalanceService;
+
+    @Autowired
+    private DiscountService discountService;
+
+    @Autowired
+    private WechatRedPackageService wechatRedPackageService;
+
+
+    private static final Logger LOG = LoggerFactory.getLogger(DakaService.class);
 
     /**
      * 下打卡订单，返回支付相关信息
@@ -55,8 +73,15 @@ public class DakaService {
      * @throws BaseException
      */
     public DakaOrderPrePay createDakaOrder(String sessionKey, BigDecimal amount, String clientIp) throws BaseException {
+
+        Calendar calendar = Calendar.getInstance();
+        if(calendar.get(Calendar.HOUR_OF_DAY) == 23 && calendar.get(Calendar.MINUTE) > 55){
+            throw BaseException.getException(ErrorCodeEnum.DAKA_NOT_PAY_TIME.getCode());
+        }
+
+        Date now = calendar.getTime();
         DakaOrder dakaOrder = new DakaOrder();
-        Date now = new Date();
+
         UserBaseInfo userBaseInfo = getUserInfoBySessionKey(sessionKey);
         Long orderId = IdGenerator.generateIdByTime();
         dakaOrder.setOrderid(orderId);
@@ -75,6 +100,8 @@ public class DakaService {
         DakaOrderPrePay dakaOrderPrePay = new DakaOrderPrePay();
         dakaOrderPrePay.setDakaResultOrder(DakaResultOrder.getDakaResultOrder(dakaOrder));
         dakaOrderPrePay.setWechatPrePay(wechatPrePay);
+
+
         return dakaOrderPrePay;
     }
 
@@ -84,7 +111,13 @@ public class DakaService {
      * @param sessionKey
      * @throws BaseException
      */
-    public void daka(String sessionKey) throws BaseException {
+    public void daka(String sessionKey,String clientIp) throws BaseException {
+
+        Calendar calendar = Calendar.getInstance();
+        if(calendar.get(Calendar.HOUR_OF_DAY) > 7 || calendar.get(Calendar.HOUR_OF_DAY) < 5 ){
+            throw BaseException.getException(ErrorCodeEnum.DAKA_NOT_IN_TIME.getCode());
+        }
+
 
         //更新打卡订单
         Date now = new Date();
@@ -93,6 +126,7 @@ public class DakaService {
         dakaOrder.setUpdateTime(now);
         dakaOrder.setDakaTime(now);
         dakaOrder.setStatus(DakaOrderStatusEnum.DAKA.getState());
+        dakaOrder.setClientIp(clientIp);
         dakaOrderMapper.updateByPrimaryKey(dakaOrder);
 
         //更新用户收入表
@@ -139,13 +173,18 @@ public class DakaService {
         //更新用户收入表
         DakaUser dakaUser = getDakaUser(dakaOrder.getUserId());
         dakaUser.setUpdateTime(now);
+        dakaUser.setCount(dakaUser.getCount() + 1);
         dakaUser.setPaySumAmount(dakaUser.getPaySumAmount().add(dakaOrder.getPayAmount()));
         dakaUserMapper.updateByPrimaryKey(dakaUser);
+
+        String consumeRemark = "每日早起打卡消费:" + dakaOrder.getPayAmount();
+        userBalanceService.subtractUserBalance(dakaUser.getUserId(),dakaOrder.getPayAmount(),consumeRemark);
 
         //更新统计表
         DakaDaySummary dakaDaySummary = getTomorrowDakaDaySummary(now);
         dakaDaySummary.setUpdateTime(now);
         dakaDaySummary.setPayAmount(dakaDaySummary.getPayAmount().add(dakaOrder.getPayAmount()));
+        dakaDaySummary.setCount(dakaDaySummary.getCount() + 1);
         dakaDaySummaryMapper.updateByPrimaryKey(dakaDaySummary);
     }
 
@@ -286,6 +325,58 @@ public class DakaService {
         String userIdStr = SignUtils.decryptAES(sessionKey);
         Long userId = Long.parseLong(userIdStr);
         return userService.getUserById(userId);
+    }
+
+
+    private List<DakaOrder> getDakaOrders(Date date,Integer status){
+        DakaOrderCriteria dakaOrderCriteria = new DakaOrderCriteria();
+        DakaOrderCriteria.Criteria criteria = dakaOrderCriteria.createCriteria();
+        criteria.andOrderDateEqualTo(date);
+        criteria.andStatusEqualTo(status);
+        List<DakaOrder> list = dakaOrderMapper.selectByExample(dakaOrderCriteria);
+        return list;
+    }
+
+
+
+    public void refreshAndSendDakaMoney(Date date) throws BaseException {
+        DakaDaySummary dakaDaySummary = getDakaDaySummary(date);
+        // 计算失败人数
+        dakaDaySummary.setFcount(dakaDaySummary.getCount() - dakaDaySummary.getScount());
+
+        List<DakaOrder> succOrds = getDakaOrders(date,DakaOrderStatusEnum.DAKA.getState());
+        List<DakaOrder> failOrds = getDakaOrders(date,DakaOrderStatusEnum.PAYED.getState());
+
+        if(succOrds.size() != dakaDaySummary.getScount() || failOrds.size() != dakaDaySummary.getFcount()){
+            throw BaseException.getException(ErrorCodeEnum.DAKA_ORDER_TABLE_SUM_TABLE_ERROR.getCode());
+        }
+
+        BigDecimal failMoney = new BigDecimal(0);
+        for(DakaOrder dakaOrder : failOrds){
+            failMoney = failMoney.add(dakaOrder.getPayAmount());
+        }
+
+        BigDecimal sendMoneySum = discountService.getDakaDiscount(failMoney,succOrds.size());
+
+        List<BigDecimal> succGetMoneyList = redPackageService.getRedPackageAmountList(sendMoneySum,succOrds.size());
+
+        for(int i = 0; i < succGetMoneyList.size() ; i++){
+            //更新用户表
+            DakaOrder dakaOrder = succOrds.get(i);
+            dakaOrder.setGetAmount(dakaOrder.getPayAmount().add(succGetMoneyList.get(i)));
+
+            wechatRedPackageService.createRedPackageOrder(dakaOrder.getGetAmount(),
+                    dakaOrder.getOrderid().toString(),
+                    dakaOrder.getOpenid(),
+                    dakaOrder.getUserId(),
+                    dakaOrder.getClientIp(),
+                    RedPackageSceneIdEnum.DAKA.getState().toString(),
+                    RedPackageSceneIdEnum.DAKA.getDesc(),
+                    null);
+        }
+
+
+
     }
 
 

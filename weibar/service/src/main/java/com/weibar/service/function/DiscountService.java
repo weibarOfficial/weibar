@@ -17,11 +17,17 @@ public class DiscountService {
 
     private static BigDecimal GIVE_DISCOUNT = new BigDecimal(1);
 
+    private static BigDecimal DAKA_DISCOUNT = new BigDecimal(1);
+
     public BigDecimal getRedPackageDiscount(BigDecimal amount){
         return amount.multiply(REDPACKAGE_DISCOUNT).setScale(2, RoundingMode.DOWN);
     }
 
     public BigDecimal getGiveDiscount(BigDecimal amount){
         return amount.multiply(GIVE_DISCOUNT).setScale(2, RoundingMode.DOWN);
+    }
+
+    public BigDecimal getDakaDiscount(BigDecimal amount,int succUserCount){
+        return amount.multiply(DAKA_DISCOUNT).setScale(2, RoundingMode.DOWN);
     }
 }

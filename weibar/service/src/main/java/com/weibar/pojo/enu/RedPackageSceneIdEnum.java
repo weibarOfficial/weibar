@@ -6,7 +6,7 @@ package com.weibar.pojo.enu;
  */
 public enum  RedPackageSceneIdEnum {
 
-    USER_WITHDRAW(1,"用户提现");
+    USER_WITHDRAW(1,"用户提现"),DAKA(2,"早起打卡奖励金");
     RedPackageSceneIdEnum(int state, String desc){
         this.state = state;
         this.desc = desc;

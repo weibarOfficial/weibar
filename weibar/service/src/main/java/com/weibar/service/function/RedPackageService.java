@@ -390,7 +390,7 @@ public class RedPackageService {
      * @param sendNum
      * @return
      */
-    private List<BigDecimal> getRedPackageAmountList(BigDecimal amount,int sendNum){
+    public List<BigDecimal> getRedPackageAmountList(BigDecimal amount,int sendNum){
 
         //按照分，分成固定份数
         long num = amount.multiply(new BigDecimal(100)).longValue();

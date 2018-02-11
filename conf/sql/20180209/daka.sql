@@ -37,6 +37,7 @@ CREATE TABLE `daka_order` (
   `daka_time` datetime DEFAULT NULL  COMMENT '打卡时间',
   `create_time` datetime NOT NULL   COMMENT '创建时间',
   `update_time` datetime NOT NULL   COMMENT '更新时间',
+  `client_ip` varchar(200) DEFAULT NULL  COMMENT '用户IP',
   PRIMARY KEY (`orderid`),
   KEY `AK_Key_user_id` (`user_id`) USING BTREE,
   KEY `AK_Key_order_date` (`order_date`) USING BTREE
