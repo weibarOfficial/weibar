@@ -228,9 +228,18 @@ public class DakaService {
 
     public DakaResultUser dakaLogin(String code,String nickName, String avatarUrl,String gender,String province,String ctiy,String country) throws BaseException {
         UserBaseInfo userBaseInfo = wechatMiniProgramService.login(code,nickName,avatarUrl,gender,province,ctiy,country);
+        return getDakaUser(userBaseInfo);
+    }
+
+
+    public DakaResultUser getDakaUser(UserBaseInfo userBaseInfo){
         DakaUser dakaUser = createOrUpdateDakaUser(userBaseInfo);
         DakaResultUser dakaResultUser = DakaResultUser.getDakaResultUserDetail(dakaUser,hasPayTodayDakaOrder(dakaUser),hasPayYesterdayDakaOrder(dakaUser),inDakaTime());
         return dakaResultUser;
+    }
+
+    public DakaResultUser getDakaUserBySessionKey(String sessionKey) throws BaseException {
+        return getDakaUser(getUserInfoBySessionKey(sessionKey));
     }
 
 

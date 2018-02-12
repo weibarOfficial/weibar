@@ -16,12 +16,12 @@ App({
                 var province = userInfo.province;
                 var city = userInfo.city;
                 var country = userInfo.country;
-                wx.showModal({
-                  content: '获取用户信息成功',
-                  showCancel: false,
-                  success: function (res) {
-                  }
-                });
+                // wx.showModal({
+                //   content: '获取用户信息成功',
+                //   showCancel: false,
+                //   success: function (res) {
+                //   }
+                // });
                 wx.request({
                   url: getApp().BASE_URL + "/daka/login",
                   data: {
@@ -72,7 +72,7 @@ App({
               success: function (res) {
               }
             });
-            console.log('获取用户登录态失败！' + res.errMsg)
+            //console.log('获取用户登录态失败！' + res.errMsg)
           }
         },
         fail : function(){

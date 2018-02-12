@@ -39,11 +39,11 @@ Page({
             console.log(res);
             if (res.data.code != 0) {
               wx.showModal({
-                content: '打卡失败:' + res.data.message,
+                content: '打卡下单失败:' + res.data.message,
                 showCancel: false
               });
             } else {
-              console.log("打卡成功");
+              console.log("打卡下单成功");
               console.log(res.data);
               var wxPayMpOrderResult = res.data.data.wechatPrePay.wxPayMpOrderResult;
               console.log(wxPayMpOrderResult);
@@ -61,10 +61,12 @@ Page({
                   'fail': function (res) { 
                     console.log("调用微信支付失败");
                     console.log(res);
+
                   },
                   'complete': function (res) { 
                     console.log("调用微信支付结束");
                     console.log(res);
+                    this.refresh();
                   }
                 })
             }
@@ -78,32 +80,46 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
+    this.refresh();
+  },
+
+
+  refresh: function(){
     var that = this;
-    wx.request({
-      url: this.data.app.BASE_URL + "/daka/getIndexSummary",
-      method: "GET",
-      dataType: "json",
-      success: function (res) {
-        console.log(res);
-        if (res.data.code != 0) {
-          wx.showModal({
-            content: '获取首页详情信息失败' + res.data.message,
-            showCancel: false,
-            success: function (res) {
+    wx.getStorage({
+      key: 'sessionKey',
+      success: function(res) {
+        wx.request({
+          url: that.data.app.BASE_URL + "/daka/getIndexSummary",
+          data:{
+            'sessionKey': res.data
+          },
+          method: "GET",
+          dataType: "json",
+          success: function (res) {
+            console.log("获取首页详情信息");
+            console.log(res);
+            if (res.data.code != 0) {
+              wx.showModal({
+                content: '获取首页详情信息失败' + res.data.message,
+                showCancel: false,
+                success: function (res) {
+                }
+              });
+            } else {
+
+              that.setData({
+                tomorrowDakaMoney: res.data.data.tomorrowSummary.payAmount,
+                suceessDaka: res.data.data.todaySummary.scount,
+                failDaka: res.data.data.todaySummary.fcount
+              })
             }
-          });
-        } else {
-          getApp().SESSION_KEY = res.data.sessionKey;
-          that.setData({
-            tomorrowDakaMoney: res.data.data.tomorrowSummary.payAmount,
-            suceessDaka: res.data.data.todaySummary.scount,
-            failDaka: res.data.data.todaySummary.fcount
-          })
-        }
 
+          }
+        });
       }
-    });
-
+    })
+    
   },
 
 
