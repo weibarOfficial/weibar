@@ -8,7 +8,9 @@ Page({
     app: getApp(),
     tomorrowDakaMoney: "未知",
     suceessDaka: "未知",
-    failDaka: "未知"
+    failDaka: "未知",
+    buttonText:"支付一元参与打卡",
+    buttonBindtap: "payForDaka",
   },
   
 
@@ -17,6 +19,40 @@ Page({
     wx.showShareMenu({
       withShareTicket: true
     })
+  },
+
+
+
+  daka: function () {
+    var that = this.data;
+    wx.getStorage({
+      key: 'sessionKey',
+      success: function (res) {
+        wx.request({
+          url: that.app.BASE_URL + "/daka/daka",
+          method: "GET",
+          dataType: "json",
+          data: {
+            sessionKey: res.data
+          },
+          success: function (res) {
+            console.log("打卡返回信息");
+            console.log(res);
+            if (res.data.code != 0) {
+              wx.showModal({
+                content: '打卡失败:' + res.data.message,
+                showCancel: false
+              });
+            } else {
+              wx.showModal({
+                content: '打卡成功！稍后将瓜分奖金',
+                showCancel: false
+              });
+            }
+          }
+        })
+      }
+    });
   },
 
 
@@ -136,6 +172,9 @@ Page({
               });
             } else {
 
+              if (res.data.data.hasPayTodayDakaOrder && res.data.data.inDakaTime){
+
+              }
               that.setData({
                 tomorrowDakaMoney: res.data.data.tomorrowSummary.payAmount,
                 suceessDaka: res.data.data.todaySummary.scount,

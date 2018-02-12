@@ -238,7 +238,12 @@ public class DakaService {
 
     public DakaResultUser getDakaUser(UserBaseInfo userBaseInfo){
         DakaUser dakaUser = createOrUpdateDakaUser(userBaseInfo);
-        DakaResultUser dakaResultUser = DakaResultUser.getDakaResultUserDetail(dakaUser,hasPayTodayDakaOrder(dakaUser),hasPayYesterdayDakaOrder(dakaUser),inDakaTime());
+        DakaResultUser dakaResultUser = DakaResultUser.getDakaResultUserDetail(
+                dakaUser,
+                hasPayTodayDakaOrder(dakaUser),
+                hasPayYesterdayDakaOrder(dakaUser),
+                inDakaTime(),
+                hasPayTomorrowDakaOrder(dakaUser));
         return dakaResultUser;
     }
 
@@ -253,6 +258,9 @@ public class DakaService {
     }
 
 
+    private boolean hasPayTomorrowDakaOrder(DakaUser dakaUser){
+        return hasPayOrder(dakaUser.getUserId(),DateUtils.addDays(new Date(),1));
+    }
 
     private boolean hasPayYesterdayDakaOrder(DakaUser dakaUser){
         return hasPayOrder(dakaUser.getUserId(),DateUtils.addDays(new Date(),-1));

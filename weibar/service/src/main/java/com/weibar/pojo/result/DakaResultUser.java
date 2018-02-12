@@ -42,6 +42,8 @@ public class DakaResultUser {
 
     private boolean hasPayYesterdayDakaOrder;
 
+    private boolean hasPayTomorrowDakaOrder;
+
     private boolean inDakaTime;
 
 
@@ -50,11 +52,13 @@ public class DakaResultUser {
     public static DakaResultUser getDakaResultUserDetail(DakaUser dakaUser,
                                                          boolean hasPayTodayDakaOrder,
                                                          boolean hasPayYesterdayDakaOrder,
-                                                         boolean inDakaTime){
+                                                         boolean inDakaTime,
+                                                         boolean hasPayTomorrowDakaOrder){
         DakaResultUser dakaResultUser = getDakaResultUser(dakaUser);
         dakaResultUser.setHasPayTodayDakaOrder(hasPayTodayDakaOrder);
         dakaResultUser.setHasPayYesterdayDakaOrder(hasPayYesterdayDakaOrder);
         dakaResultUser.setInDakaTime(inDakaTime);
+        dakaResultUser.setHasPayTomorrowDakaOrder(hasPayTomorrowDakaOrder);
         return dakaResultUser;
     }
 
@@ -76,6 +80,14 @@ public class DakaResultUser {
         return dakaResultUser;
     }
 
+
+    public boolean isHasPayTomorrowDakaOrder() {
+        return hasPayTomorrowDakaOrder;
+    }
+
+    public void setHasPayTomorrowDakaOrder(boolean hasPayTomorrowDakaOrder) {
+        this.hasPayTomorrowDakaOrder = hasPayTomorrowDakaOrder;
+    }
 
     public boolean isHasPayTodayDakaOrder() {
         return hasPayTodayDakaOrder;
