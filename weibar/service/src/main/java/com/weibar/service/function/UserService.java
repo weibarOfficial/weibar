@@ -146,9 +146,10 @@ public class UserService {
         MerchantsUserBaseInfoCriteria.Criteria criteria = userBaseInfoCriteria.createCriteria();
         //criteria.andUnionIdEqualTo(wxMaUserInfo.getUnionId());
         criteria.andOpenidEqualTo(wxMaUserInfo.getOpenId());
-        Date now = new Date();
+
         List<MerchantsUserBaseInfo> list = merchantsUserBaseInfoMapper.selectByExample(userBaseInfoCriteria);
         UserBaseInfo userBaseInfo = null;
+        Date now = new Date();
         if(list == null || list.size() == 0){
             /**
              * 先插入用户openId 与 userId对应关系表
@@ -187,7 +188,7 @@ public class UserService {
             userBaseInfo.setUserMobile("");
             userBaseInfo.setUserPicture(wxMaUserInfo.getAvatarUrl());
             userBaseInfo.setUnionId(wxMaUserInfo.getUnionId());
-
+            userBaseInfo.setOpenid(wxMaUserInfo.getOpenId());
             switch (appEnum){
                 case WEIBA_MP:
                     break;
