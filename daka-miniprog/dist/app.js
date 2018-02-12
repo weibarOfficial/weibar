@@ -36,13 +36,6 @@ App({
                   method: "GET",
                   dataType: "json",
                   success : function(res){
-                    
-                    wx.showModal({
-                      content: '登录成功',
-                      showCancel: false,
-                      success: function (res) {
-                      }
-                    });
                     console.log(res);
                     if(res.data.code != 0){
                       wx.showModal({

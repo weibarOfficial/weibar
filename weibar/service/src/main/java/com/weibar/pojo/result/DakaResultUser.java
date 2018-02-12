@@ -38,6 +38,26 @@ public class DakaResultUser {
      */
     private String sessionKey;
 
+    private boolean hasPayTodayDakaOrder;
+
+    private boolean hasPayYesterdayDakaOrder;
+
+    private boolean inDakaTime;
+
+
+
+
+    public static DakaResultUser getDakaResultUserDetail(DakaUser dakaUser,
+                                                         boolean hasPayTodayDakaOrder,
+                                                         boolean hasPayYesterdayDakaOrder,
+                                                         boolean inDakaTime){
+        DakaResultUser dakaResultUser = getDakaResultUser(dakaUser);
+        dakaResultUser.setHasPayTodayDakaOrder(hasPayTodayDakaOrder);
+        dakaResultUser.setHasPayYesterdayDakaOrder(hasPayYesterdayDakaOrder);
+        dakaResultUser.setInDakaTime(inDakaTime);
+        return dakaResultUser;
+    }
+
 
     public static DakaResultUser getDakaResultUser(DakaUser dakaUser){
         DakaResultUser dakaResultUser = new DakaResultUser();
@@ -54,6 +74,31 @@ public class DakaResultUser {
         dakaResultUser.setSex(dakaUser.getSex());
         dakaResultUser.setUserPicture(dakaUser.getUserPicture());
         return dakaResultUser;
+    }
+
+
+    public boolean isHasPayTodayDakaOrder() {
+        return hasPayTodayDakaOrder;
+    }
+
+    public void setHasPayTodayDakaOrder(boolean hasPayTodayDakaOrder) {
+        this.hasPayTodayDakaOrder = hasPayTodayDakaOrder;
+    }
+
+    public boolean isHasPayYesterdayDakaOrder() {
+        return hasPayYesterdayDakaOrder;
+    }
+
+    public void setHasPayYesterdayDakaOrder(boolean hasPayYesterdayDakaOrder) {
+        this.hasPayYesterdayDakaOrder = hasPayYesterdayDakaOrder;
+    }
+
+    public boolean isInDakaTime() {
+        return inDakaTime;
+    }
+
+    public void setInDakaTime(boolean inDakaTime) {
+        this.inDakaTime = inDakaTime;
     }
 
     public String getUserPicture() {

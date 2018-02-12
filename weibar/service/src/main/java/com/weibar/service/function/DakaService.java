@@ -113,8 +113,7 @@ public class DakaService {
      */
     public void daka(String sessionKey,String clientIp) throws BaseException {
 
-        Calendar calendar = Calendar.getInstance();
-        if(calendar.get(Calendar.HOUR_OF_DAY) > 7 || calendar.get(Calendar.HOUR_OF_DAY) < 5 ){
+        if(!inDakaTime()){
             throw BaseException.getException(ErrorCodeEnum.DAKA_NOT_IN_TIME.getCode());
         }
 
@@ -230,11 +229,46 @@ public class DakaService {
     public DakaResultUser dakaLogin(String code,String nickName, String avatarUrl,String gender,String province,String ctiy,String country) throws BaseException {
         UserBaseInfo userBaseInfo = wechatMiniProgramService.login(code,nickName,avatarUrl,gender,province,ctiy,country);
         DakaUser dakaUser = createOrUpdateDakaUser(userBaseInfo);
-        DakaResultUser dakaResultUser = DakaResultUser.getDakaResultUser(dakaUser);
+        DakaResultUser dakaResultUser = DakaResultUser.getDakaResultUserDetail(dakaUser,hasPayTodayDakaOrder(dakaUser),hasPayYesterdayDakaOrder(dakaUser),inDakaTime());
         return dakaResultUser;
     }
 
 
+
+    private boolean hasPayTodayDakaOrder(DakaUser dakaUser){
+        return hasPayOrder(dakaUser.getUserId(),Calendar.getInstance().getTime());
+    }
+
+
+
+    private boolean hasPayYesterdayDakaOrder(DakaUser dakaUser){
+        return hasPayOrder(dakaUser.getUserId(),DateUtils.addDays(new Date(),-1));
+    }
+
+
+    private boolean hasPayOrder(Long userId,Date date){
+        DakaOrderCriteria dakaOrderCriteria = new DakaOrderCriteria();
+        DakaOrderCriteria.Criteria criteria = dakaOrderCriteria.createCriteria();
+        criteria.andUserIdEqualTo(userId);
+        criteria.andOrderDateEqualTo(date);
+        criteria.andStatusEqualTo(DakaOrderStatusEnum.PAYED.getState());
+        List<DakaOrder> dakaOrderList = dakaOrderMapper.selectByExample(dakaOrderCriteria);
+        if(dakaOrderList == null || dakaOrderList.size() == 0){
+            return false;
+        }else{
+            return true;
+        }
+    }
+
+
+    private boolean inDakaTime(){
+        Calendar calendar = Calendar.getInstance();
+        if(calendar.get(Calendar.HOUR_OF_DAY) > 7 || calendar.get(Calendar.HOUR_OF_DAY) < 5){
+            return false;
+        }else{
+            return true;
+        }
+    }
 
     public  DakaUser createOrUpdateDakaUser(UserBaseInfo userBaseInfo){
         DakaUser dakaUser = null;
