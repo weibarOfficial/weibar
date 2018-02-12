@@ -11,6 +11,7 @@ Page({
     failDaka: "未知",
     buttonText:"支付一元参与打卡",
     buttonBindtap: "payForDaka",
+    buttondisabled: "false",
   },
   
 
@@ -173,13 +174,26 @@ Page({
             } else {
 
               if (res.data.data.hasPayTodayDakaOrder && res.data.data.inDakaTime){
-
+                that.setData({
+                  buttonText: "立即打卡，瓜分奖金",
+                  buttonBindtap: "daka",
+                  buttondisabled: "false"
+                })
+              } else if (res.data.data.hasPayTomorrowDakaOrder) {
+                that.setData({
+                  buttonText: "请明早记得打卡哦~",
+                  buttonBindtap: "",
+                  buttondisabled: "true"
+                })
+              }else {
+                that.setData({
+                  buttonText: "支付一元参与打卡",
+                  buttonBindtap: "payForDaka",
+                  buttondisabled: "false"
+                })
               }
-              that.setData({
-                tomorrowDakaMoney: res.data.data.tomorrowSummary.payAmount,
-                suceessDaka: res.data.data.todaySummary.scount,
-                failDaka: res.data.data.todaySummary.fcount
-              })
+
+
             }
 
           }
