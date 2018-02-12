@@ -9,6 +9,7 @@ import com.weibar.pojo.result.*;
 import com.weibar.service.mapper.DakaDaySummaryMapper;
 import com.weibar.service.mapper.DakaOrderMapper;
 import com.weibar.service.mapper.DakaUserMapper;
+import com.weibar.utils.DatesUtils;
 import com.weibar.utils.IdGenerator;
 import com.weibar.utils.SignUtils;
 import org.apache.commons.lang3.time.DateUtils;
@@ -201,6 +202,9 @@ public class DakaService {
     }
 
     public DakaOrder getDakaOrderByDate(long userId,Date date) throws BaseException {
+
+        date = DatesUtils.removeTime(date);
+
         DakaOrderCriteria dakaOrderCriteria = new DakaOrderCriteria();
         DakaOrderCriteria.Criteria criteria = dakaOrderCriteria.createCriteria();
         criteria.andOrderDateEqualTo(date);
@@ -258,6 +262,9 @@ public class DakaService {
     private boolean hasPayOrder(Long userId,Date date){
         DakaOrderCriteria dakaOrderCriteria = new DakaOrderCriteria();
         DakaOrderCriteria.Criteria criteria = dakaOrderCriteria.createCriteria();
+
+        date = DatesUtils.removeTime(date);
+
         criteria.andUserIdEqualTo(userId);
         criteria.andOrderDateEqualTo(date);
         criteria.andStatusEqualTo(DakaOrderStatusEnum.PAYED.getState());

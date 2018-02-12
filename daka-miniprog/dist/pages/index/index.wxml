@@ -11,6 +11,7 @@
         <view class="weui-msg__opr-area">
             <view class="weui-btn-area">
                 <button class="weui-btn" type="primary" bindtap="payForDaka">支付一元参与打卡</button>
+                <button class="weui-btn" type="primary" disabled="true">页面主操作 Disabled</button>
                 <!--<button class="weui-btn" type="default" bindtap="inviteFriends">邀请好友参加</button>-->
             </view>
         </view>

@@ -117,6 +117,34 @@ Page({
 
           }
         });
+        wx.request({
+          url: that.data.app.BASE_URL + "/daka/getUserInfo",
+          data: {
+            'sessionKey': res.data
+          },
+          method: "GET",
+          dataType: "json",
+          success: function (res) {
+            console.log("获取用户信息");
+            console.log(res);
+            if (res.data.code != 0) {
+              wx.showModal({
+                content: '获取用户信息' + res.data.message,
+                showCancel: false,
+                success: function (res) {
+                }
+              });
+            } else {
+
+              that.setData({
+                tomorrowDakaMoney: res.data.data.tomorrowSummary.payAmount,
+                suceessDaka: res.data.data.todaySummary.scount,
+                failDaka: res.data.data.todaySummary.fcount
+              })
+            }
+
+          }
+        });
       }
     })
     
