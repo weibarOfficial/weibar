@@ -53,12 +53,7 @@
       {
         "pagePath": "pages/my/my",
         "text": "我的战绩"
-      }
-      ,
-      {
-        "pagePath": "example/index",
-        "text": "微信例子"
-      }      
+      }    
     ]
   }
 }
