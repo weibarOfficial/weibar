@@ -19,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -125,7 +126,7 @@ public class DakaService {
         DakaOrder dakaOrder = getDakaOrderByDate(user.getUserId(),now);
         dakaOrder.setUpdateTime(now);
         dakaOrder.setDakaTime(now);
-        dakaOrder.setStatus(DakaOrderStatusEnum.DAKA.getState());
+        dakaOrder.setStatus(DakaOrderStatusEnum.DAKA_SUC.getState());
         dakaOrder.setClientIp(clientIp);
         dakaOrderMapper.updateByPrimaryKey(dakaOrder);
 
@@ -151,6 +152,28 @@ public class DakaService {
         dakaDaySummary.setUpdateTime(now);
         dakaDaySummaryMapper.updateByPrimaryKey(dakaDaySummary);
     }
+
+
+    /**
+     * 打卡我的战绩页面信息
+     * @param sessionKey
+     * @return
+     */
+    public DakaMyInfo getDakaMyInfo(String sessionKey) throws BaseException {
+        DakaResultUser dakaResultUser = getDakaUserBySessionKey(sessionKey);
+        List<DakaOrder> dakaOrderList = getDakaOrderByUser(dakaResultUser.getUserId());
+        DakaMyInfo dakaMyInfo = new DakaMyInfo();
+        dakaMyInfo.setAllPay(dakaResultUser.getPaySumAmount().setScale(2).toPlainString());
+        dakaMyInfo.setAllGet(dakaResultUser.getGetSumAmount().setScale(2).toPlainString());
+        dakaMyInfo.setAllSucDaka(dakaResultUser.getScount().toString());
+        List<DakaSimpleOrder> simpleOrderList = new ArrayList<>();
+        for(DakaOrder dakaOrder : dakaOrderList){
+            simpleOrderList.add(new DakaSimpleOrder(dakaOrder));
+        }
+        dakaMyInfo.setDakaDetails(simpleOrderList);
+        return dakaMyInfo;
+    }
+
 
 
 
@@ -214,6 +237,22 @@ public class DakaService {
             return list.get(0);
         }else{
             throw BaseException.getException(ErrorCodeEnum.DAKA_ORDER_NOT_EXIST.getCode());
+        }
+    }
+
+
+    private List<DakaOrder> getDakaOrderByUser(long userId){
+        DakaOrderCriteria dakaOrderCriteria = new DakaOrderCriteria();
+        DakaOrderCriteria.Criteria criteria = dakaOrderCriteria.createCriteria();
+        criteria.andUserIdEqualTo(userId);
+        List<Integer> invalidStatus = new ArrayList<>();
+        invalidStatus.add(DakaOrderStatusEnum.NOT_PAY.getState());
+        criteria.andStatusNotIn(invalidStatus);
+        List<DakaOrder> list =  dakaOrderMapper.selectByExample(dakaOrderCriteria);
+        if(list == null){
+            return new ArrayList<DakaOrder>();
+        }else{
+            return list;
         }
     }
 
@@ -402,7 +441,7 @@ public class DakaService {
         // 计算失败人数
         dakaDaySummary.setFcount(dakaDaySummary.getCount() - dakaDaySummary.getScount());
 
-        List<DakaOrder> succOrds = getDakaOrders(date,DakaOrderStatusEnum.DAKA.getState());
+        List<DakaOrder> succOrds = getDakaOrders(date,DakaOrderStatusEnum.DAKA_SUC.getState());
         List<DakaOrder> failOrds = getDakaOrders(date,DakaOrderStatusEnum.PAYED.getState());
 
         if(succOrds.size() != dakaDaySummary.getScount() || failOrds.size() != dakaDaySummary.getFcount()){

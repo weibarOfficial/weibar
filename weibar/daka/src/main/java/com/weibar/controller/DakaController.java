@@ -51,6 +51,13 @@ public class DakaController {
         return BaseResult.getSuccessfulResult(dakaService.getDakaUserBySessionKey(sessionKey));
     }
 
+
+    @RequestMapping(value = "/daka/getDakaMyInfo" ,method = {RequestMethod.POST,RequestMethod.GET})
+    public Object getDakaMyInfo(@RequestParam String sessionKey) throws BaseException {
+        return BaseResult.getSuccessfulResult(dakaService.getDakaMyInfo(sessionKey));
+    }
+
+
     @RequestMapping(value = "/daka/login" ,method = {RequestMethod.POST,RequestMethod.GET})
     public Object dakaLogin(@RequestParam String code,
                             @RequestParam String nickName,

@@ -5,7 +5,7 @@ package com.weibar.pojo.enu;
  */
 public enum  DakaOrderStatusEnum {
 
-    NOT_PAY(1,"未支付"),PAYED(2,"已支付"),DAKA(3,"已打卡"),SEND(4,"已发放奖励金");
+    NOT_PAY(1,"未支付"),PAYED(2,"已支付"),DAKA_SUC(3,"打卡成功"),SEND(4,"已发放奖励金"),DAKA_FAIL(5,"打卡失败");
 
     DakaOrderStatusEnum(int state, String desc){
         this.state = state;

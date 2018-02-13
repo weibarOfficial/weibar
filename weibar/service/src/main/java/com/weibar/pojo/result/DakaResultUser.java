@@ -46,6 +46,9 @@ public class DakaResultUser {
 
     private boolean inDakaTime;
 
+    private Long userId;
+    private String openId;
+
 
 
 
@@ -77,9 +80,26 @@ public class DakaResultUser {
         dakaResultUser.setSessionKey(DakaService.genSessionKey(dakaUser.getUserId()));
         dakaResultUser.setSex(dakaUser.getSex());
         dakaResultUser.setUserPicture(dakaUser.getUserPicture());
+        dakaResultUser.setUserId(dakaUser.getUserId());
+        dakaResultUser.setOpenId(dakaUser.getOpenid());
         return dakaResultUser;
     }
 
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
+    }
+
+    public String getOpenId() {
+        return openId;
+    }
+
+    public void setOpenId(String openId) {
+        this.openId = openId;
+    }
 
     public boolean isHasPayTomorrowDakaOrder() {
         return hasPayTomorrowDakaOrder;
