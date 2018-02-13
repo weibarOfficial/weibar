@@ -208,7 +208,7 @@ public class UserService {
             LOG.info("merchantsUserBaseInfo exit openId:" + wxMaUserInfo.getOpenId());
             UserBaseInfoCriteria baseInfoCriteria = new UserBaseInfoCriteria();
             UserBaseInfoCriteria.Criteria c = baseInfoCriteria.createCriteria();
-            criteria.andUserIdEqualTo(list.get(0).getUserId());
+            c.andUserIdEqualTo(list.get(0).getUserId());
             userBaseInfo = userBaseInfoMapper.selectByExample(baseInfoCriteria).get(0);
             userBaseInfo.setUpdateTime(now);
             userBaseInfo.setCity(wxMaUserInfo.getCity());
