@@ -199,6 +199,11 @@ public class DakaService {
 
         //更新打卡订单
         DakaOrder dakaOrder = getDakaOrder(orderId);
+
+        if(dakaOrder.getStatus() != DakaOrderStatusEnum.NOT_PAY.getState()){
+            throw BaseException.getException(ErrorCodeEnum.DAKA_ORDER_HAS_PAYED.getCode());
+        }
+
         Date now = new Date();
         dakaOrder.setPayTime(now);
         dakaOrder.setStatus(DakaOrderStatusEnum.PAYED.getState());

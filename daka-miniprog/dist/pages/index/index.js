@@ -94,16 +94,18 @@ Page({
                   'success': function (res) {
                     console.log("调用微信支付成功");
                     console.log(res);
+                    this.refresh();
                    },
                   'fail': function (res) { 
                     console.log("调用微信支付失败");
                     console.log(res);
+                    this.refresh();
 
                   },
                   'complete': function (res) { 
                     console.log("调用微信支付结束");
                     console.log(res);
-                    this.refresh();
+                    
                   }
                 })
             }
@@ -177,22 +179,21 @@ Page({
                 that.setData({
                   buttonText: "立即打卡，瓜分奖金",
                   buttonBindtap: "daka",
-                  buttondisabled: "false"
+                  buttondisabled: false
                 })
               } else if (res.data.data.hasPayTomorrowDakaOrder) {
                 that.setData({
                   buttonText: "请明早记得打卡哦~",
                   buttonBindtap: "",
-                  buttondisabled: "true"
+                  buttondisabled: true
                 })
               }else {
                 that.setData({
                   buttonText: "支付一元参与打卡",
                   buttonBindtap: "payForDaka",
-                  buttondisabled: "false"
+                  buttondisabled: false
                 })
               }
-
 
             }
 

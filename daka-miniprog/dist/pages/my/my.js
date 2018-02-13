@@ -9,7 +9,7 @@ Page({
     allPay: "未知",
     allGet: "未知",
     allSucDaka: "未知",
-    dakaDetails: [{ "date": "2018-02-05", "result": "打卡失败", "money": "1" }, { "date": "2018-02-05", "result": "打卡失败", "money": "2" }]
+    dakaDetails: []
   },
 
   /**
