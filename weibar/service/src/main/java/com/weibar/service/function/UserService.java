@@ -18,6 +18,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -140,6 +143,7 @@ public class UserService {
      * @param wxMaUserInfo
      * @return
      */
+    @Transactional(propagation = Propagation.REQUIRED,isolation = Isolation.READ_COMMITTED,rollbackFor = Exception.class)
     public UserBaseInfo updateUserInfoByWechatMiniProgram(WxMaUserInfo wxMaUserInfo,AppEnum appEnum){
 
         MerchantsUserBaseInfoCriteria userBaseInfoCriteria = new MerchantsUserBaseInfoCriteria();
@@ -151,6 +155,7 @@ public class UserService {
         UserBaseInfo userBaseInfo = null;
         Date now = new Date();
         if(list == null || list.size() == 0){
+            LOG.info("merchantsUserBaseInfo not exit openId:" + wxMaUserInfo.getOpenId());
             /**
              * 先插入用户openId 与 userId对应关系表
              */
@@ -200,16 +205,15 @@ public class UserService {
             userBaseInfoMapper.insert(userBaseInfo);
 
         }else{
+            LOG.info("merchantsUserBaseInfo exit openId:" + wxMaUserInfo.getOpenId());
             UserBaseInfoCriteria baseInfoCriteria = new UserBaseInfoCriteria();
             UserBaseInfoCriteria.Criteria c = baseInfoCriteria.createCriteria();
-            //c.andUnionIdEqualTo(wxMaUserInfo.getUnionId());
-            criteria.andOpenidEqualTo(wxMaUserInfo.getOpenId());
+            criteria.andUserIdEqualTo(list.get(0).getUserId());
             userBaseInfo = userBaseInfoMapper.selectByExample(baseInfoCriteria).get(0);
             userBaseInfo.setUpdateTime(now);
             userBaseInfo.setCity(wxMaUserInfo.getCity());
             userBaseInfo.setCountry(wxMaUserInfo.getCountry());
             userBaseInfo.setNickname(wxMaUserInfo.getNickName());
-            userBaseInfo.setOpenid(wxMaUserInfo.getOpenId());
             userBaseInfo.setProvince(wxMaUserInfo.getProvince());
             userBaseInfo.setSex(wxMaUserInfo.getGender());
             userBaseInfo.setUserPicture(wxMaUserInfo.getAvatarUrl());

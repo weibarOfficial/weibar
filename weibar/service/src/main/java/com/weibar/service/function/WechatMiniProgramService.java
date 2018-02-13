@@ -48,6 +48,7 @@ public class WechatMiniProgramService {
             LOG.error("get session info error ",e);
             throw BaseException.getException(ErrorCodeEnum.MINIPRAGRAM_CODE_FAIL.getCode());
         }
+        LOG.info("daka login get sessionResult openId" + sessionResult.getOpenid());
         WxMaUserInfo userInfo = new WxMaUserInfo();
         userInfo.setOpenId(sessionResult.getOpenid());
         userInfo.setAvatarUrl(avatarUrl);
