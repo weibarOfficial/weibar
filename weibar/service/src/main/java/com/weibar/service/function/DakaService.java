@@ -167,8 +167,20 @@ public class DakaService {
         dakaMyInfo.setAllGet(dakaResultUser.getGetSumAmount().setScale(2).toPlainString());
         dakaMyInfo.setAllSucDaka(dakaResultUser.getScount().toString());
         List<DakaSimpleOrder> simpleOrderList = new ArrayList<>();
+        Calendar calendar = Calendar.getInstance();
+        Date now = calendar.getTime();
         for(DakaOrder dakaOrder : dakaOrderList){
-            simpleOrderList.add(new DakaSimpleOrder(dakaOrder));
+
+            //当天的话 设定8点7分之后之后显示结果
+            if(DateUtils.isSameDay(dakaOrder.getOrderDate(),now)){
+                if((calendar.get(Calendar.HOUR_OF_DAY) > 8) ||
+                        (calendar.get(Calendar.HOUR_OF_DAY) == 8 && calendar.get(Calendar.MINUTE) > 7)){
+                    simpleOrderList.add(new DakaSimpleOrder(dakaOrder));
+                }
+            }else if(dakaOrder.getOrderDate().before(now)){
+                simpleOrderList.add(new DakaSimpleOrder(dakaOrder));
+            }
+
         }
         dakaMyInfo.setDakaDetails(simpleOrderList);
         return dakaMyInfo;
