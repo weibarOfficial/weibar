@@ -166,7 +166,7 @@ Page({
             console.log(res);
             if (res.data.code != 0) {
               wx.showModal({
-                content: '获取用户信息' + res.data.message,
+                content: '获取用户信息失败' + res.data.message,
                 showCancel: false,
                 success: function (res) {
                 }

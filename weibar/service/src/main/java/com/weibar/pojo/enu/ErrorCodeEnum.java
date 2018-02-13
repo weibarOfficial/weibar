@@ -132,7 +132,7 @@ public enum ErrorCodeEnum {
                 return errorCodeEnum;
             }
         }
-        return null;
+        return ErrorCodeEnum.UNKOWN_ERROR;
     }
 
     public int getCode() {
