@@ -6,7 +6,7 @@
         <view class="weui-msg__text-area">
             <view class="weui-msg__desc">明早打卡随机瓜分金额（元）</view>
             <view class="weui-msg__title daka-money">{{tomorrowDakaMoney}}</view>
-            <view class="weui-msg__desc"><navigator url="/pages/index/article" class="weui-msg__link">游戏规则</navigator></view>
+            <view class="weui-msg__desc"><navigator url="/pages/article/article" class="weui-msg__link">游戏规则</navigator></view>
         </view>
         <view class="weui-msg__opr-area">
             <view class="weui-btn-area">

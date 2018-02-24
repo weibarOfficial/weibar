@@ -395,6 +395,16 @@ public class DakaService {
 
 
     private DakaDaySummary getDakaDaySummary(Date date){
+
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        calendar.set(Calendar.MILLISECOND, 0);
+        calendar.set(Calendar.SECOND, 0);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.HOUR, 0);
+
+        date = calendar.getTime();
         DakaDaySummaryCriteria daySummaryCriteria = new DakaDaySummaryCriteria();
         DakaDaySummaryCriteria.Criteria criteria = daySummaryCriteria.createCriteria();
         criteria.andDakaDateEqualTo(date);
