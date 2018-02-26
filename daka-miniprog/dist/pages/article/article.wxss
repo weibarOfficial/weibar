@@ -1,1 +1,4 @@
 /* pages/article/article.wxss */
+.title-color {
+    color: #FF6600;
+}
