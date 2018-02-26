@@ -355,7 +355,7 @@ public class RedPackageService {
     public List<WeibarRedpackageDepositDetail> getRedPackageDetail(Long redPackageId,BigDecimal amount,int sendNum,String title){
 
         //找出红包最佳
-        List<BigDecimal> redPackageAmounts = getRedPackageAmountList(amount,sendNum);
+        List<BigDecimal> redPackageAmounts = getRedPackageAmountList(amount,sendNum,false);
         BigDecimal bestAmount = new BigDecimal(0);
         for(BigDecimal redPackageAmount : redPackageAmounts){
             if(redPackageAmount.compareTo(bestAmount) > 0){
@@ -390,16 +390,18 @@ public class RedPackageService {
      * @param sendNum
      * @return
      */
-    public List<BigDecimal> getRedPackageAmountList(BigDecimal amount,int sendNum){
+    public List<BigDecimal> getRedPackageAmountList(BigDecimal amount,int sendNum,boolean hasZero){
 
         //按照分，分成固定份数
         long num = amount.multiply(new BigDecimal(100)).longValue();
 
         //最低必须剩余份数
-        int least = sendNum - 1;
+        int least = sendNum;
+        if(!hasZero){
+            least = 0;
+        }
 
         List<BigDecimal> result = new ArrayList<>();
-
 
 
         while (result.size() < sendNum){
@@ -411,9 +413,12 @@ public class RedPackageService {
                 break;
             }
 
-            long maxCanGet = num - least;
-            long get = ThreadLocalRandom.current().nextLong(1, maxCanGet + 1);
+            long maxCanGet = Math.min(num - least,num);
+            long get = ThreadLocalRandom.current().nextLong(0, maxCanGet );
 
+            if(!hasZero && get == 0){
+                get = 1;
+            }
 
             //扣除相应份数
             num = num - get;
