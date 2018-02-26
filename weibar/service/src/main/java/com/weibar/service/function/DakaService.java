@@ -421,7 +421,7 @@ public class DakaService {
     private DakaDaySummary getDakaDaySummary(Date date){
 
         date = DatesUtils.removeTime(date);
-        
+
         DakaDaySummaryCriteria daySummaryCriteria = new DakaDaySummaryCriteria();
         DakaDaySummaryCriteria.Criteria criteria = daySummaryCriteria.createCriteria();
         criteria.andDakaDateEqualTo(date);

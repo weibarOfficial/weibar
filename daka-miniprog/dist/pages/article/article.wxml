@@ -5,29 +5,23 @@
     </view>
     <view class="page__bd">
         <view class="weui-article">
-            <view class="weui-article__h1">大标题</view>
             <view class="weui-article__section">
-                <view class="weui-article__title">章标题</view>
                 <view class="weui-article__section">
-                    <view class="weui-article__h3">1.1 节标题</view>
+                    <view class="weui-article__h3">支付一元参与打卡活动</view>
                     <view class="weui-article__p">
-                        Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-                        tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-                        quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-                        consequat.
-                    </view>
-                    <view class="weui-article__p">
-                        <image class="weui-article__img" src="../images/pic_article.png" mode="aspectFit" style="height: 180px" />
-                        <image class="weui-article__img" src="../images/pic_article.png" mode="aspectFit" style="height: 180px" />
+                     每天23:55分之前支付一元参与打卡活动，隔天记得打卡支付的一元即可返还，还可以获得未打卡用户的现金~
                     </view>
                 </view>
                 <view class="weui-article__section">
-                    <view class="weui-article__h3">1.2 节标题</view>
+                    <view class="weui-article__h3">早起打卡瓜分现金</view>
                     <view class="weui-article__p">
-                        Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-                        tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-                        cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-                        proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+                    对于参加活动的用户，早上5-8点之前打卡，将在8点5分之前返还支付的一元，并随机瓜分未打卡用户的活动金~；未打卡成功的用户将失去支付的一元现金。
+                    </view>
+                </view>
+                <view class="weui-article__section">
+                    <view class="weui-article__h3">我的战绩</view>
+                    <view class="weui-article__p">
+                     我的战绩可以查看个人的参与记录。
                     </view>
                 </view>
             </view>
