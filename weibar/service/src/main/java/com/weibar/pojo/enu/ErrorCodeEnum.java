@@ -21,6 +21,7 @@ public enum ErrorCodeEnum {
     USER_USER_LOG_DELETE_FAIL(-10010,"删除用户访问记录失败"),
     USER_USER_BALANCE_NOT_ENOUGH(-10011,"用户余额不足"),
     USER_USER_BALANCE_UPDATE_FAIL(-10012,"更新用户余额失败"),//可能是并发更新余额导致
+    USER_OPEN_ID_EXIST_MORE(-10013,"openid 存在多条记录"),
     USER_ERROR_END(-20000,"用户相关错误结束段"),
 
     MERCHANT_ERROR_BEGIN(-20001,"商户相关错误开始段"),

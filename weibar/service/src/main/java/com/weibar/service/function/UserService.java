@@ -144,7 +144,7 @@ public class UserService {
      * @return
      */
     @Transactional(propagation = Propagation.REQUIRED,isolation = Isolation.READ_COMMITTED,rollbackFor = Exception.class)
-    public UserBaseInfo updateUserInfoByWechatMiniProgram(WxMaUserInfo wxMaUserInfo,AppEnum appEnum){
+    public UserBaseInfo updateUserInfoByWechatMiniProgram(WxMaUserInfo wxMaUserInfo,AppEnum appEnum) throws BaseException {
 
         MerchantsUserBaseInfoCriteria userBaseInfoCriteria = new MerchantsUserBaseInfoCriteria();
         MerchantsUserBaseInfoCriteria.Criteria criteria = userBaseInfoCriteria.createCriteria();
@@ -204,8 +204,11 @@ public class UserService {
 
             userBaseInfoMapper.insert(userBaseInfo);
 
-        }else{
-            LOG.info("merchantsUserBaseInfo exit openId:" + wxMaUserInfo.getOpenId());
+        }else if(list.size() > 1){
+            throw BaseException.getException(ErrorCodeEnum.USER_OPEN_ID_EXIST_MORE.getCode());
+
+        } else{
+            LOG.info("merchantsUserBaseInfo exist openId:" + wxMaUserInfo.getOpenId());
             UserBaseInfoCriteria baseInfoCriteria = new UserBaseInfoCriteria();
             UserBaseInfoCriteria.Criteria c = baseInfoCriteria.createCriteria();
             c.andUserIdEqualTo(list.get(0).getUserId());
