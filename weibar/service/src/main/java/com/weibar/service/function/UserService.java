@@ -42,6 +42,9 @@ public class UserService {
     @Autowired
     private MerchantsUserBaseInfoMapper merchantsUserBaseInfoMapper;
 
+    @Autowired
+    private UserService userService;
+
 
 
 
@@ -79,6 +82,8 @@ public class UserService {
         List<UserBaseInfo> userBaseInfoList = userBaseInfoMapper.selectByExample(userBaseInfoCriteria);
         if(userBaseInfoList == null || userBaseInfoList.size() == 0){
             throw BaseException.getException(ErrorCodeEnum.USER_USER_ID_NOT_EXIST.getCode());
+        }else if(userBaseInfoList.size() > 1){
+            throw BaseException.getException(ErrorCodeEnum.USER_USER_ID_EXIST_MORE.getCode());
         }
         return userBaseInfoList.get(0);
     }
@@ -155,7 +160,7 @@ public class UserService {
         UserBaseInfo userBaseInfo = null;
         Date now = new Date();
         if(list == null || list.size() == 0){
-            LOG.info("merchantsUserBaseInfo not exit openId:" + wxMaUserInfo.getOpenId());
+            LOG.info("merchantsUserBaseInfo not exist openId:" + wxMaUserInfo.getOpenId());
             /**
              * 先插入用户openId 与 userId对应关系表
              */
@@ -209,10 +214,7 @@ public class UserService {
 
         } else{
             LOG.info("merchantsUserBaseInfo exist openId:" + wxMaUserInfo.getOpenId());
-            UserBaseInfoCriteria baseInfoCriteria = new UserBaseInfoCriteria();
-            UserBaseInfoCriteria.Criteria c = baseInfoCriteria.createCriteria();
-            c.andUserIdEqualTo(list.get(0).getUserId());
-            userBaseInfo = userBaseInfoMapper.selectByExample(baseInfoCriteria).get(0);
+            userBaseInfo = userService.getUserById(list.get(0).getUserId());
             userBaseInfo.setUpdateTime(now);
             userBaseInfo.setCity(wxMaUserInfo.getCity());
             userBaseInfo.setCountry(wxMaUserInfo.getCountry());
