@@ -17,6 +17,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -76,6 +79,13 @@ public class DakaService {
      */
     public DakaOrderPrePay createDakaOrder(String sessionKey, BigDecimal amount, String clientIp) throws BaseException {
 
+        UserBaseInfo userBaseInfo = getUserInfoBySessionKey(sessionKey);
+
+        LOG.info("createDakaOrder userId " + userBaseInfo.getUserId() +
+                " openId " + userBaseInfo.getOpenid() +
+                " nickName " + userBaseInfo.getNickname() +
+                " amount " + amount + " clientIp " + clientIp);
+
         Calendar calendar = Calendar.getInstance();
         if(calendar.get(Calendar.HOUR_OF_DAY) == 23 && calendar.get(Calendar.MINUTE) > 55){
             throw BaseException.getException(ErrorCodeEnum.DAKA_NOT_PAY_TIME.getCode());
@@ -84,7 +94,7 @@ public class DakaService {
         Date now = calendar.getTime();
         DakaOrder dakaOrder = new DakaOrder();
 
-        UserBaseInfo userBaseInfo = getUserInfoBySessionKey(sessionKey);
+
         Long orderId = IdGenerator.generateIdByTime();
         dakaOrder.setOrderid(orderId);
         dakaOrder.setCreateTime(now);
@@ -113,8 +123,15 @@ public class DakaService {
      * @param sessionKey
      * @throws BaseException
      */
+    @Transactional(propagation = Propagation.REQUIRED,isolation = Isolation.READ_COMMITTED,rollbackFor = Exception.class)
     public void daka(String sessionKey,String clientIp) throws BaseException {
 
+
+        UserBaseInfo user = getUserInfoBySessionKey(sessionKey);
+        LOG.info("daka userId " + user.getUserId() +
+                " openId " + user.getOpenid() +
+                " nickName " + user.getNickname() +
+                 " clientIp " + clientIp);
         if(!inDakaTime()){
             throw BaseException.getException(ErrorCodeEnum.DAKA_NOT_IN_TIME.getCode());
         }
@@ -122,7 +139,7 @@ public class DakaService {
 
         //更新打卡订单
         Date now = new Date();
-        UserBaseInfo user = getUserInfoBySessionKey(sessionKey);
+
         DakaOrder dakaOrder = getDakaOrderByDate(user.getUserId(),now);
         dakaOrder.setUpdateTime(now);
         dakaOrder.setDakaTime(now);
@@ -195,10 +212,17 @@ public class DakaService {
      * 支付成功之后回调打卡
      * @param orderId
      */
+    @Transactional(propagation = Propagation.REQUIRED,isolation = Isolation.READ_COMMITTED,rollbackFor = Exception.class)
     public void payForDaka(Long orderId) throws BaseException {
 
         //更新打卡订单
         DakaOrder dakaOrder = getDakaOrder(orderId);
+
+        LOG.info("payForDaka userId " + dakaOrder.getUserId() +
+                " openId " + dakaOrder.getOpenid() +
+                " orderId " + orderId);
+
+
 
         if(dakaOrder.getStatus() != DakaOrderStatusEnum.NOT_PAY.getState()){
             throw BaseException.getException(ErrorCodeEnum.DAKA_ORDER_HAS_PAYED.getCode());
@@ -396,15 +420,8 @@ public class DakaService {
 
     private DakaDaySummary getDakaDaySummary(Date date){
 
-
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(date);
-        calendar.set(Calendar.MILLISECOND, 0);
-        calendar.set(Calendar.SECOND, 0);
-        calendar.set(Calendar.MINUTE, 0);
-        calendar.set(Calendar.HOUR, 0);
-
-        date = calendar.getTime();
+        date = DatesUtils.removeTime(date);
+        
         DakaDaySummaryCriteria daySummaryCriteria = new DakaDaySummaryCriteria();
         DakaDaySummaryCriteria.Criteria criteria = daySummaryCriteria.createCriteria();
         criteria.andDakaDateEqualTo(date);
@@ -496,9 +513,8 @@ public class DakaService {
                     dakaOrder.getClientIp(),
                     RedPackageSceneIdEnum.DAKA.getState().toString(),
                     RedPackageSceneIdEnum.DAKA.getDesc(),
-                    null);
+                    "发放打卡成功奖励金");
         }
-
 
 
     }
