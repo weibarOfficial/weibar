@@ -482,7 +482,7 @@ public class DakaService {
 
         BigDecimal sendMoneySum = discountService.getDakaDiscount(failMoney,succOrds.size());
 
-        List<BigDecimal> succGetMoneyList = redPackageService.getRedPackageAmountList(sendMoneySum,succOrds.size());
+        List<BigDecimal> succGetMoneyList = redPackageService.getRedPackageAmountList(sendMoneySum,succOrds.size(),true);
 
         for(int i = 0; i < succGetMoneyList.size() ; i++){
             //更新用户表
