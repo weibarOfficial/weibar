@@ -123,6 +123,7 @@ public enum ErrorCodeEnum {
 
     MINIPRAGRAM_ERROR_BEGIN(-150001,"小程序相关错误开始段"),
     MINIPRAGRAM_CODE_FAIL(-150002,"小程序校验code失败"),
+    MINIPRAGRAM_GET_QR_ERROR(-150003,"小程序获取二维码失败"),
     MINIPRAGRAM_ERROR_END(-160000,"小程序相关错误结束段");
 
     ErrorCodeEnum(int code, String msg) {

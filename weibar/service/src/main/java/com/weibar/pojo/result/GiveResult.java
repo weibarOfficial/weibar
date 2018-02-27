@@ -11,14 +11,14 @@ public class GiveResult {
     private BigDecimal minRechargeAmount;
     private BarrageInfo barrageInfo;
     private PrivateChat privateChat;
-    private WechatPrePay wechatPrePay;
+    private WechatPrePay wechatMpPrePay;
 
-    public WechatPrePay getWechatPrePay() {
-        return wechatPrePay;
+    public WechatPrePay getWechatMpPrePay() {
+        return wechatMpPrePay;
     }
 
-    public void setWechatPrePay(WechatPrePay wechatPrePay) {
-        this.wechatPrePay = wechatPrePay;
+    public void setWechatMpPrePay(WechatPrePay wechatMpPrePay) {
+        this.wechatMpPrePay = wechatMpPrePay;
     }
 
     public PrivateChat getPrivateChat() {

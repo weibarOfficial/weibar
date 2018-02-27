@@ -3,11 +3,16 @@ package com.weibar.service.function;
 import cn.binarywang.wx.miniapp.api.WxMaService;
 import cn.binarywang.wx.miniapp.bean.WxMaJscode2SessionResult;
 import cn.binarywang.wx.miniapp.bean.WxMaUserInfo;
+import cn.binarywang.wx.miniapp.bean.WxMaWxcodeLimit;
+import cn.binarywang.wx.miniapp.util.http.QrCodeRequestExecutor;
 import com.weibar.pojo.db.DakaUser;
 import com.weibar.pojo.db.UserBaseInfo;
 import com.weibar.pojo.enu.AppEnum;
 import com.weibar.pojo.enu.ErrorCodeEnum;
 import com.weibar.pojo.exception.BaseException;
+import com.weibar.pojo.result.DakaQrCodeFix;
+import com.weibar.utils.AliOssClient;
+import com.weibar.utils.JsonConverter;
 import me.chanjar.weixin.common.exception.WxErrorException;
 import me.chanjar.weixin.common.util.crypto.PKCS7Encoder;
 import org.apache.catalina.User;
@@ -20,8 +25,11 @@ import org.springframework.stereotype.Service;
 import javax.crypto.Cipher;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
+import java.io.File;
 import java.nio.charset.StandardCharsets;
 import java.security.AlgorithmParameters;
+
+import static cn.binarywang.wx.miniapp.api.WxMaQrcodeService.GET_WXACODE_UNLIMIT_URL;
 
 /**
  * Created by Administrator on 2018/2/1.
@@ -61,5 +69,30 @@ public class WechatMiniProgramService {
         UserBaseInfo userBaseInfo = userService.updateUserInfoByWechatMiniProgram(userInfo, AppEnum.DAKA_MINI);
 
         return userBaseInfo;
+    }
+
+
+    public String createMaQrcode(String scene,String page) throws BaseException {
+        try {
+            //File file = wxService.getQrcodeService().createWxCode(page);
+
+
+            DakaQrCodeFix wxMaWxcodeLimit = new DakaQrCodeFix();
+            wxMaWxcodeLimit.setScene(scene);
+            wxMaWxcodeLimit.setPage(page);
+            wxMaWxcodeLimit.setWidth(430);
+            wxMaWxcodeLimit.setAuto_color(true);
+            wxMaWxcodeLimit.setLine_color(null);
+
+            File file = wxService.execute(new QrCodeRequestExecutor(wxService.getRequestHttp()),
+                    GET_WXACODE_UNLIMIT_URL, wxMaWxcodeLimit);
+
+
+            String url = AliOssClient.uploadFile(file);
+            return url;
+        } catch (WxErrorException e) {
+            LOG.error("createMaQrcode error ",e);
+            throw BaseException.getException(ErrorCodeEnum.MINIPRAGRAM_GET_QR_ERROR.getCode());
+        }
     }
 }

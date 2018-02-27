@@ -11,15 +11,15 @@ public class BarpinResult {
     private boolean isBanlanceEnough;
     private BigDecimal minRechargeAmount;
     private BarrageInfo barrageInfo;
-    private WechatPrePay wechatPrePay;
+    private WechatPrePay wechatMpPrePay;
 
 
-    public WechatPrePay getWechatPrePay() {
-        return wechatPrePay;
+    public WechatPrePay getWechatMpPrePay() {
+        return wechatMpPrePay;
     }
 
-    public void setWechatPrePay(WechatPrePay wechatPrePay) {
-        this.wechatPrePay = wechatPrePay;
+    public void setWechatMpPrePay(WechatPrePay wechatMpPrePay) {
+        this.wechatMpPrePay = wechatMpPrePay;
     }
 
 

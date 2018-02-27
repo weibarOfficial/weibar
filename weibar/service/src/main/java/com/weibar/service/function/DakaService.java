@@ -69,6 +69,16 @@ public class DakaService {
 
     private static final Logger LOG = LoggerFactory.getLogger(DakaService.class);
 
+
+    public static final String DAKA_INDEX_PAGE = "pages/index/index";
+
+    public static final String DAKA_QR_SECNE = "1";
+
+
+
+
+
+
     /**
      * 下打卡订单，返回支付相关信息
      * @param sessionKey
@@ -517,6 +527,11 @@ public class DakaService {
         }
 
 
+    }
+
+
+    public String getQRCodeURL() throws BaseException {
+        return wechatMiniProgramService.createMaQrcode(DAKA_QR_SECNE,DAKA_INDEX_PAGE);
     }
 
 

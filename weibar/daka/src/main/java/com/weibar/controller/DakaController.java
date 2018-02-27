@@ -69,4 +69,9 @@ public class DakaController {
         return BaseResult.getSuccessfulResult(dakaService.dakaLogin(code,nickName,avatarUrl,gender,province,ctiy,country));
     }
 
+    @RequestMapping(value = "/daka/getDakaQRCode" ,method = {RequestMethod.POST,RequestMethod.GET})
+    public Object getDakaQrCodeUrl() throws BaseException {
+        return BaseResult.getSuccessfulResult(dakaService.getQRCodeURL());
+    }
+
 }

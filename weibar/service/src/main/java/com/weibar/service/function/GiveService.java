@@ -69,7 +69,7 @@ public class GiveService {
             WechatPrePay wechatPrePay = wechatPayService.createOrder(minRechargeAmount.multiply(new BigDecimal(100)).intValue(),userIp,userGive.getOpenid(),
                     payAttachService.generateGivePayAttach(merchantId, userGive.getUserId(), userGiven.getUserId(),
                             userIp,goodsId,content,giveType));
-            giveResult.setWechatPrePay(wechatPrePay);
+            giveResult.setWechatMpPrePay(wechatPrePay);
             return giveResult;
         }
 

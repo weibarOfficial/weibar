@@ -2,10 +2,11 @@ package com.weibar.utils;
 
 import com.aliyun.oss.OSSClient;
 import com.aliyun.oss.model.CannedAccessControlList;
+import com.fasterxml.jackson.core.util.ByteArrayBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.ByteArrayInputStream;
+import java.io.*;
 
 /**
  * Created by Administrator on 2017/11/16.
@@ -68,6 +69,26 @@ public class AliOssClient {
         String fileName = SignUtils.md5DigestAsHex(content);
         getOssClient().putObject(BUCKET_NAME, fileName, new ByteArrayInputStream(content));
         logger.info("uploadBytes to alioss successfully fileName: " + fileName);
+        return fileName;
+    }
+
+
+    public static String uploadFile(File file){
+        ByteArrayBuilder byteArrayBuilder = new ByteArrayBuilder();
+        try {
+            FileInputStream fileInputStream = new FileInputStream(file);
+            int buffer ;
+            while((buffer = fileInputStream.read()) != -1){
+                byteArrayBuilder.append(buffer);
+            }
+        } catch (IOException e) {
+            logger.error("uploadFile error",e);
+            return null;
+        }
+        byte[] bytes = byteArrayBuilder.toByteArray();
+        String fileName = SignUtils.md5DigestAsHex(bytes);
+        getOssClient().putObject(BUCKET_NAME, fileName, new ByteArrayInputStream(bytes));
+        logger.info("uploadFile to alioss successfully fileName: " + fileName);
         return fileName;
     }
 

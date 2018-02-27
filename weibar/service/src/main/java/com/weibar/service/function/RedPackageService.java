@@ -89,7 +89,7 @@ public class RedPackageService {
             //余额不足生成微信订单返回
             WechatPrePay wechatPrePay = wechatPayService.createOrder(needRechargeAmount.multiply(new BigDecimal(100)).intValue(),userIp,userBaseInfo.getOpenid(),
                         payAttachService.generateRedPackagePayAttach(redPackageId));
-            redPackageBeforePay.setWechatPrePay(wechatPrePay);
+            redPackageBeforePay.setWechatMpPrePay(wechatPrePay);
         }else{
             redPackageBeforePay.setBanlanceEnough(true);
         }

@@ -125,9 +125,9 @@ public class BarpinService {
             BigDecimal minRechargeAmount =  needPayAmount.subtract(userAccountBalance.getBalance());
             barpinResult.setMinRechargeAmount(minRechargeAmount);
             //余额不足生成微信订单返回
-            WechatPrePay wechatPrePay = wechatPayService.createOrder(minRechargeAmount.multiply(new BigDecimal(100)).intValue(),userIp,userBaseInfo.getOpenid(),
+            WechatPrePay wechatMpPrePay = wechatPayService.createOrder(minRechargeAmount.multiply(new BigDecimal(100)).intValue(),userIp,userBaseInfo.getOpenid(),
                     payAttachService.generateBapinPayAttach(merchantId,messageId,second,userId,times,userIp,theme,content));
-            barpinResult.setWechatPrePay(wechatPrePay);
+            barpinResult.setWechatMpPrePay(wechatMpPrePay);
             return barpinResult;
         }
 
