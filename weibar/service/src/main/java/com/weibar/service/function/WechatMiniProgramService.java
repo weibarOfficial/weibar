@@ -77,6 +77,7 @@ public class WechatMiniProgramService {
             //File file = wxService.getQrcodeService().createWxCode(page);
 
 
+            //为了修复原来微信调用库的bug而创建
             DakaQrCodeFix wxMaWxcodeLimit = new DakaQrCodeFix();
             wxMaWxcodeLimit.setScene(scene);
             wxMaWxcodeLimit.setPage(page);
@@ -88,7 +89,7 @@ public class WechatMiniProgramService {
                     GET_WXACODE_UNLIMIT_URL, wxMaWxcodeLimit);
 
 
-            String url = AliOssClient.uploadFile(file);
+            String url = AliOssClient.getImgUrlByFileName(AliOssClient.uploadFile(file));
             return url;
         } catch (WxErrorException e) {
             LOG.error("createMaQrcode error ",e);

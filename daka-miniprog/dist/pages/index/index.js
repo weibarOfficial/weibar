@@ -183,7 +183,7 @@ Page({
                 })
               } else if (res.data.data.hasPayTomorrowDakaOrder) {
                 that.setData({
-                  buttonText: "请明早记得打卡哦~",
+                  buttonText: "明早记得5-8点前打卡哦~",
                   buttonBindtap: "",
                   buttondisabled: true
                 })

@@ -48,11 +48,16 @@
     "list": [
       {
         "pagePath": "pages/index/index",
-        "text": "早起打卡"
+        "text": "早起打卡",
+        "iconPath": "morning.png",
+        "selectedIconPath": "morningSelected.png"
+
       },
       {
         "pagePath": "pages/my/my",
-        "text": "我的战绩"
+        "text": "我的战绩",
+        "iconPath":"myicon.png",
+        "selectedIconPath":"myiconSelected.png"
       }    
     ]
   }
