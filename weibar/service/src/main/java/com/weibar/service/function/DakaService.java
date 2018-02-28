@@ -515,7 +515,9 @@ public class DakaService {
             //更新用户表
             DakaOrder dakaOrder = succOrds.get(i);
             dakaOrder.setGetAmount(dakaOrder.getPayAmount().add(succGetMoneyList.get(i)));
-
+            dakaOrder.setUpdateTime(new Date());
+            dakaOrder.setStatus(DakaOrderStatusEnum.SEND.getState());
+            dakaOrderMapper.updateByPrimaryKey(dakaOrder);
             wechatRedPackageService.createRedPackageOrder(dakaOrder.getGetAmount(),
                     dakaOrder.getOrderid().toString(),
                     dakaOrder.getOpenid(),

@@ -24,9 +24,12 @@ public class DakaSimpleOrder {
         this.setDate(simpleDateFormat.format(dakaOrder.getOrderDate()));
 
         int status = dakaOrder.getStatus();
-        if(status == DakaOrderStatusEnum.DAKA_SUC.getState() || status == DakaOrderStatusEnum.SEND.getState()){
+        if(status == DakaOrderStatusEnum.SEND.getState()){
             this.setResult("打卡成功");
             this.setMoney(dakaOrder.getGetAmount().setScale(2).toPlainString());
+        }else if (status == DakaOrderStatusEnum.DAKA_SUC.getState()){
+            this.setResult("打卡成功");
+            this.setMoney("收益计算中...");
         }else{
             this.setResult("打卡失败");
             this.setMoney("-" + dakaOrder.getPayAmount().setScale(2).toPlainString());
