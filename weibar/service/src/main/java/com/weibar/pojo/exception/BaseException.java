@@ -1,6 +1,8 @@
 package com.weibar.pojo.exception;
 
 import com.weibar.pojo.enu.ErrorCodeEnum;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Created by Administrator on 2017/10/30.
@@ -9,8 +11,14 @@ import com.weibar.pojo.enu.ErrorCodeEnum;
 public class BaseException extends Exception{
 
 
+    private static final Logger LOG = LoggerFactory.getLogger(BaseException.class);
+
+
     public static BaseException getException(int code){
-        return new BaseException(code, ErrorCodeEnum.getErrorCodeEnumByCode(code).getMsg());
+        ErrorCodeEnum errorCodeEnum = ErrorCodeEnum.getErrorCodeEnumByCode(code);
+        //LOG.info("errorCodeEnum " + errorCodeEnum + "errorCodeEnum msg " + errorCodeEnum.getMsg() + " code " + code );
+        BaseException baseException =  new BaseException(code, errorCodeEnum.getMsg());
+        return baseException;
     }
 
     private int code;
@@ -26,6 +34,8 @@ public class BaseException extends Exception{
         this.msg = msg;
     }
 
+
+
     public int getCode() {
         return code;
     }
@@ -40,5 +50,13 @@ public class BaseException extends Exception{
 
     public void setMsg(String msg) {
         this.msg = msg;
+    }
+
+    @Override
+    public String toString() {
+        return "BaseException{" +
+                "code=" + code +
+                ", msg='" + msg + '\'' +
+                '}';
     }
 }

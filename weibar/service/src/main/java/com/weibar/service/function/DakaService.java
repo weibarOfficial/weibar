@@ -151,6 +151,12 @@ public class DakaService {
         Date now = new Date();
 
         DakaOrder dakaOrder = getDakaOrderByDate(user.getUserId(),now);
+
+        if(dakaOrder.getStatus() == DakaOrderStatusEnum.DAKA_SUC.getState() ||
+                dakaOrder.getStatus() == DakaOrderStatusEnum.SEND.getState()){
+            throw BaseException.getException(ErrorCodeEnum.DAKA_ORDER_HAS_SUCCESS.getCode());
+        }
+
         dakaOrder.setUpdateTime(now);
         dakaOrder.setDakaTime(now);
         dakaOrder.setStatus(DakaOrderStatusEnum.DAKA_SUC.getState());
@@ -163,8 +169,8 @@ public class DakaService {
         dakaUser.setUpdateTime(now);
         dakaUserMapper.updateByPrimaryKey(dakaUser);
 
-        //更新统计表
-        DakaDaySummary dakaDaySummary = getTomorrowDakaDaySummary(now);
+        //更新统计表(当天的统计表）
+        DakaDaySummary dakaDaySummary = getDakaDaySummary(now);
         dakaDaySummary.setScount(dakaDaySummary.getScount() + 1);
 
         //早起之星
@@ -479,45 +485,97 @@ public class DakaService {
     }
 
 
-    private List<DakaOrder> getDakaOrders(Date date,Integer status){
+    private List<DakaOrder> getDakaOrders(Date date,List<Integer> status){
         DakaOrderCriteria dakaOrderCriteria = new DakaOrderCriteria();
         DakaOrderCriteria.Criteria criteria = dakaOrderCriteria.createCriteria();
         criteria.andOrderDateEqualTo(date);
-        criteria.andStatusEqualTo(status);
+        criteria.andStatusIn(status);
         List<DakaOrder> list = dakaOrderMapper.selectByExample(dakaOrderCriteria);
         return list;
     }
 
 
+    private List<DakaOrder> getDakaOrders(Long userId){
+        DakaOrderCriteria dakaOrderCriteria = new DakaOrderCriteria();
+        DakaOrderCriteria.Criteria criteria = dakaOrderCriteria.createCriteria();
+        criteria.andUserIdEqualTo(userId);
+        List<DakaOrder> list = dakaOrderMapper.selectByExample(dakaOrderCriteria);
+        return list;
+    }
 
+
+    /**
+     * 要支持可以重复执行
+     * @param date
+     * @throws BaseException
+     */
+    @Transactional(propagation = Propagation.REQUIRED,isolation = Isolation.READ_COMMITTED,rollbackFor = Exception.class)
     public void refreshAndSendDakaMoney(Date date) throws BaseException {
+
         DakaDaySummary dakaDaySummary = getDakaDaySummary(date);
         // 计算失败人数
         dakaDaySummary.setFcount(dakaDaySummary.getCount() - dakaDaySummary.getScount());
 
-        List<DakaOrder> succOrds = getDakaOrders(date,DakaOrderStatusEnum.DAKA_SUC.getState());
-        List<DakaOrder> failOrds = getDakaOrders(date,DakaOrderStatusEnum.PAYED.getState());
+        List<Integer> sucStatus = new ArrayList<>();
+        List<Integer> failStatus = new ArrayList<>();
+        sucStatus.add(DakaOrderStatusEnum.DAKA_SUC.getState());
+        sucStatus.add(DakaOrderStatusEnum.SEND.getState());
+        failStatus.add(DakaOrderStatusEnum.PAYED.getState());
+
+        List<DakaOrder> succOrds = getDakaOrders(date,sucStatus);
+        List<DakaOrder> failOrds = getDakaOrders(date,failStatus);
 
         if(succOrds.size() != dakaDaySummary.getScount() || failOrds.size() != dakaDaySummary.getFcount()){
-            throw BaseException.getException(ErrorCodeEnum.DAKA_ORDER_TABLE_SUM_TABLE_ERROR.getCode());
+            BaseException baseException = BaseException.getException(ErrorCodeEnum.DAKA_ORDER_TABLE_SUM_TABLE_ERROR.getCode());
+            throw baseException;
         }
 
         BigDecimal failMoney = new BigDecimal(0);
         for(DakaOrder dakaOrder : failOrds){
             failMoney = failMoney.add(dakaOrder.getPayAmount());
+            dakaOrder.setStatus(DakaOrderStatusEnum.DAKA_FAIL.getState());
+            dakaOrder.setUpdateTime(new Date());
+            dakaOrderMapper.updateByPrimaryKey(dakaOrder);
         }
 
         BigDecimal sendMoneySum = discountService.getDakaDiscount(failMoney,succOrds.size());
 
         List<BigDecimal> succGetMoneyList = redPackageService.getRedPackageAmountList(sendMoneySum,succOrds.size(),true);
 
+
+
+        // 最佳 和 最有毅力
+        DakaOrder luckyUser = null;
+        DakaUser gutUser = null;
+
+
         for(int i = 0; i < succGetMoneyList.size() ; i++){
-            //更新用户表
+            //更新订单表
+            Date now = new Date();
             DakaOrder dakaOrder = succOrds.get(i);
             dakaOrder.setGetAmount(dakaOrder.getPayAmount().add(succGetMoneyList.get(i)));
-            dakaOrder.setUpdateTime(new Date());
+            dakaOrder.setUpdateTime(now);
             dakaOrder.setStatus(DakaOrderStatusEnum.SEND.getState());
             dakaOrderMapper.updateByPrimaryKey(dakaOrder);
+
+
+            //更新用户收入表
+            DakaUser dakaUser = updateDakaUser(dakaOrder.getUserId());
+
+            // 更新最佳和最有毅力
+            if(luckyUser == null){
+                luckyUser = dakaOrder;
+            }else if(dakaOrder.getGetAmount().compareTo(luckyUser.getGetAmount()) > 0){
+                luckyUser = dakaOrder;
+            }
+
+            if(gutUser == null){
+                gutUser = dakaUser;
+            }else if(gutUser.getScount() < dakaUser.getScount()){
+                gutUser = dakaUser;
+            }
+
+
             wechatRedPackageService.createRedPackageOrder(dakaOrder.getGetAmount(),
                     dakaOrder.getOrderid().toString(),
                     dakaOrder.getOpenid(),
@@ -528,7 +586,79 @@ public class DakaService {
                     "发放打卡成功奖励金");
         }
 
+        //更新统计表
+        dakaDaySummary.setUpdateTime(new Date());
+        dakaDaySummary.setLuckyAmount(luckyUser.getGetAmount());
+        dakaDaySummary.setLuckyOpenId(luckyUser.getOpenid());
+        dakaDaySummary.setLuckyUserId(luckyUser.getUserId());
+        DakaUser dakaUserLucky = getDakaUser(luckyUser.getUserId());
+        dakaDaySummary.setLuckyUserPicture(dakaUserLucky.getUserPicture());
 
+        dakaDaySummary.setGutsCount(gutUser.getScount());
+        dakaDaySummary.setGutsOpenId(gutUser.getOpenid());
+        dakaDaySummary.setGutsUserId(gutUser.getUserId());
+        dakaDaySummary.setGutsUserPicture(gutUser.getUserPicture());
+
+        dakaDaySummaryMapper.updateByPrimaryKey(dakaDaySummary);
+    }
+
+
+    public DakaUser updateDakaUser(Long userId) throws BaseException {
+        List<DakaOrder> list = getDakaOrders(userId);
+        BigDecimal paySum = new BigDecimal(0);
+        BigDecimal getSum = new BigDecimal(0);
+        int scount = 0;
+        int fcount = 0;
+        int count = 0;
+        for(DakaOrder dakaOrder : list){
+            if(dakaOrder.getStatus() != DakaOrderStatusEnum.NOT_PAY.getState()){
+                paySum.add(dakaOrder.getPayAmount());
+            }
+            if(dakaOrder.getStatus() == DakaOrderStatusEnum.SEND.getState()){
+                getSum.add(dakaOrder.getGetAmount());
+            }
+            if(dakaOrder.getStatus() == DakaOrderStatusEnum.DAKA_SUC.getState() || dakaOrder.getStatus() == DakaOrderStatusEnum.SEND.getState()){
+                scount++;
+            }
+            if(dakaOrder.getStatus() == DakaOrderStatusEnum.DAKA_FAIL.getState()){
+                fcount++;
+            }
+            count++;
+        }
+        DakaUser dakaUser = getDakaUser(userId);
+        Date now = new Date();
+        dakaUser.setGetSumAmount(getSum);
+        dakaUser.setPaySumAmount(paySum);
+        dakaUser.setUpdateTime(now);
+        dakaUser.setScount(scount);
+        dakaUser.setFcount(fcount);
+        dakaUser.setCount(count);
+        dakaUserMapper.updateByPrimaryKey(dakaUser);
+        return dakaUser;
+
+    }
+
+
+    private BigDecimal getUserPaySum(Long userId){
+        List<DakaOrder> list = getDakaOrders(userId);
+        BigDecimal paySum = new BigDecimal(0);
+        for(DakaOrder dakaOrder : list){
+            if(dakaOrder.getStatus() != DakaOrderStatusEnum.NOT_PAY.getState()){
+                paySum.add(dakaOrder.getPayAmount());
+            }
+        }
+        return paySum;
+    }
+
+    private BigDecimal getUserGetSum(Long userId){
+        List<DakaOrder> list = getDakaOrders(userId);
+        BigDecimal getSum = new BigDecimal(0);
+        for(DakaOrder dakaOrder : list){
+            if(dakaOrder.getStatus() == DakaOrderStatusEnum.SEND.getState()){
+                getSum.add(dakaOrder.getGetAmount());
+            }
+        }
+        return getSum;
     }
 
 

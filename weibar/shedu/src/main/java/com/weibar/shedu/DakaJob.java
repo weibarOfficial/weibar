@@ -19,12 +19,15 @@ public class DakaJob {
     private DakaService dakaService;
 
     @Scheduled(cron = "0 1 8 * * ?")
+    //@Scheduled(cron = "0 56 16 * * ?")
     public void dakaFinishJob(){
         try {
+            LOG.info("dakaFinishJob begin");
             Date now = new Date();
             dakaService.refreshAndSendDakaMoney(now);
+            LOG.info("dakaFinishJob end succ");
         } catch (BaseException e) {
-            LOG.error("refreshAndSendDakaMoney error",e);
+            LOG.error("refreshAndSendDakaMoney error " + e.toString(),e);
         }
     }
 

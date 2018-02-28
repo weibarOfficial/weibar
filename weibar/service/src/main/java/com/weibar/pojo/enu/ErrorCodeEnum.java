@@ -119,6 +119,7 @@ public enum ErrorCodeEnum {
     DAKA_NOT_IN_TIME(-140005,"每天请在5点到8点之间进行打卡"),
     DAKA_ORDER_TABLE_SUM_TABLE_ERROR(-140006,"用户订单表和统计表数据不一致"),
     DAKA_ORDER_HAS_PAYED(-140008,"打卡订单已支付"),
+    DAKA_ORDER_HAS_SUCCESS(-140009,"已打卡成功~ 请勿重复打卡"),
     DAKA_ERROR_END(-150000,"打卡相关错误结束段"),
 
     MINIPRAGRAM_ERROR_BEGIN(-150001,"小程序相关错误开始段"),

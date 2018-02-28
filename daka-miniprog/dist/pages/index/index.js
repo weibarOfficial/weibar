@@ -41,7 +41,7 @@ Page({
             console.log(res);
             if (res.data.code != 0) {
               wx.showModal({
-                content: '打卡失败:' + res.data.message,
+                content:  res.data.message,
                 showCancel: false
               });
             } else {
