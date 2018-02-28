@@ -1,8 +1,10 @@
 App({
   BASE_URL: 'https://www.yylive.com',  
     onLaunch: function () {
+      var that = this;
       wx.login({
         success: function (res) {
+          //that.loginMedal();
           if (res.code) {
             //发起网络请求
             var loginCode = res.code;
@@ -72,16 +74,10 @@ App({
               success: function (res) {
               }
             });
-            //console.log('获取用户登录态失败！' + res.errMsg)
           }
         },
         fail : function(){
-          wx.showModal({
-            content: '登录失败，访问后台服务器失败',
-            showCancel: false,
-            success: function (res) {
-            }
-          });
+          that.loginMedal();
         }
       });
     },
@@ -90,6 +86,30 @@ App({
     },
     onHide: function () {
         console.log('App Hide')
+    },
+
+
+    loginMedal : function(){
+      wx.showModal({
+        content: '微信登录失败，必须授权登录才能进行后续操作，是否重新登录？',
+        showCancel: true,
+        success: function (res) {
+
+          if (res.confirm) {
+            wx.openSetting({
+              success: function (res) {
+              }
+            })
+          } else if (res.cancel) {
+            console.log('微信登录 用户点击取消');
+            wx.navigateBack({
+              delta: -1
+            })
+          }
+
+
+        }
+      });
     },
     globalData: {
         hasLogin: false

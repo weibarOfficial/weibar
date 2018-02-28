@@ -521,6 +521,7 @@ public class DakaService {
         sucStatus.add(DakaOrderStatusEnum.DAKA_SUC.getState());
         sucStatus.add(DakaOrderStatusEnum.SEND.getState());
         failStatus.add(DakaOrderStatusEnum.PAYED.getState());
+        failStatus.add(DakaOrderStatusEnum.DAKA_FAIL.getState());
 
         List<DakaOrder> succOrds = getDakaOrders(date,sucStatus);
         List<DakaOrder> failOrds = getDakaOrders(date,failStatus);
@@ -533,6 +534,11 @@ public class DakaService {
         BigDecimal failMoney = new BigDecimal(0);
         for(DakaOrder dakaOrder : failOrds){
             failMoney = failMoney.add(dakaOrder.getPayAmount());
+
+            if(dakaOrder.getStatus() == DakaOrderStatusEnum.DAKA_FAIL.getState()){
+                continue;
+            }
+
             dakaOrder.setStatus(DakaOrderStatusEnum.DAKA_FAIL.getState());
             dakaOrder.setUpdateTime(new Date());
             dakaOrderMapper.updateByPrimaryKey(dakaOrder);
@@ -550,9 +556,16 @@ public class DakaService {
 
 
         for(int i = 0; i < succGetMoneyList.size() ; i++){
+
+
             //更新订单表
             Date now = new Date();
             DakaOrder dakaOrder = succOrds.get(i);
+
+            if(dakaOrder.getStatus() == DakaOrderStatusEnum.SEND.getState()){
+                continue;
+            }
+
             dakaOrder.setGetAmount(dakaOrder.getPayAmount().add(succGetMoneyList.get(i)));
             dakaOrder.setUpdateTime(now);
             dakaOrder.setStatus(DakaOrderStatusEnum.SEND.getState());
@@ -638,28 +651,6 @@ public class DakaService {
 
     }
 
-
-    private BigDecimal getUserPaySum(Long userId){
-        List<DakaOrder> list = getDakaOrders(userId);
-        BigDecimal paySum = new BigDecimal(0);
-        for(DakaOrder dakaOrder : list){
-            if(dakaOrder.getStatus() != DakaOrderStatusEnum.NOT_PAY.getState()){
-                paySum.add(dakaOrder.getPayAmount());
-            }
-        }
-        return paySum;
-    }
-
-    private BigDecimal getUserGetSum(Long userId){
-        List<DakaOrder> list = getDakaOrders(userId);
-        BigDecimal getSum = new BigDecimal(0);
-        for(DakaOrder dakaOrder : list){
-            if(dakaOrder.getStatus() == DakaOrderStatusEnum.SEND.getState()){
-                getSum.add(dakaOrder.getGetAmount());
-            }
-        }
-        return getSum;
-    }
 
 
     public String getQRCodeURL() throws BaseException {
