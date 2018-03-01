@@ -13,7 +13,7 @@
     <appender name="file" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <!--<file>${log.path.all}</file>-->
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <fileNamePattern>/data/weblog/weibar/shedu/all.log.%d{yyyy-MM-dd}</fileNamePattern>
+            <fileNamePattern>/data/weblog/weibar/shedu/alln.log.%d{yyyy-MM-dd}</fileNamePattern>
         </rollingPolicy>
         <encoder>
             <pattern>%d{HH:mm:ss.SSS} %contextName [%thread] %-5level %logger{36} - %msg%n</pattern>
@@ -27,7 +27,7 @@
             <level>WARN</level>
         </filter>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <fileNamePattern>/data/weblog/weibar/shedu/error.log.%d{yyyy-MM-dd}</fileNamePattern>
+            <fileNamePattern>/data/weblog/weibar/shedu/errorn.log.%d{yyyy-MM-dd}</fileNamePattern>
         </rollingPolicy>
         <encoder>
             <pattern>%d{HH:mm:ss.SSS} %contextName [%thread] %-5level %logger{36} - %msg%n</pattern>
