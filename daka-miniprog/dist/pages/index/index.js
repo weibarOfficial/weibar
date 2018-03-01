@@ -9,7 +9,7 @@ Page({
     tomorrowDakaMoney: "未知",
     suceessDaka: "未知",
     failDaka: "未知",
-    buttonText:"支付一元参与打卡",
+    buttonText:"支付2元参与打卡",
     buttonBindtap: "payForDaka",
     buttondisabled: "false",
   },
@@ -70,7 +70,7 @@ Page({
           dataType: "json",
           data: {
             sessionKey: res.data,
-            amount: 0.01
+            amount: 2
           },
           success: function (res) {
             console.log(res);
@@ -189,7 +189,7 @@ Page({
                 })
               }else {
                 that.setData({
-                  buttonText: "支付一元参与打卡",
+                  buttonText: "支付2元参与打卡",
                   buttonBindtap: "payForDaka",
                   buttondisabled: false
                 })

@@ -19,7 +19,7 @@ public class DakaJob {
     private DakaService dakaService;
 
     @Scheduled(cron = "0 1 8 * * ?")
-    //@Scheduled(cron = "0 56 16 * * ?")
+    //@Scheduled(cron = "0 28 14 * * ?")
     public void dakaFinishJob(){
         try {
             LOG.info("dakaFinishJob begin");

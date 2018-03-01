@@ -150,40 +150,44 @@ public class DakaService {
         //更新打卡订单
         Date now = new Date();
 
-        DakaOrder dakaOrder = getDakaOrderByDate(user.getUserId(),now);
+        //这里存在重复支付订单的情况
+        List<DakaOrder> dakaOrders = getPayedDakaOrderByDate(user.getUserId(),now);
 
-        if(dakaOrder.getStatus() == DakaOrderStatusEnum.DAKA_SUC.getState() ||
-                dakaOrder.getStatus() == DakaOrderStatusEnum.SEND.getState()){
-            throw BaseException.getException(ErrorCodeEnum.DAKA_ORDER_HAS_SUCCESS.getCode());
+        for(DakaOrder dakaOrder : dakaOrders){
+
+            if(dakaOrder.getStatus() == DakaOrderStatusEnum.DAKA_SUC.getState() ||
+                    dakaOrder.getStatus() == DakaOrderStatusEnum.SEND.getState()){
+                throw BaseException.getException(ErrorCodeEnum.DAKA_ORDER_HAS_SUCCESS.getCode());
+            }
+
+            dakaOrder.setUpdateTime(now);
+            dakaOrder.setDakaTime(now);
+            dakaOrder.setStatus(DakaOrderStatusEnum.DAKA_SUC.getState());
+            dakaOrder.setClientIp(clientIp);
+            dakaOrderMapper.updateByPrimaryKey(dakaOrder);
+
+            //更新用户收入表
+            DakaUser dakaUser = getDakaUser(dakaOrder.getUserId());
+            dakaUser.setScount(dakaUser.getScount() + 1);
+            dakaUser.setUpdateTime(now);
+            dakaUserMapper.updateByPrimaryKey(dakaUser);
+
+            //更新统计表(当天的统计表）
+            DakaDaySummary dakaDaySummary = getDakaDaySummary(now);
+            dakaDaySummary.setScount(dakaDaySummary.getScount() + 1);
+
+            //早起之星
+            if(dakaDaySummary.getScount() == 1){
+                dakaDaySummary.setEarlyOpenId(dakaUser.getOpenid());
+                dakaDaySummary.setEarlyTime(now);
+                dakaDaySummary.setEarlyUserId(dakaUser.getUserId());
+                dakaDaySummary.setEarlyOpenId(dakaUser.getOpenid());
+                dakaDaySummary.setEarlyUserPicture(dakaUser.getUserPicture());
+            }
+
+            dakaDaySummary.setUpdateTime(now);
+            dakaDaySummaryMapper.updateByPrimaryKey(dakaDaySummary);
         }
-
-        dakaOrder.setUpdateTime(now);
-        dakaOrder.setDakaTime(now);
-        dakaOrder.setStatus(DakaOrderStatusEnum.DAKA_SUC.getState());
-        dakaOrder.setClientIp(clientIp);
-        dakaOrderMapper.updateByPrimaryKey(dakaOrder);
-
-        //更新用户收入表
-        DakaUser dakaUser = getDakaUser(dakaOrder.getUserId());
-        dakaUser.setScount(dakaUser.getScount() + 1);
-        dakaUser.setUpdateTime(now);
-        dakaUserMapper.updateByPrimaryKey(dakaUser);
-
-        //更新统计表(当天的统计表）
-        DakaDaySummary dakaDaySummary = getDakaDaySummary(now);
-        dakaDaySummary.setScount(dakaDaySummary.getScount() + 1);
-
-        //早起之星
-        if(dakaDaySummary.getScount() == 1){
-            dakaDaySummary.setEarlyOpenId(dakaUser.getOpenid());
-            dakaDaySummary.setEarlyTime(now);
-            dakaDaySummary.setEarlyUserId(dakaUser.getUserId());
-            dakaDaySummary.setEarlyOpenId(dakaUser.getOpenid());
-            dakaDaySummary.setEarlyUserPicture(dakaUser.getUserPicture());
-        }
-
-        dakaDaySummary.setUpdateTime(now);
-        dakaDaySummaryMapper.updateByPrimaryKey(dakaDaySummary);
     }
 
 
@@ -281,7 +285,7 @@ public class DakaService {
         }
     }
 
-    public DakaOrder getDakaOrderByDate(long userId,Date date) throws BaseException {
+    public List<DakaOrder> getPayedDakaOrderByDate(long userId, Date date) throws BaseException {
 
         date = DatesUtils.removeTime(date);
 
@@ -289,9 +293,10 @@ public class DakaService {
         DakaOrderCriteria.Criteria criteria = dakaOrderCriteria.createCriteria();
         criteria.andOrderDateEqualTo(date);
         criteria.andUserIdEqualTo(userId);
+        criteria.andStatusEqualTo(DakaOrderStatusEnum.PAYED.getState());
         List<DakaOrder> list = dakaOrderMapper.selectByExample(dakaOrderCriteria);
         if(list != null && list.size() != 0){
-            return list.get(0);
+            return list;
         }else{
             throw BaseException.getException(ErrorCodeEnum.DAKA_ORDER_NOT_EXIST.getCode());
         }
@@ -527,18 +532,22 @@ public class DakaService {
         List<DakaOrder> failOrds = getDakaOrders(date,failStatus);
 
         if(succOrds.size() != dakaDaySummary.getScount() || failOrds.size() != dakaDaySummary.getFcount()){
-            BaseException baseException = BaseException.getException(ErrorCodeEnum.DAKA_ORDER_TABLE_SUM_TABLE_ERROR.getCode());
-            throw baseException;
+            //BaseException baseException = BaseException.getException(ErrorCodeEnum.DAKA_ORDER_TABLE_SUM_TABLE_ERROR.getCode());
+            //throw baseException;
+
+            //不一致以订单表为准
+            dakaDaySummary.setScount(succOrds.size());
+            dakaDaySummary.setFcount(failOrds.size());
+            dakaDaySummary.setCount(succOrds.size() + failOrds.size());
         }
 
         BigDecimal failMoney = new BigDecimal(0);
         for(DakaOrder dakaOrder : failOrds){
             failMoney = failMoney.add(dakaOrder.getPayAmount());
-
+            updateDakaUser(dakaOrder.getUserId());
             if(dakaOrder.getStatus() == DakaOrderStatusEnum.DAKA_FAIL.getState()){
                 continue;
             }
-
             dakaOrder.setStatus(DakaOrderStatusEnum.DAKA_FAIL.getState());
             dakaOrder.setUpdateTime(new Date());
             dakaOrderMapper.updateByPrimaryKey(dakaOrder);
@@ -601,22 +610,30 @@ public class DakaService {
 
         //更新统计表
         dakaDaySummary.setUpdateTime(new Date());
-        dakaDaySummary.setLuckyAmount(luckyUser.getGetAmount());
-        dakaDaySummary.setLuckyOpenId(luckyUser.getOpenid());
-        dakaDaySummary.setLuckyUserId(luckyUser.getUserId());
-        DakaUser dakaUserLucky = getDakaUser(luckyUser.getUserId());
-        dakaDaySummary.setLuckyUserPicture(dakaUserLucky.getUserPicture());
-
-        dakaDaySummary.setGutsCount(gutUser.getScount());
-        dakaDaySummary.setGutsOpenId(gutUser.getOpenid());
-        dakaDaySummary.setGutsUserId(gutUser.getUserId());
-        dakaDaySummary.setGutsUserPicture(gutUser.getUserPicture());
+        if(luckyUser != null) {
+            dakaDaySummary.setLuckyAmount(luckyUser.getGetAmount());
+            dakaDaySummary.setLuckyOpenId(luckyUser.getOpenid());
+            dakaDaySummary.setLuckyUserId(luckyUser.getUserId());
+            DakaUser dakaUserLucky = getDakaUser(luckyUser.getUserId());
+            dakaDaySummary.setLuckyUserPicture(dakaUserLucky.getUserPicture());
+        }
+        if(gutUser != null) {
+            dakaDaySummary.setGutsCount(gutUser.getScount());
+            dakaDaySummary.setGutsOpenId(gutUser.getOpenid());
+            dakaDaySummary.setGutsUserId(gutUser.getUserId());
+            dakaDaySummary.setGutsUserPicture(gutUser.getUserPicture());
+        }
 
         dakaDaySummaryMapper.updateByPrimaryKey(dakaDaySummary);
+
+
+
     }
 
 
-    public DakaUser updateDakaUser(Long userId) throws BaseException {
+
+
+    private DakaUser updateDakaUser(Long userId) throws BaseException {
         List<DakaOrder> list = getDakaOrders(userId);
         BigDecimal paySum = new BigDecimal(0);
         BigDecimal getSum = new BigDecimal(0);
@@ -625,10 +642,10 @@ public class DakaService {
         int count = 0;
         for(DakaOrder dakaOrder : list){
             if(dakaOrder.getStatus() != DakaOrderStatusEnum.NOT_PAY.getState()){
-                paySum.add(dakaOrder.getPayAmount());
+                paySum = paySum.add(dakaOrder.getPayAmount());
             }
             if(dakaOrder.getStatus() == DakaOrderStatusEnum.SEND.getState()){
-                getSum.add(dakaOrder.getGetAmount());
+                getSum = getSum.add(dakaOrder.getGetAmount());
             }
             if(dakaOrder.getStatus() == DakaOrderStatusEnum.DAKA_SUC.getState() || dakaOrder.getStatus() == DakaOrderStatusEnum.SEND.getState()){
                 scount++;
