@@ -7,8 +7,8 @@
         
 		
 service/target/
-/web/target/
-/shedu/target/
+web/target/
+shedu/target/
 /daka/target/
 /ws/target/
 
