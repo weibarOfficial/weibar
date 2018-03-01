@@ -11,9 +11,9 @@
 
     <!--输出到文件-->
     <appender name="file" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>${log.path.all}</file>
+        <!--<file>${log.path.all}</file>-->
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <fileNamePattern>all.%d{yyyy-MM-dd}.log</fileNamePattern>
+            <fileNamePattern>/data/weblog/weibar/shedu/all.log.%d{yyyy-MM-dd}</fileNamePattern>
         </rollingPolicy>
         <encoder>
             <pattern>%d{HH:mm:ss.SSS} %contextName [%thread] %-5level %logger{36} - %msg%n</pattern>
@@ -22,17 +22,19 @@
 
 
     <appender name="errorFile" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>${log.path.error}</file>
+        <!--<file>${log.path.error}</file>-->
         <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
             <level>WARN</level>
         </filter>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <fileNamePattern>error.%d{yyyy-MM-dd}.log</fileNamePattern>
+            <fileNamePattern>/data/weblog/weibar/shedu/error.log.%d{yyyy-MM-dd}</fileNamePattern>
         </rollingPolicy>
         <encoder>
             <pattern>%d{HH:mm:ss.SSS} %contextName [%thread] %-5level %logger{36} - %msg%n</pattern>
         </encoder>
     </appender>
+
+
 
     <root level="debug">
         <appender-ref ref="console" />
@@ -43,5 +45,7 @@
     <logger name="com.mysql.jdbc" level="ALL" additivity="false">
         <appender-ref ref="console"/>
     </logger>
+
+    <logger name="org.springframework" level="WARN" />
 
 </configuration>
