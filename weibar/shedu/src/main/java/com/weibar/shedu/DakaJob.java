@@ -18,8 +18,8 @@ public class DakaJob {
     @Autowired
     private DakaService dakaService;
 
-    //@Scheduled(cron = "0 1 8 * * ?")
-    @Scheduled(cron = "0 22 20 * * ?")
+    @Scheduled(cron = "0 1 8 * * ?")
+    //@Scheduled(cron = "0 22 20 * * ?")
     public void dakaFinishJob(){
         try {
             LOG.info("dakaFinishJob begin");
