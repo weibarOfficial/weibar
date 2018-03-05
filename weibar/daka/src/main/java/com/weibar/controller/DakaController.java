@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import java.math.BigDecimal;
+import java.util.Date;
 
 /**
  * Created by Administrator on 2018/1/31.
@@ -72,6 +73,15 @@ public class DakaController {
     @RequestMapping(value = "/daka/getDakaQRCode" ,method = {RequestMethod.POST,RequestMethod.GET})
     public Object getDakaQrCodeUrl() throws BaseException {
         return BaseResult.getSuccessfulResult(dakaService.getQRCodeURL());
+    }
+
+
+
+    @RequestMapping(value = "/daka/dakaFinishSepcificDateJob" ,method = {RequestMethod.POST,RequestMethod.GET})
+    public Object dakaFinishSepcificDateJob(@RequestParam Long time) throws BaseException {
+        Date timeDate = new Date(time);
+        dakaService.refreshAndSendDakaMoney(timeDate);
+        return BaseResult.getSuccessfulResult(null);
     }
 
 }

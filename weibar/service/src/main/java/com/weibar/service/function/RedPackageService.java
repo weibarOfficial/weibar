@@ -414,8 +414,14 @@ public class RedPackageService {
             }
 
             long maxCanGet = Math.min(num - least,num);
-            long get = ThreadLocalRandom.current().nextLong(0, maxCanGet );
 
+            long get = 0;
+            //针对可以为0的处理
+            if(maxCanGet > 0) {
+                get = ThreadLocalRandom.current().nextLong(0, maxCanGet );
+            }
+
+           //针对不能为0的处理
             if(!hasZero && get == 0){
                 get = 1;
             }
