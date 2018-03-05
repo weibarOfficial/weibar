@@ -105,6 +105,7 @@ Page({
                   'complete': function (res) { 
                     console.log("调用微信支付结束");
                     console.log(res);
+                    this.refresh();
                     
                   }
                 })

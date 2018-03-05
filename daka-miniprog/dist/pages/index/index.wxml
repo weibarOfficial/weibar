@@ -1,7 +1,7 @@
 <view class="page">
+    
     <view class="weui-msg">
-        
-        <image src="http://img1.3lian.com/2015/w7/85/d/101.jpg" mode="aspectFill">  </image>
+        <image src="zaoqi.jpg" mode="aspectFill">  </image>
         
         <view class="weui-msg__text-area">
             <view class="weui-msg__desc">明早打卡随机瓜分金额（元）</view>
