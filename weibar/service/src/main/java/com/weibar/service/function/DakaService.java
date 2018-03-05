@@ -310,6 +310,7 @@ public class DakaService {
         List<Integer> invalidStatus = new ArrayList<>();
         invalidStatus.add(DakaOrderStatusEnum.NOT_PAY.getState());
         criteria.andStatusNotIn(invalidStatus);
+        dakaOrderCriteria.setOrderByClause(" create_time desc ");
         List<DakaOrder> list =  dakaOrderMapper.selectByExample(dakaOrderCriteria);
         if(list == null){
             return new ArrayList<DakaOrder>();

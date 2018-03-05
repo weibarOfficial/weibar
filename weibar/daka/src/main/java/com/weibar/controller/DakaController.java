@@ -32,7 +32,11 @@ public class DakaController {
 
     @RequestMapping(value = "/daka/pay" ,method = {RequestMethod.POST,RequestMethod.GET})
     public Object pay(@RequestParam String sessionKey,@RequestParam String amount,HttpServletRequest request) throws BaseException {
-        return BaseResult.getSuccessfulResult(dakaService.createDakaOrder(sessionKey,new BigDecimal(amount), IpUtil.getRequestIp(request)));
+
+        BigDecimal amountB = new BigDecimal(amount);
+        //写死一元
+        amountB = new BigDecimal(1);
+        return BaseResult.getSuccessfulResult(dakaService.createDakaOrder(sessionKey,amountB, IpUtil.getRequestIp(request)));
     }
 
     @RequestMapping(value = "/daka/daka" ,method = {RequestMethod.POST,RequestMethod.GET})
