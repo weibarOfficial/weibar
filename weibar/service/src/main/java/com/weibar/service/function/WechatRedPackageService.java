@@ -1,6 +1,8 @@
 package com.weibar.service.function;
 
+import com.github.binarywang.wxpay.bean.request.WxEntPayRequest;
 import com.github.binarywang.wxpay.bean.request.WxPaySendRedpackRequest;
+import com.github.binarywang.wxpay.bean.result.WxEntPayResult;
 import com.github.binarywang.wxpay.bean.result.WxPaySendRedpackResult;
 import com.github.binarywang.wxpay.exception.WxPayException;
 import com.github.binarywang.wxpay.service.WxPayService;
@@ -86,31 +88,49 @@ public class WechatRedPackageService {
 
     public void sendRedPackage(WeibarRedpackageOrder order) throws BaseException {
 
-        WxPaySendRedpackRequest wxPaySendRedpackRequest = new WxPaySendRedpackRequest();
-        wxPaySendRedpackRequest.setMchBillNo(order.getOrderid().toString());
-        wxPaySendRedpackRequest.setSendName(WechatPayConsts.COMPANY_NAME);
-        wxPaySendRedpackRequest.setReOpenid(order.getOpenid());
-        int amountVaule = order.getAmount().multiply(new BigDecimal(100)).setScale(0, BigDecimal.ROUND_DOWN).intValueExact();
-        wxPaySendRedpackRequest.setTotalAmount(amountVaule);
-        wxPaySendRedpackRequest.setTotalNum(SEND_NUM);
-        wxPaySendRedpackRequest.setWishing(order.getRedpackettitle());
-        wxPaySendRedpackRequest.setClientIp(IpUtil.getLocalHostIP());
-        wxPaySendRedpackRequest.setActName(order.getRedpackettitle());
-        wxPaySendRedpackRequest.setRemark("userId:" + order.getUserId() + " chOrderId " + order.getChorderid());
-        wxPaySendRedpackRequest.setSceneId(DEFAULT_SCENE_ID);
+//        WxPaySendRedpackRequest wxPaySendRedpackRequest = new WxPaySendRedpackRequest();
+//        wxPaySendRedpackRequest.setMchBillNo(order.getOrderid().toString());
+//        wxPaySendRedpackRequest.setSendName(WechatPayConsts.COMPANY_NAME);
+//        wxPaySendRedpackRequest.setReOpenid(order.getOpenid());
+//        //int amountVaule = order.getAmount().multiply(new BigDecimal(100)).setScale(0, BigDecimal.ROUND_DOWN).intValueExact();
+//        wxPaySendRedpackRequest.setTotalAmount(amountVaule);
+//        wxPaySendRedpackRequest.setTotalNum(SEND_NUM);
+//        wxPaySendRedpackRequest.setWishing(order.getRedpackettitle());
+//        wxPaySendRedpackRequest.setClientIp(IpUtil.getLocalHostIP());
+//        wxPaySendRedpackRequest.setActName(order.getRedpackettitle());
+//        wxPaySendRedpackRequest.setRemark("userId:" + order.getUserId() + " chOrderId " + order.getChorderid());
+//        wxPaySendRedpackRequest.setSceneId(DEFAULT_SCENE_ID);
 
-        //wxPaySendRedpackRequest.setAppid();
+
+        WxEntPayRequest wxEntPayRequest = new WxEntPayRequest();
+        wxEntPayRequest.setPartnerTradeNo(order.getOrderid().toString());
+        wxEntPayRequest.setOpenid(order.getOpenid());
+        wxEntPayRequest.setCheckName("NO_CHECK");
+        int amountVaule = order.getAmount().multiply(new BigDecimal(100)).setScale(0, BigDecimal.ROUND_DOWN).intValueExact();
+        wxEntPayRequest.setAmount(amountVaule);
+        wxEntPayRequest.setDescription(order.getRedpackettitle());
+        wxEntPayRequest.setSpbillCreateIp(IpUtil.getLocalHostIP());
+
+
 
         WxPaySendRedpackResult wxPaySendRedpackResult = null;
+        WxEntPayResult wxEntPayResult = null;
         try {
-            wxPaySendRedpackResult = wxPayService.sendRedpack(wxPaySendRedpackRequest);
+            //wxPaySendRedpackResult = wxPayService.sendRedpack(wxPaySendRedpackRequest);
 
-            if(!StringUtils.equals(WechatPayConsts.RETURN_CODE_SUCCESS,wxPaySendRedpackResult.getResultCode())){
+            wxEntPayResult = wxPayService.entPay(wxEntPayRequest);
+            if(!StringUtils.equals(WechatPayConsts.RETURN_CODE_SUCCESS,wxEntPayResult.getResultCode())){
                 order.setUpdateTime(new Date());
                 order.setStatusmsg(wxPaySendRedpackResult.getXmlString());
                 weibarRedpackageOrderMapper.updateByPrimaryKey(order);
                 throw BaseException.getException(ErrorCodeEnum.WECHAT_PAY_ERROR_SEND_RED_PACK.getCode());
             }
+//            if(!StringUtils.equals(WechatPayConsts.RETURN_CODE_SUCCESS,wxPaySendRedpackResult.getResultCode())){
+//                order.setUpdateTime(new Date());
+//                order.setStatusmsg(wxPaySendRedpackResult.getXmlString());
+//                weibarRedpackageOrderMapper.updateByPrimaryKey(order);
+//                throw BaseException.getException(ErrorCodeEnum.WECHAT_PAY_ERROR_SEND_RED_PACK.getCode());
+//            }
 
         } catch (WxPayException e) {
             LOG.error("wechat sendRedpack error", e);
