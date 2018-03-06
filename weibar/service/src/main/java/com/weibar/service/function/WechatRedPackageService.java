@@ -113,7 +113,7 @@ public class WechatRedPackageService {
 
 
 
-        WxPaySendRedpackResult wxPaySendRedpackResult = null;
+        //WxPaySendRedpackResult wxPaySendRedpackResult = null;
         WxEntPayResult wxEntPayResult = null;
         try {
             //wxPaySendRedpackResult = wxPayService.sendRedpack(wxPaySendRedpackRequest);
@@ -121,7 +121,7 @@ public class WechatRedPackageService {
             wxEntPayResult = wxPayService.entPay(wxEntPayRequest);
             if(!StringUtils.equals(WechatPayConsts.RETURN_CODE_SUCCESS,wxEntPayResult.getResultCode())){
                 order.setUpdateTime(new Date());
-                order.setStatusmsg(wxPaySendRedpackResult.getXmlString());
+                order.setStatusmsg(wxEntPayResult.getXmlString());
                 weibarRedpackageOrderMapper.updateByPrimaryKey(order);
                 throw BaseException.getException(ErrorCodeEnum.WECHAT_PAY_ERROR_SEND_RED_PACK.getCode());
             }
@@ -140,7 +140,7 @@ public class WechatRedPackageService {
         order.setUpdateTime(new Date());
         order.setStatus(RedPackageOrderStateEnum.USER_HAS_GET.getCode());
         order.setStatuscode(RedPackageOrderStateEnum.USER_HAS_GET.getDesc());
-        order.setStatusmsg(wxPaySendRedpackResult.getXmlString());
+        order.setStatusmsg(wxEntPayResult.getXmlString());
         weibarRedpackageOrderMapper.updateByPrimaryKey(order);
         handleForSuccess(order);
     }
