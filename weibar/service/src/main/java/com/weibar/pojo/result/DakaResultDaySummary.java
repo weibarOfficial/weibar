@@ -3,6 +3,7 @@ package com.weibar.pojo.result;
 import com.weibar.pojo.db.DakaDaySummary;
 
 import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
@@ -20,7 +21,7 @@ public class DakaResultDaySummary {
 
     private String earlyOpenId;
 
-    private Date earlyTime;
+    private String earlyTime;
 
     private Long earlyUserId;
 
@@ -28,7 +29,7 @@ public class DakaResultDaySummary {
 
     private String luckyOpenId;
 
-    private BigDecimal luckyAmount;
+    private String luckyAmount;
 
     private Long luckyUserId;
 
@@ -36,7 +37,7 @@ public class DakaResultDaySummary {
 
     private String gutsOpenId;
 
-    private Integer gutsCount;
+    private String gutsCount;
 
     private Long gutsUserId;
 
@@ -55,15 +56,16 @@ public class DakaResultDaySummary {
         daySummary.setCount(dakaDaySummary.getCount());
         daySummary.setDakaDate(dakaDaySummary.getDakaDate());
         daySummary.setEarlyOpenId(dakaDaySummary.getEarlyOpenId());
-        daySummary.setEarlyTime(dakaDaySummary.getEarlyTime());
+        daySummary.setEarlyTime(new SimpleDateFormat("HH:mm:ss").format(dakaDaySummary.getEarlyTime()));
         daySummary.setEarlyUserId(dakaDaySummary.getEarlyUserId());
         daySummary.setEarlyUserPicture(dakaDaySummary.getEarlyUserPicture());
         daySummary.setFcount(dakaDaySummary.getFcount());
-        daySummary.setGutsCount(dakaDaySummary.getGutsCount());
+        daySummary.setGutsCount(dakaDaySummary.getGutsCount().toString());
         daySummary.setGutsOpenId(dakaDaySummary.getGutsOpenId());
         daySummary.setGutsUserId(dakaDaySummary.getGutsUserId());
         daySummary.setGutsUserPicture(dakaDaySummary.getGutsUserPicture());
-        daySummary.setLuckyAmount(dakaDaySummary.getLuckyAmount());
+
+        daySummary.setLuckyAmount(dakaDaySummary.getLuckyAmount().setScale(2).toPlainString());
         daySummary.setLuckyOpenId(dakaDaySummary.getLuckyOpenId());
         daySummary.setLuckyUserId(dakaDaySummary.getLuckyUserId());
         daySummary.setLuckyUserPicture(dakaDaySummary.getLuckyUserPicture());
@@ -72,22 +74,6 @@ public class DakaResultDaySummary {
         return daySummary;
     }
 
-
-    public BigDecimal getPayAmount() {
-        return payAmount;
-    }
-
-    public void setPayAmount(BigDecimal payAmount) {
-        this.payAmount = payAmount;
-    }
-
-    public BigDecimal getSendAmount() {
-        return sendAmount;
-    }
-
-    public void setSendAmount(BigDecimal sendAmount) {
-        this.sendAmount = sendAmount;
-    }
 
     public Date getDakaDate() {
         return dakaDate;
@@ -129,11 +115,11 @@ public class DakaResultDaySummary {
         this.earlyOpenId = earlyOpenId;
     }
 
-    public Date getEarlyTime() {
+    public String getEarlyTime() {
         return earlyTime;
     }
 
-    public void setEarlyTime(Date earlyTime) {
+    public void setEarlyTime(String earlyTime) {
         this.earlyTime = earlyTime;
     }
 
@@ -161,11 +147,11 @@ public class DakaResultDaySummary {
         this.luckyOpenId = luckyOpenId;
     }
 
-    public BigDecimal getLuckyAmount() {
+    public String getLuckyAmount() {
         return luckyAmount;
     }
 
-    public void setLuckyAmount(BigDecimal luckyAmount) {
+    public void setLuckyAmount(String luckyAmount) {
         this.luckyAmount = luckyAmount;
     }
 
@@ -193,11 +179,11 @@ public class DakaResultDaySummary {
         this.gutsOpenId = gutsOpenId;
     }
 
-    public Integer getGutsCount() {
+    public String getGutsCount() {
         return gutsCount;
     }
 
-    public void setGutsCount(Integer gutsCount) {
+    public void setGutsCount(String gutsCount) {
         this.gutsCount = gutsCount;
     }
 
@@ -215,6 +201,22 @@ public class DakaResultDaySummary {
 
     public void setGutsUserPicture(String gutsUserPicture) {
         this.gutsUserPicture = gutsUserPicture;
+    }
+
+    public BigDecimal getPayAmount() {
+        return payAmount;
+    }
+
+    public void setPayAmount(BigDecimal payAmount) {
+        this.payAmount = payAmount;
+    }
+
+    public BigDecimal getSendAmount() {
+        return sendAmount;
+    }
+
+    public void setSendAmount(BigDecimal sendAmount) {
+        this.sendAmount = sendAmount;
     }
 
     @Override

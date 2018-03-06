@@ -1,24 +1,58 @@
 <view class="page">
-    
-    <view class="weui-msg">
-        <image src="zaoqi.jpg" mode="aspectFill">  </image>
-        
-        <view class="weui-msg__text-area">
-            <view class="weui-msg__desc">明早打卡随机瓜分金额（元）</view>
-            <view class="weui-msg__title daka-money">{{tomorrowDakaMoney}}</view>
-            <view class="weui-msg__desc"><navigator url="/pages/article/article" class="weui-msg__link">游戏规则</navigator></view>
-        </view>
-        <view class="weui-msg__opr-area">
-            <view class="weui-btn-area">
-                <button class="weui-btn" type="primary" bindtap="{{buttonBindtap}}" disabled="{{buttondisabled}}">{{buttonText}}</button>
-                <!--<button class="weui-btn" type="primary" disabled="true">页面主操作 Disabled</button>-->
-                <!--<button class="weui-btn" type="default" bindtap="inviteFriends">邀请好友参加</button>-->
-            </view>
-        </view>
 
-        <view class="weui-msg__text-area">
-            <view class="weui-msg__title daka-zhankuang">今日打卡战况</view>
-            <view class="weui-msg__desc">{{suceessDaka}}人打卡成功，{{failDaka}}人打卡失败</view>
-        </view>
+  <view class="weui-msg daka-block">
+    <!--<image src="zaoqi.jpg" mode="aspectFill">  </image>-->
+
+    <view class="weui-msg__text-area daka-head-block">
+      <view class="weui-msg__desc">明早打卡随机瓜分金额（元）</view>
+      <view class="weui-msg__title daka-money">{{tomorrowDakaMoney}}</view>
+      <view class="weui-msg__desc">
+        <navigator url="/pages/article/article" class="weui-msg__link">游戏规则</navigator>
+      </view>
     </view>
+    <view class="weui-msg__opr-area">
+      <view class="weui-btn-area">
+        <button class="weui-btn" type="primary" bindtap="{{buttonBindtap}}" disabled="{{buttondisabled}}">{{buttonText}}</button>
+        <!--<button class="weui-btn" type="primary" disabled="true">页面主操作 Disabled</button>-->
+        <!--<button class="weui-btn" type="default" bindtap="inviteFriends">邀请好友参加</button>-->
+      </view>
+    </view>
+
+    <view class="weui-msg__text-area">
+      <view class="weui-msg__title daka-zhankuang">今日打卡战况</view>
+      <view class="weui-msg__desc"><view class='suceessDaka'>{{suceessDaka}}</view>人打卡成功，<view class='failDaka'>{{failDaka}}</view>人打卡失败</view>
+    </view>
+
+    <view class="weui-flex">
+      <view class="weui-flex__item">
+        <image class='circle' src=''></image>
+      </view>
+      <view class="weui-flex__item">
+        <image class='circle' src=''></image>
+      </view>
+      <view class="weui-flex__item">
+        <image class='circle' src=''></image>
+      </view>
+    </view>
+
+    <view class="weui-flex">
+      <view class="weui-flex__item">
+        <view class="placeholder label label1">早起之星</view>
+        <view class="placeholder labelUserName">虚以待位</view>
+        <view class="placeholder labelText">123</view>
+      </view>
+      <view class="weui-flex__item">
+        <view class="placeholder label label2">幸运之星</view>
+        <view class="placeholder labelUserName">123</view>
+        <view class="placeholder labelText">123</view>
+      </view>
+      <view class="weui-flex__item">
+        <view class="placeholder label label3">毅力之星</view>
+        <view class="placeholder labelUserName">123</view>
+        <view class="placeholder labelText">123</view>
+      </view>
+    </view>
+
+
+  </view>
 </view>

@@ -7,3 +7,74 @@
 .daka-zhankuang {
     font-size: 30rpx;
 }
+
+.daka-guize {
+    font-size: 30rpx;
+}
+
+
+
+
+
+.daka-head-block{
+  margin-top: 50rpx;
+  background-image: url("http://static.yylive.com/8a64fc93145d34f737dcf08e88d8f17f");  
+  background-size:100% 100%;
+  background-repeat:no-repeat;
+  padding-bottom: 60rpx;
+}
+
+
+.circle{
+    width: 40px;
+    height: 40px;
+    border: 0 solid #ffffff;
+    border-radius: 500px;
+    box-shadow: 4px 1px 1px #cccccc;
+
+}
+
+.label{
+    background-size:70% 100%;
+    background-repeat:no-repeat;
+    background-position-y: top;
+    background-position-x: center;
+    font-size: 25rpx;
+    color:#ffffff;
+    padding-left: 38rpx;
+    padding-top: 12rpx;
+}
+
+.labelText{
+    color: #FF6600;
+    font-size: 35rpx;
+}
+
+.labelUserName{
+    color: #000000;
+    font-size: 25rpx;
+}
+
+.label1{
+    background-image: url("http://static.yylive.com/c4a0a7d7f4815fcab75fffa6c4ff1d87");  
+}
+
+.label2{
+    background-image: url("http://static.yylive.com/f39e805cf3c19b7f469c3c31c7c988ba");  
+}
+
+.label3{
+    background-image: url("http://static.yylive.com/872c684f7682ea042aff1ea45f4f0bc4");  
+}
+
+.suceessDaka{
+  display:inline-block;
+  vertical-align:top;
+  color: #FF6600;
+}
+
+.failDaka{
+  display:inline-block;
+  vertical-align:top;
+  color: #336666;
+}
