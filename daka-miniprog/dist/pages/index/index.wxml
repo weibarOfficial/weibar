@@ -25,13 +25,13 @@
 
     <view class="weui-flex">
       <view class="weui-flex__item">
-        <image class='circle' src=''></image>
+        <image class='circle' src='{{earlyUserPicture}}'></image>
       </view>
       <view class="weui-flex__item">
-        <image class='circle' src=''></image>
+        <image class='circle' src='{{luckyUserPicture}}'></image>
       </view>
       <view class="weui-flex__item">
-        <image class='circle' src=''></image>
+        <image class='circle' src='{{gutsUserPicture}}'></image>
       </view>
     </view>
 

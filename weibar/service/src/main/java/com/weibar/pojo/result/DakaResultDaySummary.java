@@ -23,6 +23,8 @@ public class DakaResultDaySummary {
 
     private String earlyTime;
 
+    private String earlyUserName;
+
     private Long earlyUserId;
 
     private String earlyUserPicture;
@@ -32,6 +34,9 @@ public class DakaResultDaySummary {
     private String luckyAmount;
 
     private Long luckyUserId;
+
+
+    private String luckyUserName;
 
     private String luckyUserPicture;
 
@@ -43,6 +48,8 @@ public class DakaResultDaySummary {
 
     private String gutsUserPicture;
 
+
+    private String gutsUserName;
 
     private BigDecimal payAmount;
 
@@ -59,21 +66,47 @@ public class DakaResultDaySummary {
         daySummary.setEarlyTime(new SimpleDateFormat("HH:mm:ss").format(dakaDaySummary.getEarlyTime()));
         daySummary.setEarlyUserId(dakaDaySummary.getEarlyUserId());
         daySummary.setEarlyUserPicture(dakaDaySummary.getEarlyUserPicture());
+        daySummary.setEarlyUserName(dakaDaySummary.getEarlyUserName());
         daySummary.setFcount(dakaDaySummary.getFcount());
         daySummary.setGutsCount(dakaDaySummary.getGutsCount().toString());
         daySummary.setGutsOpenId(dakaDaySummary.getGutsOpenId());
         daySummary.setGutsUserId(dakaDaySummary.getGutsUserId());
         daySummary.setGutsUserPicture(dakaDaySummary.getGutsUserPicture());
-
+        daySummary.setGutsUserName(dakaDaySummary.getGutsUserName());
         daySummary.setLuckyAmount(dakaDaySummary.getLuckyAmount().setScale(2).toPlainString());
         daySummary.setLuckyOpenId(dakaDaySummary.getLuckyOpenId());
         daySummary.setLuckyUserId(dakaDaySummary.getLuckyUserId());
         daySummary.setLuckyUserPicture(dakaDaySummary.getLuckyUserPicture());
+        daySummary.setLuckyUserName(dakaDaySummary.getLuckyUserName());
         daySummary.setPayAmount(dakaDaySummary.getPayAmount());
         daySummary.setSendAmount(dakaDaySummary.getSendAmount());
         return daySummary;
     }
 
+
+    public String getEarlyUserName() {
+        return earlyUserName;
+    }
+
+    public void setEarlyUserName(String earlyUserName) {
+        this.earlyUserName = earlyUserName;
+    }
+
+    public String getLuckyUserName() {
+        return luckyUserName;
+    }
+
+    public void setLuckyUserName(String luckyUserName) {
+        this.luckyUserName = luckyUserName;
+    }
+
+    public String getGutsUserName() {
+        return gutsUserName;
+    }
+
+    public void setGutsUserName(String gutsUserName) {
+        this.gutsUserName = gutsUserName;
+    }
 
     public Date getDakaDate() {
         return dakaDate;
