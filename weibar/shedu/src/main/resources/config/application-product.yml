@@ -27,7 +27,7 @@ wechat:
     token: weibar2017
     aesKey:
   pay:
-    appId: wxa105b2133d0dd8b0
+    appId: wxd62da453fe48632c
     mchKey: nxApb3xKPYrHyRxq7wai4pWUyQOQeLyU
     mchId: 1493754672
     keyPath: /data/keys/apiclient_cert.p12
