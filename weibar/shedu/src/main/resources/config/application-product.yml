@@ -1,4 +1,23 @@
 ### 正式环境
+#wechat:
+#  mp:
+#    appId: wxa105b2133d0dd8b0
+#    secret: 4c88575249eec6450bb6cb5d296520e4
+#    token: weibar2017
+#    aesKey:
+#  pay:
+#    appId: wxa105b2133d0dd8b0
+#    mchKey: nxApb3xKPYrHyRxq7wai4pWUyQOQeLyU
+#    mchId: 1493754672
+#    keyPath: /data/keys/apiclient_cert.p12
+#  miniapp:
+#    appid: wxd62da453fe48632c
+#    secret: f28addb4676847e1ebd54b8e67ca7509
+#    token:
+#    aesKey:
+#    msgDataFormat: JSON
+
+
 wechat:
   mp:
     appId: wxa105b2133d0dd8b0
@@ -6,7 +25,7 @@ wechat:
     token: weibar2017
     aesKey:
   pay:
-    appId: wxa105b2133d0dd8b0
+    appId: wxd62da453fe48632c
     mchKey: nxApb3xKPYrHyRxq7wai4pWUyQOQeLyU
     mchId: 1493754672
     keyPath: /data/keys/apiclient_cert.p12
@@ -16,7 +35,6 @@ wechat:
     token:
     aesKey:
     msgDataFormat: JSON
-
 
 
 
