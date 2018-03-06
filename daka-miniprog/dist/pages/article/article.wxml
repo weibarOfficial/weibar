@@ -7,15 +7,15 @@
         <view class="weui-article">
             <view class="weui-article__section">
                 <view class="weui-article__section">
-                    <view class="weui-article__h3 title-color">支付2元参与打卡活动</view>
+                    <view class="weui-article__h3 title-color">支付一元参与打卡活动</view>
                     <view class="weui-article__p">
-                     每天23:55分之前支付2元参与打卡活动，隔天记得打卡支付的2元即可返还，还可以获得未打卡用户的现金~
+                     每天23:55分之前支付一元参与打卡活动，隔天记得打卡支付的一元即可返还，还可以获得未打卡用户的现金~
                     </view>
                 </view>
                 <view class="weui-article__section">
                     <view class="weui-article__h3 title-color">早起打卡瓜分现金</view>
                     <view class="weui-article__p">
-                    对于参加活动的用户，早上5-8点之前打卡，将在8点5分之前返还支付的2元，并随机瓜分未打卡用户的活动金~；未打卡成功的用户将失去支付的2元现金。
+                    对于参加活动的用户，早上5-8点之前打卡，将在8点5分之前返还支付的一元，并随机瓜分未打卡用户的活动金~；未打卡成功的用户将失去支付的一元现金。
                     </view>
                 </view>
                 <view class="weui-article__section">

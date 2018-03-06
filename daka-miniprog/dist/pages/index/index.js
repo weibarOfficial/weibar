@@ -9,7 +9,7 @@ Page({
     tomorrowDakaMoney: "未知",
     suceessDaka: "未知",
     failDaka: "未知",
-    buttonText:"支付2元参与打卡",
+    buttonText:"支付一元参与打卡",
     buttonBindtap: "payForDaka",
     buttondisabled: "false",
     earlyUserPicture:"",
@@ -69,18 +69,19 @@ Page({
 
   payForDaka:function(){
     var sessionKey = null;
-    var that = this.data;
+    var that = this;
+    var thatData = this.data;
     wx.getStorage({
       key: 'sessionKey',
       success : function(res){
         
         wx.request({
-          url: that.app.BASE_URL + "/daka/pay",
+          url: thatData.app.BASE_URL + "/daka/pay",
           method: "GET",
           dataType: "json",
           data: {
             sessionKey: res.data,
-            amount: 2
+            amount: 1
           },
           success: function (res) {
             console.log(res);
@@ -104,18 +105,18 @@ Page({
                   'success': function (res) {
                     console.log("调用微信支付成功");
                     console.log(res);
-                    this.refresh();
+                    that.refresh();
                    },
                   'fail': function (res) { 
                     console.log("调用微信支付失败");
                     console.log(res);
-                    this.refresh();
+                    that.refresh();
 
                   },
                   'complete': function (res) { 
                     console.log("调用微信支付结束");
                     console.log(res);
-                    this.refresh();
+                    that.refresh();
                     
                   }
                 })
@@ -130,11 +131,17 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
+
+    var that = this;
+    setTimeout(function () {
+      that.refresh(); 
+    }, 1000);
     
   },
 
 
   refresh: function(){
+    console.log("come in refresh");
     var that = this;
     wx.getStorage({
       key: 'sessionKey',
@@ -161,7 +168,16 @@ Page({
               that.setData({
                 tomorrowDakaMoney: res.data.data.tomorrowSummary.payAmount,
                 suceessDaka: res.data.data.todaySummary.scount,
-                failDaka: res.data.data.todaySummary.fcount
+                failDaka: res.data.data.todaySummary.fcount,
+                earlyUserPicture: res.data.data.todaySummary.earlyUserPicture,
+                luckyUserPicture: res.data.data.todaySummary.luckyUserPicture,
+                gutsUserPicture: res.data.data.todaySummary.gutsUserPicture,
+                earlyUserName: res.data.data.todaySummary.earlyUserName,
+                earlyTime: res.data.data.todaySummary.earlyTime,
+                luckyUserName: res.data.data.todaySummary.luckyUserName,
+                luckyAmount: res.data.data.todaySummary.luckyAmount,
+                gutsUserName: res.data.data.todaySummary.gutsUserName,
+                gutsCount: res.data.data.todaySummary.gutsCount
               })
             }
 
@@ -200,7 +216,7 @@ Page({
                 })
               }else {
                 that.setData({
-                  buttonText: "支付2元参与打卡",
+                  buttonText: "支付一元参与打卡",
                   buttonBindtap: "payForDaka",
                   buttondisabled: false
                 })
@@ -220,14 +236,19 @@ Page({
    * 生命周期函数--监听页面初次渲染完成
    */
   onReady: function () {
-    this.refresh();
+    
   },
 
   /**
    * 生命周期函数--监听页面显示
    */
   onShow: function () {
-    this.refresh();
+    var that = this;
+    for(var i = 0; i < 10; i++){
+      setTimeout(function () {
+        that.refresh();
+      }, 500 + i * 500);
+    }
   },
 
   /**

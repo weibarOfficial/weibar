@@ -58,14 +58,7 @@
         "text": "我的战绩",
         "iconPath":"myicon.png",
         "selectedIconPath":"myiconSelected.png"
-      },
-      {
-          "pagePath": "example/index",
-          "text": "微信例子"
       }
-
-
-       
     ]
   }
 }

@@ -1,9 +1,7 @@
 package com.weibar.service.function;
 
 import com.github.binarywang.wxpay.bean.request.WxEntPayRequest;
-import com.github.binarywang.wxpay.bean.request.WxPaySendRedpackRequest;
 import com.github.binarywang.wxpay.bean.result.WxEntPayResult;
-import com.github.binarywang.wxpay.bean.result.WxPaySendRedpackResult;
 import com.github.binarywang.wxpay.exception.WxPayException;
 import com.github.binarywang.wxpay.service.WxPayService;
 import com.weibar.pojo.consts.WechatPayConsts;
@@ -82,6 +80,19 @@ public class WechatRedPackageService {
         weibarRedpackageOrder.setUserId(userId);
         weibarRedpackageOrder.setCreateTime(now);
         weibarRedpackageOrder.setUpdateTime(now);
+
+        RedPackageSceneIdEnum redPackageSceneId = RedPackageSceneIdEnum.getRedPackageSceneIdEnum(Integer.parseInt(sceneId));
+        //这里先写死 后续有机会改进需要入库
+        switch (redPackageSceneId){
+            case WEIBAR_USER_WITHDRAW:
+                weibarRedpackageOrder.setAppId("wxa105b2133d0dd8b0");
+                break;
+            case DAKA:
+                weibarRedpackageOrder.setAppId("wxd62da453fe48632c");
+                break;
+            default:
+                break;
+        }
         weibarRedpackageOrderMapper.insert(weibarRedpackageOrder);
     }
 
@@ -110,6 +121,7 @@ public class WechatRedPackageService {
         wxEntPayRequest.setAmount(amountVaule);
         wxEntPayRequest.setDescription(order.getRedpackettitle());
         wxEntPayRequest.setSpbillCreateIp(IpUtil.getLocalHostIP());
+        wxEntPayRequest.setAppid(order.getAppId());
 
 
 
@@ -177,7 +189,7 @@ public class WechatRedPackageService {
         RedPackageSceneIdEnum redPackageScene = RedPackageSceneIdEnum.getRedPackageSceneIdEnum(Integer.valueOf(order.getSceneId()));
 
         switch (redPackageScene){
-            case USER_WITHDRAW:
+            case WEIBAR_USER_WITHDRAW:
                 withdrawService.updateWithdrawSuccess(Long.parseLong(order.getChorderid()));
                 break;
             default:

@@ -5,7 +5,9 @@
 }
 
 .daka-zhankuang {
-    font-size: 30rpx;
+    font-size: 35rpx;
+    font-weight: 700;
+    font-family: "楷体","楷体_GB2312";
 }
 
 .daka-guize {
@@ -21,7 +23,7 @@
   background-image: url("http://static.yylive.com/8a64fc93145d34f737dcf08e88d8f17f");  
   background-size:100% 100%;
   background-repeat:no-repeat;
-  padding-bottom: 60rpx;
+  padding-bottom: 80rpx;
 }
 
 
@@ -47,12 +49,12 @@
 
 .labelText{
     color: #FF6600;
-    font-size: 35rpx;
+    font-size: 25rpx;
 }
 
 .labelUserName{
-    color: #000000;
-    font-size: 25rpx;
+    color: #808080;
+    font-size: 23rpx;
 }
 
 .label1{

@@ -71,8 +71,8 @@ public class WithdrawService {
                 userBaseInfo.getOpenid(),
                 userId,
                 clientIp,
-                RedPackageSceneIdEnum.USER_WITHDRAW.getState().toString(),
-                RedPackageSceneIdEnum.USER_WITHDRAW.getDesc(),
+                RedPackageSceneIdEnum.WEIBAR_USER_WITHDRAW.getState().toString(),
+                RedPackageSceneIdEnum.WEIBAR_USER_WITHDRAW.getDesc(),
                 null);
 
     }
