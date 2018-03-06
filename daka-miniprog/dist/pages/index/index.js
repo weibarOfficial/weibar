@@ -12,6 +12,16 @@ Page({
     buttonText:"支付2元参与打卡",
     buttonBindtap: "payForDaka",
     buttondisabled: "false",
+    earlyUserPicture:"",
+    luckyUserPicture: "",
+    gutsUserPicture: "",
+    earlyUserName:"",
+    earlyTime:"",
+    luckyUserName:"",
+    luckyAmount:"",
+    gutsUserName:"",
+    gutsCount:""
+
   },
   
 

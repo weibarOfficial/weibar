@@ -35,7 +35,6 @@ public class DakaResultDaySummary {
 
     private Long luckyUserId;
 
-
     private String luckyUserName;
 
     private String luckyUserPicture;
@@ -53,7 +52,6 @@ public class DakaResultDaySummary {
 
     private BigDecimal payAmount;
 
-
     private BigDecimal sendAmount;
 
 
@@ -63,17 +61,26 @@ public class DakaResultDaySummary {
         daySummary.setCount(dakaDaySummary.getCount());
         daySummary.setDakaDate(dakaDaySummary.getDakaDate());
         daySummary.setEarlyOpenId(dakaDaySummary.getEarlyOpenId());
-        daySummary.setEarlyTime(new SimpleDateFormat("HH:mm:ss").format(dakaDaySummary.getEarlyTime()));
+        if(dakaDaySummary.getEarlyTime() != null){
+            daySummary.setEarlyTime(new SimpleDateFormat("HH:mm:ss").format(dakaDaySummary.getEarlyTime()));
+        }
+
         daySummary.setEarlyUserId(dakaDaySummary.getEarlyUserId());
         daySummary.setEarlyUserPicture(dakaDaySummary.getEarlyUserPicture());
         daySummary.setEarlyUserName(dakaDaySummary.getEarlyUserName());
         daySummary.setFcount(dakaDaySummary.getFcount());
-        daySummary.setGutsCount(dakaDaySummary.getGutsCount().toString());
+        if(dakaDaySummary.getGutsCount() != null){
+            daySummary.setGutsCount(dakaDaySummary.getGutsCount().toString());
+        }
+
         daySummary.setGutsOpenId(dakaDaySummary.getGutsOpenId());
         daySummary.setGutsUserId(dakaDaySummary.getGutsUserId());
         daySummary.setGutsUserPicture(dakaDaySummary.getGutsUserPicture());
         daySummary.setGutsUserName(dakaDaySummary.getGutsUserName());
-        daySummary.setLuckyAmount(dakaDaySummary.getLuckyAmount().setScale(2).toPlainString());
+        if(dakaDaySummary.getLuckyAmount() != null){
+            daySummary.setLuckyAmount(dakaDaySummary.getLuckyAmount().setScale(2).toPlainString());
+        }
+
         daySummary.setLuckyOpenId(dakaDaySummary.getLuckyOpenId());
         daySummary.setLuckyUserId(dakaDaySummary.getLuckyUserId());
         daySummary.setLuckyUserPicture(dakaDaySummary.getLuckyUserPicture());
