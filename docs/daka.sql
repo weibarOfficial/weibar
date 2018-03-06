@@ -23,6 +23,10 @@ CREATE TABLE `daka_day_summary` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+alter table `daka_day_summary` add column `early_user_name` varchar(1024) DEFAULT NULL;
+alter table `daka_day_summary` add column `lucky_user_name` varchar(1024) DEFAULT NULL;
+alter table `daka_day_summary` add column `guts_user_name` varchar(1024) DEFAULT NULL;
+
 
 
 CREATE TABLE `daka_order` (

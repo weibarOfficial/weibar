@@ -575,6 +575,8 @@ CREATE TABLE `weibar_redpackage_deposit` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=38 DEFAULT CHARSET=utf8;
 
+
+
 -- ----------------------------
 -- Records of weibar_redpackage_deposit
 -- ----------------------------
@@ -647,6 +649,8 @@ CREATE TABLE `weibar_red_packet_order` (
   `ext` text COMMENT '扩展字段',
   PRIMARY KEY (`orderid`)
 ) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
+
+alter table `weibar_red_packet_order` add column `app_id` varchar(256);
 
 -- ----------------------------
 -- Records of weibar_red_packet_order

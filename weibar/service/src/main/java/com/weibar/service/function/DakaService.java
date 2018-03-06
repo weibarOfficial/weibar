@@ -183,6 +183,7 @@ public class DakaService {
                 dakaDaySummary.setEarlyUserId(dakaUser.getUserId());
                 dakaDaySummary.setEarlyOpenId(dakaUser.getOpenid());
                 dakaDaySummary.setEarlyUserPicture(dakaUser.getUserPicture());
+                dakaDaySummary.setEarlyUserName(dakaUser.getNickname());
             }
 
             dakaDaySummary.setUpdateTime(now);
@@ -617,12 +618,14 @@ public class DakaService {
             dakaDaySummary.setLuckyUserId(luckyUser.getUserId());
             DakaUser dakaUserLucky = getDakaUser(luckyUser.getUserId());
             dakaDaySummary.setLuckyUserPicture(dakaUserLucky.getUserPicture());
+            dakaDaySummary.setLuckyUserName(dakaUserLucky.getNickname());
         }
         if(gutUser != null) {
             dakaDaySummary.setGutsCount(gutUser.getScount());
             dakaDaySummary.setGutsOpenId(gutUser.getOpenid());
             dakaDaySummary.setGutsUserId(gutUser.getUserId());
             dakaDaySummary.setGutsUserPicture(gutUser.getUserPicture());
+            dakaDaySummary.setGutsUserName(userService.getUserById(gutUser.getUserId()).getNickname());
         }
 
         dakaDaySummaryMapper.updateByPrimaryKey(dakaDaySummary);
