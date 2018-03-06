@@ -99,7 +99,7 @@ public class WechatRedPackageService {
         wxPaySendRedpackRequest.setRemark("userId:" + order.getUserId() + " chOrderId " + order.getChorderid());
         wxPaySendRedpackRequest.setSceneId(DEFAULT_SCENE_ID);
 
-        wxPaySendRedpackRequest.setAppid();
+        //wxPaySendRedpackRequest.setAppid();
 
         WxPaySendRedpackResult wxPaySendRedpackResult = null;
         try {
