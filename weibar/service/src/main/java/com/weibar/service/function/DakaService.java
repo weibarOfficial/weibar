@@ -209,10 +209,10 @@ public class DakaService {
         Date now = calendar.getTime();
         for(DakaOrder dakaOrder : dakaOrderList){
 
-            //当天的话 设定8点7分之后之后显示结果
+            //当天的话 设定8点2分之后之后显示结果
             if(DateUtils.isSameDay(dakaOrder.getOrderDate(),now)){
                 if((calendar.get(Calendar.HOUR_OF_DAY) > 8) ||
-                        (calendar.get(Calendar.HOUR_OF_DAY) == 8 && calendar.get(Calendar.MINUTE) > 7)){
+                        (calendar.get(Calendar.HOUR_OF_DAY) == 8 && calendar.get(Calendar.MINUTE) > 2)){
                     simpleOrderList.add(new DakaSimpleOrder(dakaOrder));
                 }
             }else if(dakaOrder.getOrderDate().before(now)){

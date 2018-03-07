@@ -164,6 +164,27 @@ Page({
                 }
               });
             } else {
+              var earlyTimeStr;
+              if (res.data.data.todaySummary.earlyTime){
+                earlyTimeStr = "今日" + res.data.data.todaySummary.earlyTime + "打卡";
+              }else{
+                earlyTimeStr = "虚以待位";
+              }
+              var luckyAmountStr;
+              if (res.data.data.todaySummary.luckyAmount){
+                luckyAmountStr = res.data.data.todaySummary.luckyAmount + "元";
+              }else{
+                luckyAmountStr = "虚以待位";
+              }
+
+              var gutsCountStr;
+              if (res.data.data.todaySummary.gutsCount) {
+                gutsCountStr = "累计打卡" + res.data.data.todaySummary.gutsCount + "次";
+              } else {
+                gutsCountStr = "虚以待位";
+              } 
+
+
 
               that.setData({
                 tomorrowDakaMoney: res.data.data.tomorrowSummary.payAmount,
@@ -173,11 +194,11 @@ Page({
                 luckyUserPicture: res.data.data.todaySummary.luckyUserPicture,
                 gutsUserPicture: res.data.data.todaySummary.gutsUserPicture,
                 earlyUserName: res.data.data.todaySummary.earlyUserName,
-                earlyTime: res.data.data.todaySummary.earlyTime,
+                earlyTime: earlyTimeStr,
                 luckyUserName: res.data.data.todaySummary.luckyUserName,
-                luckyAmount: res.data.data.todaySummary.luckyAmount,
+                luckyAmount: luckyAmountStr,
                 gutsUserName: res.data.data.todaySummary.gutsUserName,
-                gutsCount: res.data.data.todaySummary.gutsCount
+                gutsCount: gutsCountStr
               })
             }
 
