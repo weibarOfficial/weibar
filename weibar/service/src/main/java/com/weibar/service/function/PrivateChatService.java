@@ -1,7 +1,6 @@
 package com.weibar.service.function;
 
 import com.google.common.collect.Lists;
-import com.weibar.pojo.comparator.PrivateChatComparator;
 import com.weibar.pojo.consts.WebSocketConsts;
 import com.weibar.pojo.db.*;
 import com.weibar.pojo.enu.ErrorCodeEnum;

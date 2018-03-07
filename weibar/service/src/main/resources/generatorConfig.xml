@@ -215,5 +215,9 @@
                           identity="true"/>
         </table>
 
+
+        <table schema="" tableName="daka_user_rank" domainObjectName="DakaUserRank">
+        </table>
+
     </context>
 </generatorConfiguration>

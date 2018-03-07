@@ -172,7 +172,7 @@ Page({
               }
               var luckyAmountStr;
               if (res.data.data.todaySummary.luckyAmount){
-                luckyAmountStr = res.data.data.todaySummary.luckyAmount + "元";
+                luckyAmountStr = "获得" + res.data.data.todaySummary.luckyAmount + "元";
               }else{
                 luckyAmountStr = "虚以待位";
               }

@@ -65,3 +65,26 @@ CREATE TABLE `daka_user` (
   `update_time` datetime NOT NULL DEFAULT '2000-01-01 00:00:00' COMMENT '更新时间',
   PRIMARY KEY (`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+
+CREATE TABLE `daka_user_rank` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `user_id` bigint(20) NOT NULL COMMENT '帐号',
+  `user_picture` varchar(1024) DEFAULT NULL,
+  `openid` varchar(1024) NOT NULL,
+  `nickname` varchar(500) DEFAULT NULL COMMENT '用户昵称',
+  `sex` varchar(500) DEFAULT NULL COMMENT '用户的性别',
+  `rank` int(11) DEFAULT NULL COMMENT '用户排名',
+  `get_sum_amount` decimal(10,2) DEFAULT NULL COMMENT '用户打开成功分到金额',
+  `create_time` datetime NOT NULL DEFAULT '2000-01-01 00:00:00' COMMENT '创建时间',
+  `update_time` datetime NOT NULL DEFAULT '2000-01-01 00:00:00' COMMENT '更新时间',
+  PRIMARY KEY (`id`),
+  KEY `AK_Key_rank` (`rank`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+
+
+
+
+
+
