@@ -1,36 +1,49 @@
-<view class="rank-page">
-    <view class="page-head">
-        <view class="page-title">早起排行榜</view>
+<!--pages/rank/rank.wxml-->
+<view class="page">
+  <view class="page__hd my-head">
+    <view class="page__title">世界排名</view>
+
+  </view>
+  <view class="page__bd">
+
+    <view class="weui-cells__title">累计早起打卡获取奖金排名</view>
+    <view class="weui-cells weui-cells_after-title my-list">
+
+      <view class="weui-cell" wx:for="{{rankItems}}" wx:for-index="idx" wx:for-item="rankItem">
+        <view wx:if="{{rankItem.rank == 1}}"> 
+          <view class="weui-cell__hd">
+            <image class="gold-icon" style="margin-right: 0px;vertical-align: middle;width:30px; height: 30px;"></image>
+          </view>
+        </view>
+        <view wx:elif="{{rankItem.rank == 2}}">
+          <view class="weui-cell__hd">
+            <image class="silver-icon" style="margin-right: 0px;vertical-align: middle;width:30px; height: 30px;"></image>
+          </view>        
+        </view>
+        <view wx:elif="{{rankItem.rank == 3}}">
+          <view class="weui-cell__hd">
+            <image class="bronze-icon" style="margin-right: 0px;vertical-align: middle;width:30px; height: 30px;"></image>
+          </view>        
+        </view>        
+        <view wx:else> 
+          <view class="weui-cell__hd">
+            <view  style="vertical-align: middle;width:30px; height: 30px;font-size: 25rpx;color:#C0C0C0;">{{rankItem.rank}}名</view>
+          </view> 
+        </view>
+
+        <view class="weui-cell__hd">
+          <image class='circle' src="{{rankItem.userPicture}}" style="margin-right: 10px;vertical-align: middle;width:30px; height: 30px;"></image>
+        </view>
+        <view class="weui-cell__bd">{{rankItem.nickname}}</view>
+        <view class="weui-cell__ft">{{rankItem.getSumAmount}}元</view>
+      </view>
     </view>
 
-    <view class="rank-types">
-        <view
-            class="rank-type {{currentRankType == rankType ? 'true' : null }}"
-            data-rank-type="{{rankType}}" bindtap="changeRankType"
-            wx:for="{{rankTypes}}" wx:key="idx" wx:for-item="rankType">{{rankType}}</view>
+
+    <view class="weui-cell">
+
     </view>
 
-    <view class="rank-items">
-        <block wx:for="{{rankItems}}" wx:key="idx" wx:for-index="idx" wx:for-item="rank">
-            <view class="rank">
-                <view class="rank-num">{{rank.serial}}</view>
-                <view class="user-avatar-container">
-                    <image class="user-avatar" src="{{rank.user.avatarLarge}}"></image>
-                </view>
-                <view class="rank-data">
-                    <view class="user-meta">
-                        <text class="user-name">{{rank.user.username}}</text>
-                        <text class="user-job">{{rank.user.jobTitle}}@{{rank.user.company}}</text>
-                    </view>
-                    <text class="rank-meta" wx:if="{{currentRankType == '原创'}}">原创{{rank.postNum}}篇，获得{{rank.collectedNum}}次收藏，被阅读{{rank.readedNum}}次</text>
-                    <text class="rank-meta" wx:if="{{currentRankType == '分享'}}">分享{{rank.shareNum}}篇，获得{{rank.collectedNum}}次收藏，被阅读{{rank.readedNum}}次</text>
-                    <text class="rank-meta" wx:if="{{currentRankType == '阅读'}}">阅读{{rank.readNum}}篇，收藏{{rank.collectionNum}}篇</text>
-                </view>
-            </view>
-        </block>
-    </view>
 
-    <modal class="modal" hidden="{{modalHidden}}" no-cancel bindconfirm="modalHide" bindcancel="modalHide">
-        <view> 请求发生错误 </view>
-    </modal>
+  </view>
 </view>

@@ -66,7 +66,7 @@ CREATE TABLE `daka_user` (
   PRIMARY KEY (`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-
+drop table `daka_user_rank`;
 CREATE TABLE `daka_user_rank` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `user_id` bigint(20) NOT NULL COMMENT '帐号',

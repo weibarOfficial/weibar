@@ -1,70 +1,43 @@
-.rank-types {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-around;
-    text-align: center;
+/* pages/rank/rank.wxss */
+.my-head-flex {
+  margin-bottom: 0.6rem;
 }
 
-.rank-type {
-    flex: 1;
-    font-size: 28rpx;
-    border-bottom: 2px solid #eaeaea;
-    padding-bottom: 10rpx;
-    transition: border .3s;
+.my-head {
+    background-color: #336666;
+    color:#FFFFFF;
 }
 
-.rank-type.true {
-    border-bottom-color: #3cc51f;
+.my-head-my {
+    padding-top: 0.6rem;
+    font-size: 45rpx;
+    color:#FFFFFF;
 }
 
-.rank {
-    margin: 50rpx 10rpx;
-    flex-direction: row;
-    height: 50px;
-    font-size: 32rpx;
-    border-bottom: 1px solid #eaeaea;
-    padding-bottom: 30rpx;
-}
-
-.rank-num {
-    float: left;
-    width: 20px;
-    text-align: center;
-    padding-top: 9px;
-    padding-bottom: 9px;
-    color: #3cc51f;
-}
-
-.user-avatar-container {
-    margin-left: 10px;
-    float: left;
-    width: 50px;
-    height: 40px;
-}
-
-.user-avatar-container image {
+.circle{
     width: 40px;
     height: 40px;
-    border-radius: 50%;
+    border: 0 solid #ffffff;
+    border-radius: 500px;
+    box-shadow: 4px 1px 1px #cccccc;
 }
 
-.user-meta {
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    color: #ddd;
+.gold-icon{
+  content:url("http://static.yylive.com/6f73f837b7c9756987543f09cc44073f");
 }
 
-.user-name {
-    color: #333;
+.silver-icon{
+  content:url("http://static.yylive.com/f1cf5ed7cd9e3c694c2ee9dff9df7ecc");
+
 }
 
-.user-job {
-    margin-left: 10rpx;
-    font-size: 28rpx;
+.bronze-icon{
+  content:url("http://static.yylive.com/aa9d115b030403b3ee91a58b590b9f1f");
 }
 
-.rank-meta {
-    color: #ddd;
-    font-size: 28rpx;
+.my-list{
+    font-size: 25rpx;
+    color:#FF6600;
 }
+
+

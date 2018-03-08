@@ -52,19 +52,22 @@
         "text": "早起打卡",
         "iconPath": "morning.png",
         "selectedIconPath": "morningSelected.png"
-
       },
       {
         "pagePath": "pages/my/my",
         "text": "我的战绩",
-        "iconPath":"myicon.png",
-        "selectedIconPath":"myiconSelected.png"
+        "iconPath": "myicon.png",
+        "selectedIconPath": "myiconSelected.png"
       },
       {
-         "pagePath": "pages/rank/rank",
-         "text": "早起排名",
-         "iconPath": "rank.png",
-         "selectedIconPath": "rankSelected.png"
+        "pagePath": "pages/rank/rank",
+        "text": "世界排名",
+        "iconPath": "rank.png",
+        "selectedIconPath": "rankSelected.png"
+      },
+      {
+        "pagePath": "example/index",
+        "text": "微信例子"
       }
     ]
   }
