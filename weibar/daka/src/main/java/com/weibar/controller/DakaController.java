@@ -3,6 +3,7 @@ package com.weibar.controller;
 import com.weibar.pojo.exception.BaseException;
 import com.weibar.pojo.result.BaseResult;
 import com.weibar.service.function.DakaService;
+import com.weibar.service.function.DakaUserRankService;
 import com.weibar.service.function.WechatMiniProgramService;
 import com.weibar.utils.IpUtil;
 import org.slf4j.Logger;
@@ -28,6 +29,9 @@ public class DakaController {
 
     @Autowired
     private DakaService dakaService;
+
+    @Autowired
+    private DakaUserRankService dakaUserRankService;
 
 
     @RequestMapping(value = "/daka/pay" ,method = {RequestMethod.POST,RequestMethod.GET})
@@ -88,4 +92,14 @@ public class DakaController {
         return BaseResult.getSuccessfulResult(null);
     }
 
+    @RequestMapping(value = "/daka/dakaRefreshRank" ,method = {RequestMethod.POST,RequestMethod.GET})
+    public Object dakaRefreshRankJob() throws BaseException {
+        dakaUserRankService.refreshRanks();
+        return BaseResult.getSuccessfulResult(null);
+    }
+
+    @RequestMapping(value = "/daka/getRanks" ,method = {RequestMethod.POST,RequestMethod.GET})
+    public Object getRanks() throws BaseException {
+        return BaseResult.getSuccessfulResult(dakaUserRankService.getUserRanks());
+    }
 }

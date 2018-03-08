@@ -51,6 +51,6 @@ public class DakaUserComparator implements Comparator<DakaUser> {
      */
     @Override
     public int compare(DakaUser o1, DakaUser o2) {
-        return o1.getGetSumAmount().compareTo(o2.getGetSumAmount());
+        return -o1.getGetSumAmount().compareTo(o2.getGetSumAmount());
     }
 }

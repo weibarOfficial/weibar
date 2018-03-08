@@ -79,6 +79,7 @@ CREATE TABLE `daka_user_rank` (
   `create_time` datetime NOT NULL DEFAULT '2000-01-01 00:00:00' COMMENT '创建时间',
   `update_time` datetime NOT NULL DEFAULT '2000-01-01 00:00:00' COMMENT '更新时间',
   PRIMARY KEY (`id`),
+  KEY `AK_Key_user_id` (`user_id`) USING BTREE,
   KEY `AK_Key_rank` (`rank`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 

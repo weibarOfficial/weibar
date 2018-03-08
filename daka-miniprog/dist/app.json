@@ -29,7 +29,8 @@
     "example/tabbar/tabbar",
     "example/searchbar/searchbar",
     "pages/article/article",
-    "pages/my/my"
+    "pages/my/my",
+    "pages/rank/rank"
   ],
   "window": {
     "navigationBarTextStyle": "#FFFFFF",
@@ -58,6 +59,12 @@
         "text": "我的战绩",
         "iconPath":"myicon.png",
         "selectedIconPath":"myiconSelected.png"
+      },
+      {
+         "pagePath": "pages/rank/rank",
+         "text": "早起排名",
+         "iconPath": "rank.png",
+         "selectedIconPath": "rankSelected.png"
       }
     ]
   }

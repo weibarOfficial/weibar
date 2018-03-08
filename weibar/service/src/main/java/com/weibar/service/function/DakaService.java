@@ -66,6 +66,9 @@ public class DakaService {
     @Autowired
     private WechatRedPackageService wechatRedPackageService;
 
+    @Autowired
+    private DakaUserRankService dakaUserRankService;
+
 
     private static final Logger LOG = LoggerFactory.getLogger(DakaService.class);
 
@@ -630,7 +633,7 @@ public class DakaService {
 
         dakaDaySummaryMapper.updateByPrimaryKey(dakaDaySummary);
 
-
+        dakaUserRankService.refreshRanks();
 
     }
 
