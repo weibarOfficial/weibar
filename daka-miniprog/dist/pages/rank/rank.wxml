@@ -1,8 +1,7 @@
 <!--pages/rank/rank.wxml-->
 <view class="page">
-  <view class="page__hd my-head">
-    <view class="page__title">世界排名</view>
-
+  <view class="page__hd my-head" >
+    <view class="page__title">打卡奖励排名</view>
   </view>
   <view class="page__bd">
 
@@ -27,7 +26,7 @@
         </view>        
         <view wx:else> 
           <view class="weui-cell__hd">
-            <view  style="vertical-align: middle;width:30px; height: 30px;font-size: 25rpx;color:#C0C0C0;">{{rankItem.rank}}名</view>
+            <view  style="vertical-align: middle;width:30px;font-size: 25rpx;color:#C0C0C0;">{{rankItem.rank}}名</view>
           </view> 
         </view>
 
@@ -38,12 +37,5 @@
         <view class="weui-cell__ft">{{rankItem.getSumAmount}}元</view>
       </view>
     </view>
-
-
-    <view class="weui-cell">
-
-    </view>
-
-
   </view>
 </view>

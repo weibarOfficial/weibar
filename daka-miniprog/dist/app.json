@@ -61,13 +61,9 @@
       },
       {
         "pagePath": "pages/rank/rank",
-        "text": "世界排名",
+        "text": "打卡排名",
         "iconPath": "rank.png",
         "selectedIconPath": "rankSelected.png"
-      },
-      {
-        "pagePath": "example/index",
-        "text": "微信例子"
       }
     ]
   }
