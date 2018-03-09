@@ -515,4 +515,27 @@ public class DakaUser {
     public void setUnionId(String unionId) {
         this.unionId = unionId == null ? null : unionId.trim();
     }
+
+
+    @Override
+    public String toString() {
+        return "DakaUser{" +
+                "userId=" + userId +
+                ", userPicture='" + userPicture + '\'' +
+                ", openid='" + openid + '\'' +
+                ", nickname='" + nickname + '\'' +
+                ", sex='" + sex + '\'' +
+                ", city='" + city + '\'' +
+                ", country='" + country + '\'' +
+                ", province='" + province + '\'' +
+                ", count=" + count +
+                ", scount=" + scount +
+                ", fcount=" + fcount +
+                ", paySumAmount=" + paySumAmount +
+                ", getSumAmount=" + getSumAmount +
+                ", createTime=" + createTime +
+                ", updateTime=" + updateTime +
+                ", unionId='" + unionId + '\'' +
+                '}';
+    }
 }

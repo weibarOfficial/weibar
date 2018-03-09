@@ -8,6 +8,8 @@ import com.weibar.pojo.db.DakaUserRankCriteria;
 import com.weibar.pojo.result.DakaResultUserRank;
 import com.weibar.service.mapper.DakaUserMapper;
 import com.weibar.service.mapper.DakaUserRankMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -27,6 +29,8 @@ public class DakaUserRankService {
     @Autowired
     private DakaUserMapper dakaUserMapper;
 
+    private static final Logger LOG = LoggerFactory.getLogger(DakaService.class);
+
     public List<DakaResultUserRank> getUserRanks(){
         DakaUserRankCriteria dakaUserRankCriteria = new DakaUserRankCriteria();
         dakaUserRankCriteria.setOrderByClause(" rank ");
@@ -42,6 +46,7 @@ public class DakaUserRankService {
         Collections.sort(userList,new DakaUserComparator());
         for(int i = 0; i < userList.size();i++){
             DakaUser dakaUser = userList.get(i);
+            LOG.info("refreshRanks dakauser " + dakaUser);
             DakaUserRank dakaUserRank = getDakaUserRankByDakaUser(dakaUser);
             dakaUserRank.setRank(i+1);
             updateOrInsertDakaUserRank(dakaUserRank);
@@ -61,6 +66,7 @@ public class DakaUserRankService {
             rankOri.setRank(dakaUserRank.getRank());
             rankOri.setNickname(dakaUserRank.getNickname());
             rankOri.setUserPicture(dakaUserRank.getUserPicture());
+            rankOri.setGetSumAmount(dakaUserRank.getGetSumAmount());
             rankOri.setUpdateTime(dakaUserRank.getUpdateTime());
             dakaUserRankMapper.updateByPrimaryKey(rankOri);
         }
