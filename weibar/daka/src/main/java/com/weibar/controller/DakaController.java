@@ -2,6 +2,7 @@ package com.weibar.controller;
 
 import com.weibar.pojo.exception.BaseException;
 import com.weibar.pojo.result.BaseResult;
+import com.weibar.service.function.DakaFreeService;
 import com.weibar.service.function.DakaService;
 import com.weibar.service.function.DakaUserRankService;
 import com.weibar.service.function.WechatMiniProgramService;
@@ -29,6 +30,8 @@ public class DakaController {
 
     @Autowired
     private DakaService dakaService;
+    @Autowired
+    private DakaFreeService dakaFreeService;
 
     @Autowired
     private DakaUserRankService dakaUserRankService;
@@ -42,6 +45,13 @@ public class DakaController {
         amountB = new BigDecimal(1);
         return BaseResult.getSuccessfulResult(dakaService.createDakaOrder(sessionKey,amountB, IpUtil.getRequestIp(request)));
     }
+
+    @RequestMapping(value = "/daka/payForFree" ,method = {RequestMethod.POST,RequestMethod.GET})
+    public Object payForFree(@RequestParam String sessionKey,HttpServletRequest request) throws BaseException {
+        dakaFreeService.createDakaForFree(sessionKey, IpUtil.getRequestIp(request));
+        return BaseResult.getSuccessfulResult(null);
+    }
+
 
     @RequestMapping(value = "/daka/daka" ,method = {RequestMethod.POST,RequestMethod.GET})
     public Object daka(@RequestParam String sessionKey,HttpServletRequest request) throws BaseException {
