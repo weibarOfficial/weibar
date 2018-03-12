@@ -165,23 +165,32 @@ Page({
               });
             } else {
               var earlyTimeStr;
+              var earlyUserNameStr;
               if (res.data.data.todaySummary.earlyTime){
                 earlyTimeStr = "今日" + res.data.data.todaySummary.earlyTime + "打卡";
+                earlyUserNameStr = res.data.data.todaySummary.earlyUserName;
               }else{
-                earlyTimeStr = "虚以待位";
+                earlyUserNameStr = "虚以待位";
+                earlyTimeStr = "";
               }
               var luckyAmountStr;
+              var luckyUserNameStr;
               if (res.data.data.todaySummary.luckyAmount){
                 luckyAmountStr = "获得" + res.data.data.todaySummary.luckyAmount + "元";
+                luckyUserNameStr = res.data.data.todaySummary.luckyUserName;
               }else{
-                luckyAmountStr = "虚以待位";
+                luckyUserNameStr = "虚以待位";
+                luckyAmountStr = "";
               }
 
               var gutsCountStr;
+              var gutsUserNameStr;
               if (res.data.data.todaySummary.gutsCount) {
                 gutsCountStr = "累计打卡" + res.data.data.todaySummary.gutsCount + "次";
+                gutsUserNameStr = res.data.data.todaySummary.gutsUserName;
               } else {
-                gutsCountStr = "虚以待位";
+                gutsUserNameStr = "虚以待位";
+                gutsCountStr = "";
               } 
 
 
@@ -193,11 +202,11 @@ Page({
                 earlyUserPicture: res.data.data.todaySummary.earlyUserPicture,
                 luckyUserPicture: res.data.data.todaySummary.luckyUserPicture,
                 gutsUserPicture: res.data.data.todaySummary.gutsUserPicture,
-                earlyUserName: res.data.data.todaySummary.earlyUserName,
+                earlyUserName: earlyUserNameStr,
                 earlyTime: earlyTimeStr,
-                luckyUserName: res.data.data.todaySummary.luckyUserName,
+                luckyUserName: luckyUserNameStr,
                 luckyAmount: luckyAmountStr,
-                gutsUserName: res.data.data.todaySummary.gutsUserName,
+                gutsUserName: gutsUserNameStr,
                 gutsCount: gutsCountStr
               })
             }

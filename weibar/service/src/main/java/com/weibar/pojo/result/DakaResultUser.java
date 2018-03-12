@@ -1,6 +1,7 @@
 package com.weibar.pojo.result;
 
 import com.weibar.pojo.db.DakaUser;
+import com.weibar.pojo.enu.DakaButtonEnum;
 import com.weibar.service.function.DakaService;
 
 import java.math.BigDecimal;
@@ -50,18 +51,22 @@ public class DakaResultUser {
     private String openId;
 
 
+    private DakaButtonEnum dakaButton;
+
+
 
 
     public static DakaResultUser getDakaResultUserDetail(DakaUser dakaUser,
                                                          boolean hasPayTodayDakaOrder,
                                                          boolean hasPayYesterdayDakaOrder,
                                                          boolean inDakaTime,
-                                                         boolean hasPayTomorrowDakaOrder){
+                                                         boolean hasPayTomorrowDakaOrder,DakaButtonEnum dakaButton){
         DakaResultUser dakaResultUser = getDakaResultUser(dakaUser);
         dakaResultUser.setHasPayTodayDakaOrder(hasPayTodayDakaOrder);
         dakaResultUser.setHasPayYesterdayDakaOrder(hasPayYesterdayDakaOrder);
         dakaResultUser.setInDakaTime(inDakaTime);
         dakaResultUser.setHasPayTomorrowDakaOrder(hasPayTomorrowDakaOrder);
+        dakaResultUser.setDakaButton(dakaButton);
         return dakaResultUser;
     }
 
@@ -83,6 +88,15 @@ public class DakaResultUser {
         dakaResultUser.setUserId(dakaUser.getUserId());
         dakaResultUser.setOpenId(dakaUser.getOpenid());
         return dakaResultUser;
+    }
+
+
+    public DakaButtonEnum getDakaButton() {
+        return dakaButton;
+    }
+
+    public void setDakaButton(DakaButtonEnum dakaButton) {
+        this.dakaButton = dakaButton;
     }
 
     public Long getUserId() {

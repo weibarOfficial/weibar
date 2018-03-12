@@ -11,6 +11,7 @@ public class DakaIndexSummary {
     private DakaResultDaySummary todaySummary;
     private DakaResultDaySummary tomorrowSummary;
 
+
     public DakaResultDaySummary getTodaySummary() {
         return todaySummary;
     }

@@ -1,6 +1,7 @@
 package com.weibar.service.function;
 
 import com.weibar.pojo.db.*;
+import com.weibar.pojo.enu.DakaButtonEnum;
 import com.weibar.pojo.enu.DakaOrderStatusEnum;
 import com.weibar.pojo.enu.ErrorCodeEnum;
 import com.weibar.pojo.enu.RedPackageSceneIdEnum;
@@ -99,12 +100,41 @@ public class DakaService {
                 " nickName " + userBaseInfo.getNickname() +
                 " amount " + amount + " clientIp " + clientIp);
 
+        DakaOrder dakaOrder = checkAndInsertDakaOrder(amount,userBaseInfo,DakaOrderStatusEnum.NOT_PAY.getState());
+
+        WechatPrePay wechatPrePay = wechatPayService.createOrder(amount.multiply(new BigDecimal(100)).intValue(),clientIp,userBaseInfo.getMiniDakaOpenid(),
+                payAttachService.generateDakaOrderAttach(dakaOrder.getOrderid()));
+
+        DakaOrderPrePay dakaOrderPrePay = new DakaOrderPrePay();
+        dakaOrderPrePay.setDakaResultOrder(DakaResultOrder.getDakaResultOrder(dakaOrder));
+        dakaOrderPrePay.setWechatPrePay(wechatPrePay);
+
+        //更新打卡用户表数据
+        updateDakaUserData(userBaseInfo.getUserId());
+
+        return dakaOrderPrePay;
+    }
+
+    public DakaOrder checkAndInsertDakaOrder(BigDecimal amount,UserBaseInfo userBaseInfo,int payState) throws BaseException {
         Calendar calendar = Calendar.getInstance();
         if(calendar.get(Calendar.HOUR_OF_DAY) == 23 && calendar.get(Calendar.MINUTE) > 55){
             throw BaseException.getException(ErrorCodeEnum.DAKA_NOT_PAY_TIME.getCode());
         }
-
         Date now = calendar.getTime();
+
+        Date tomorrow = DatesUtils.removeTime(DateUtils.addDays(now,1));
+
+        DakaOrderCriteria dakaOrderCriteria = new DakaOrderCriteria();
+        DakaOrderCriteria.Criteria criteria = dakaOrderCriteria.createCriteria();
+        criteria.andUserIdEqualTo(userBaseInfo.getUserId());
+        criteria.andStatusEqualTo(DakaOrderStatusEnum.PAYED.getState());
+        criteria.andOrderDateEqualTo(tomorrow);
+        List<DakaOrder> orderList = dakaOrderMapper.selectByExample(dakaOrderCriteria);
+        if(orderList != null && orderList.size() > 0){
+            throw BaseException.getException(ErrorCodeEnum.DAKA_HAS_PAY.getCode());
+        }
+
+
         DakaOrder dakaOrder = new DakaOrder();
 
 
@@ -112,23 +142,19 @@ public class DakaService {
         dakaOrder.setOrderid(orderId);
         dakaOrder.setCreateTime(now);
         dakaOrder.setUpdateTime(now);
-        dakaOrder.setStatus(DakaOrderStatusEnum.NOT_PAY.getState());
+        dakaOrder.setStatus(payState);
+
+
         dakaOrder.setPayAmount(amount);
         dakaOrder.setUserId(userBaseInfo.getUserId());
         dakaOrder.setOpenid(userBaseInfo.getOpenid());
         dakaOrder.setOrderDate(DateUtils.addDays(now,1));
         dakaOrderMapper.insert(dakaOrder);
-
-        WechatPrePay wechatPrePay = wechatPayService.createOrder(amount.multiply(new BigDecimal(100)).intValue(),clientIp,userBaseInfo.getMiniDakaOpenid(),
-                payAttachService.generateDakaOrderAttach(orderId));
-
-        DakaOrderPrePay dakaOrderPrePay = new DakaOrderPrePay();
-        dakaOrderPrePay.setDakaResultOrder(DakaResultOrder.getDakaResultOrder(dakaOrder));
-        dakaOrderPrePay.setWechatPrePay(wechatPrePay);
-
-
-        return dakaOrderPrePay;
+        return dakaOrder;
     }
+
+
+
 
 
     /**
@@ -171,9 +197,6 @@ public class DakaService {
 
             //更新用户收入表
             DakaUser dakaUser = getDakaUser(dakaOrder.getUserId());
-            dakaUser.setScount(dakaUser.getScount() + 1);
-            dakaUser.setUpdateTime(now);
-            dakaUserMapper.updateByPrimaryKey(dakaUser);
 
             //更新统计表(当天的统计表）
             DakaDaySummary dakaDaySummary = getDakaDaySummary(now);
@@ -192,6 +215,10 @@ public class DakaService {
             dakaDaySummary.setUpdateTime(now);
             dakaDaySummaryMapper.updateByPrimaryKey(dakaDaySummary);
         }
+
+
+        //更新打卡用户表数据
+        updateDakaUserData(user.getUserId());
     }
 
 
@@ -260,10 +287,10 @@ public class DakaService {
 
         //更新用户收入表
         DakaUser dakaUser = getDakaUser(dakaOrder.getUserId());
-        dakaUser.setUpdateTime(now);
-        dakaUser.setCount(dakaUser.getCount() + 1);
-        dakaUser.setPaySumAmount(dakaUser.getPaySumAmount().add(dakaOrder.getPayAmount()));
-        dakaUserMapper.updateByPrimaryKey(dakaUser);
+//        dakaUser.setUpdateTime(now);
+//        dakaUser.setCount(dakaUser.getCount() + 1);
+//        dakaUser.setPaySumAmount(dakaUser.getPaySumAmount().add(dakaOrder.getPayAmount()));
+//        dakaUserMapper.updateByPrimaryKey(dakaUser);
 
         String consumeRemark = "每日早起打卡消费:" + dakaOrder.getPayAmount();
         userBalanceService.subtractUserBalance(dakaUser.getUserId(),dakaOrder.getPayAmount(),consumeRemark);
@@ -274,6 +301,9 @@ public class DakaService {
         dakaDaySummary.setPayAmount(dakaDaySummary.getPayAmount().add(dakaOrder.getPayAmount()));
         dakaDaySummary.setCount(dakaDaySummary.getCount() + 1);
         dakaDaySummaryMapper.updateByPrimaryKey(dakaDaySummary);
+
+        //更新打卡用户表数据
+        updateDakaUserData(dakaUser.getUserId());
     }
 
 
@@ -342,19 +372,43 @@ public class DakaService {
     }
 
 
+    /**
+     *
+     * @param userBaseInfo
+     * @return
+     */
     public DakaResultUser getDakaUser(UserBaseInfo userBaseInfo){
         DakaUser dakaUser = createOrUpdateDakaUser(userBaseInfo);
+        boolean hasPayTodayDakaOrder = hasPayTodayDakaOrder(dakaUser);
+        boolean hasPayYesterdayDakaOrder = hasPayYesterdayDakaOrder(dakaUser);
+        boolean inDakaTime = inDakaTime();
+        boolean hasPayTomorrowDakaOrder = hasPayTomorrowDakaOrder(dakaUser);
+        DakaButtonEnum dakaButton = getDakaButton(hasPayTodayDakaOrder,hasPayTomorrowDakaOrder,inDakaTime);
+
         DakaResultUser dakaResultUser = DakaResultUser.getDakaResultUserDetail(
                 dakaUser,
-                hasPayTodayDakaOrder(dakaUser),
-                hasPayYesterdayDakaOrder(dakaUser),
-                inDakaTime(),
-                hasPayTomorrowDakaOrder(dakaUser));
+                hasPayTodayDakaOrder,
+                hasPayYesterdayDakaOrder,
+                inDakaTime,
+                hasPayTomorrowDakaOrder,
+                dakaButton);
         return dakaResultUser;
     }
 
     public DakaResultUser getDakaUserBySessionKey(String sessionKey) throws BaseException {
         return getDakaUser(getUserInfoBySessionKey(sessionKey));
+    }
+
+
+    public DakaButtonEnum getDakaButton(boolean hasPayTodayDakaOrder,boolean hasPayTomorrowDakaOrder,boolean inDakaTime){
+        if(hasPayTodayDakaOrder && inDakaTime){
+            return DakaButtonEnum.DAKA;
+        }
+        if(hasPayTomorrowDakaOrder){
+            return DakaButtonEnum.REM_DAKA;
+        }
+        //这里控制是否需要付费打卡
+        return DakaButtonEnum.FREE_FOR_DAKA;
     }
 
 
@@ -470,7 +524,7 @@ public class DakaService {
         }
     }
 
-    private DakaDaySummary getTomorrowDakaDaySummary(Date date){
+    public DakaDaySummary getTomorrowDakaDaySummary(Date date){
         return getDakaDaySummary(DateUtils.addDays(date,1));
     }
 
@@ -549,7 +603,7 @@ public class DakaService {
         BigDecimal failMoney = new BigDecimal(0);
         for(DakaOrder dakaOrder : failOrds){
             failMoney = failMoney.add(dakaOrder.getPayAmount());
-            updateDakaUser(dakaOrder.getUserId());
+            updateDakaUserData(dakaOrder.getUserId());
             if(dakaOrder.getStatus() == DakaOrderStatusEnum.DAKA_FAIL.getState()){
                 continue;
             }
@@ -587,7 +641,7 @@ public class DakaService {
 
 
             //更新用户收入表
-            DakaUser dakaUser = updateDakaUser(dakaOrder.getUserId());
+            DakaUser dakaUser = updateDakaUserData(dakaOrder.getUserId());
 
             // 更新最佳和最有毅力
             if(luckyUser == null){
@@ -640,7 +694,7 @@ public class DakaService {
 
 
 
-    private DakaUser updateDakaUser(Long userId) throws BaseException {
+    public DakaUser updateDakaUserData(Long userId) throws BaseException {
         List<DakaOrder> list = getDakaOrders(userId);
         BigDecimal paySum = new BigDecimal(0);
         BigDecimal getSum = new BigDecimal(0);

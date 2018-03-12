@@ -115,7 +115,8 @@ public enum ErrorCodeEnum {
     DAKA_USER_NOT_EXIST(-140002,"打卡用户不存在"),
     DAKA_ORDER_NOT_EXIST(-140003,"打卡订单不存在"),
 
-    DAKA_NOT_PAY_TIME(-140004,"每天23:55之后不能支付打卡"),
+    DAKA_NOT_PAY_TIME(-140004,"每天23:55之后不能报名打卡"),
+    DAKA_HAS_PAY(-140004,"已报名明天打卡，不用重复报名~"),
     DAKA_NOT_IN_TIME(-140005,"每天请在5点到8点之间进行打卡"),
     DAKA_ORDER_TABLE_SUM_TABLE_ERROR(-140006,"用户订单表和统计表数据不一致"),
     DAKA_ORDER_HAS_PAYED(-140008,"打卡订单已支付"),
