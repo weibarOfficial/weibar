@@ -51,7 +51,11 @@ public class DakaResultUser {
     private String openId;
 
 
-    private DakaButtonEnum dakaButton;
+    private String dakaBindTap;
+    private boolean dakaDisabled;
+    private String dakaText;
+
+
 
 
 
@@ -66,7 +70,9 @@ public class DakaResultUser {
         dakaResultUser.setHasPayYesterdayDakaOrder(hasPayYesterdayDakaOrder);
         dakaResultUser.setInDakaTime(inDakaTime);
         dakaResultUser.setHasPayTomorrowDakaOrder(hasPayTomorrowDakaOrder);
-        dakaResultUser.setDakaButton(dakaButton);
+        dakaResultUser.setDakaBindTap(dakaButton.getBindTap());
+        dakaResultUser.setDakaDisabled(dakaButton.isDisabled());
+        dakaResultUser.setDakaText(dakaButton.getText());
         return dakaResultUser;
     }
 
@@ -91,12 +97,28 @@ public class DakaResultUser {
     }
 
 
-    public DakaButtonEnum getDakaButton() {
-        return dakaButton;
+    public String getDakaBindTap() {
+        return dakaBindTap;
     }
 
-    public void setDakaButton(DakaButtonEnum dakaButton) {
-        this.dakaButton = dakaButton;
+    public void setDakaBindTap(String dakaBindTap) {
+        this.dakaBindTap = dakaBindTap;
+    }
+
+    public boolean isDakaDisabled() {
+        return dakaDisabled;
+    }
+
+    public void setDakaDisabled(boolean dakaDisabled) {
+        this.dakaDisabled = dakaDisabled;
+    }
+
+    public String getDakaText() {
+        return dakaText;
+    }
+
+    public void setDakaText(String dakaText) {
+        this.dakaText = dakaText;
     }
 
     public Long getUserId() {
