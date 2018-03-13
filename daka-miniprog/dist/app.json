@@ -30,7 +30,9 @@
     "example/searchbar/searchbar",
     "pages/article/article",
     "pages/my/my",
-    "pages/rank/rank"
+    "pages/rank/rank",
+    "pages/article/articleFree",
+    "pages/marquee/marquee"
   ],
   "window": {
     "navigationBarTextStyle": "#FFFFFF",

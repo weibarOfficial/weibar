@@ -121,6 +121,7 @@ public enum ErrorCodeEnum {
     DAKA_ORDER_TABLE_SUM_TABLE_ERROR(-140006,"用户订单表和统计表数据不一致"),
     DAKA_ORDER_HAS_PAYED(-140008,"打卡订单已支付"),
     DAKA_ORDER_HAS_SUCCESS(-140009,"已打卡成功~ 请勿重复打卡"),
+    DAKA_RULE_CHANGE(-140010,"已成功报名打卡！现无需支付一元，请记得明早打卡瓜分奖金哦~"),
     DAKA_ERROR_END(-150000,"打卡相关错误结束段"),
 
     MINIPRAGRAM_ERROR_BEGIN(-150001,"小程序相关错误开始段"),

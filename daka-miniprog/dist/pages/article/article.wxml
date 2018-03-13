@@ -19,9 +19,15 @@
                     </view>
                 </view>
                 <view class="weui-article__section">
-                    <view class="weui-article__h3 title-color">我的战绩</view>
+                    <view class="weui-article__h3 title-color">我的战绩&打卡排名</view>
                     <view class="weui-article__p">
-                     我的战绩可以查看个人的参与记录。
+                     我的战绩可以查看个人的参与记录。打卡排名可以查看累计获取奖励金金额靠前的用户排名。
+                    </view>
+                </view>
+                <view class="weui-article__section">
+                    <view class="weui-article__h3 title-color">联系客服</view>
+                    <view class="weui-article__p">
+                    反馈与建议,请您加weibar_admin客服微信号
                     </view>
                 </view>
             </view>

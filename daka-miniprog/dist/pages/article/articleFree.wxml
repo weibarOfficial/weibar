@@ -1,0 +1,37 @@
+<!--pages/article/articleFree.wxml-->
+<view class="page">
+    <view class="page__hd">
+        <view class="page__title title-color">游戏规则</view>
+    </view>
+    <view class="page__bd">
+        <view class="weui-article">
+            <view class="weui-article__section">
+                <view class="weui-article__section">
+                    <view class="weui-article__h3 title-color">免费报名参与明日打卡</view>
+                    <view class="weui-article__p">
+                     每天23:55分之前免费报名参与明日打卡活动，隔天记得打卡即可随机获得一定奖金，最高10元哦~对于参加活动的用户，早上5-8点之前打卡，将在8点5分之前获取一定现金奖励，奖金池由该小程序开发公司提供~
+                    </view>
+                </view>
+                <view class="weui-article__section">
+                    <view class="weui-article__h3 title-color">我的战绩</view>
+                    <view class="weui-article__p">
+                     我的战绩可以查看个人的参与记录。
+                    </view>
+                </view>
+                <view class="weui-article__section">
+                    <view class="weui-article__h3 title-color">打卡排名</view>
+                    <view class="weui-article__p">
+                     打卡排名可以查看累计获取奖励金金额靠前的用户排名。
+                    </view>
+                </view>
+                <view class="weui-article__section">
+                    <view class="weui-article__h3 title-color">联系客服</view>
+                    <view class="weui-article__p">
+                    反馈与建议,请您加weibar_admin客服微信号
+                    </view>
+                </view>
+            </view>
+        </view>
+    </view>
+</view>
+

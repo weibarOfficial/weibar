@@ -1,0 +1,4 @@
+/* pages/article/articleFree.wxss */
+.title-color {
+    color: #FF6600;
+}

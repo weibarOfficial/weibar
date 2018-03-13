@@ -20,7 +20,10 @@ Page({
     luckyUserName:"",
     luckyAmount:"",
     gutsUserName:"",
-    gutsCount:""
+    gutsCount:"",
+    gameRuleUrl:"/pages/article/articleFree",
+    marqueeText:""
+
 
   },
   

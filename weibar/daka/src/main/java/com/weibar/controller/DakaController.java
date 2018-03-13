@@ -1,5 +1,6 @@
 package com.weibar.controller;
 
+import com.weibar.pojo.enu.ErrorCodeEnum;
 import com.weibar.pojo.exception.BaseException;
 import com.weibar.pojo.result.BaseResult;
 import com.weibar.service.function.DakaFreeService;
@@ -40,10 +41,14 @@ public class DakaController {
     @RequestMapping(value = "/daka/pay" ,method = {RequestMethod.POST,RequestMethod.GET})
     public Object pay(@RequestParam String sessionKey,@RequestParam String amount,HttpServletRequest request) throws BaseException {
 
-        BigDecimal amountB = new BigDecimal(amount);
-        //写死一元
-        amountB = new BigDecimal(1);
-        return BaseResult.getSuccessfulResult(dakaService.createDakaOrder(sessionKey,amountB, IpUtil.getRequestIp(request)));
+        //暂时屏蔽掉支付一元接口
+//        BigDecimal amountB = new BigDecimal(amount);
+//        //写死一元
+//        amountB = new BigDecimal(1);
+//        return BaseResult.getSuccessfulResult(dakaService.createDakaOrder(sessionKey,amountB, IpUtil.getRequestIp(request)));
+        //使用免费打卡接口并抛异常
+        dakaFreeService.createDakaForFree(sessionKey, IpUtil.getRequestIp(request));
+        throw BaseException.getException(ErrorCodeEnum.DAKA_RULE_CHANGE.getCode());
     }
 
     @RequestMapping(value = "/daka/payForFree" ,method = {RequestMethod.POST,RequestMethod.GET})

@@ -2,6 +2,7 @@ package com.weibar.shedu;
 
 
 import com.weibar.pojo.exception.BaseException;
+import com.weibar.service.DakaRefreshService;
 import com.weibar.service.function.DakaService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,7 +17,7 @@ public class DakaJob {
 
     private static final Logger LOG = LoggerFactory.getLogger(DakaJob.class);
     @Autowired
-    private DakaService dakaService;
+    private DakaRefreshService dakaRefreshService;
 
     @Scheduled(cron = "0 1 8 * * ?")
     //@Scheduled(cron = "0 22 20 * * ?")
@@ -24,7 +25,7 @@ public class DakaJob {
         try {
             LOG.info("dakaFinishJob begin");
             Date now = new Date();
-            dakaService.refreshAndSendDakaMoney(now);
+            dakaRefreshService.refreshAndSendDakaMoney(now);
             LOG.info("dakaFinishJob end succ");
         } catch (BaseException e) {
             LOG.error("refreshAndSendDakaMoney error " + e.toString(),e);
