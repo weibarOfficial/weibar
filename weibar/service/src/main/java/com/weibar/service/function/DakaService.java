@@ -70,6 +70,10 @@ public class DakaService {
     @Autowired
     private DakaUserRankService dakaUserRankService;
 
+    public static final String GAME_RULE_URL = "/pages/article/articleFree";
+    public static final String MARQUEE_TEXT = "【客服微信号：反馈与建议，请您加weibar_admin微信号】";
+
+
 
     private static final Logger LOG = LoggerFactory.getLogger(DakaService.class);
 
@@ -391,7 +395,10 @@ public class DakaService {
                 hasPayYesterdayDakaOrder,
                 inDakaTime,
                 hasPayTomorrowDakaOrder,
-                dakaButton);
+                dakaButton,
+                GAME_RULE_URL,
+                MARQUEE_TEXT
+                );
         return dakaResultUser;
     }
 

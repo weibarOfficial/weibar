@@ -9,7 +9,7 @@ Page({
     tomorrowDakaMoney: "未知",
     suceessDaka: "未知",
     failDaka: "未知",
-    buttonText:"支付一元参与打卡",
+    buttonText:"报名参与打卡",
     buttonBindtap: "payForDaka",
     buttondisabled: "false",
     earlyUserPicture:"",
@@ -57,10 +57,55 @@ Page({
             } else {
               wx.showModal({
                 content: '打卡成功！稍后将瓜分奖金',
-                showCancel: false
+                showCancel: false,
+                success : function(){
+                  that.refresh();
+                }
               });
             }
+            that.refresh();
           }
+        })
+      }
+    });
+  },
+
+
+  freeForDaka:function(){
+    var sessionKey = null;
+    var that = this;
+    var thatData = this.data;
+    wx.getStorage({
+      key: 'sessionKey',
+      success: function (res) {
+
+        wx.request({
+          url: thatData.app.BASE_URL + "/daka/payForFree",
+          method: "GET",
+          dataType: "json",
+          data: {
+            sessionKey: res.data
+          },
+          success: function (res) {
+            console.log(res);
+            if (res.data.code != 0) {
+              wx.showModal({
+                content: '报名打卡下单失败:' + res.data.message,
+                showCancel: false
+              });
+            } else {
+              console.log("免费打卡下单成功");
+              wx.showModal({
+                content: '打卡报名成功！明早记得5-8点前打卡哦~',
+                showCancel: false
+              });
+              
+              console.log(res.data);
+
+            }
+            that.refresh();
+          }
+
         })
       }
     });

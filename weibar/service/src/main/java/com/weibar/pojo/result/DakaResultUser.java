@@ -54,9 +54,8 @@ public class DakaResultUser {
     private String dakaBindTap;
     private boolean dakaDisabled;
     private String dakaText;
-
-
-
+    private String gameRuleUrl;
+    private String marqueeText;
 
 
 
@@ -64,7 +63,10 @@ public class DakaResultUser {
                                                          boolean hasPayTodayDakaOrder,
                                                          boolean hasPayYesterdayDakaOrder,
                                                          boolean inDakaTime,
-                                                         boolean hasPayTomorrowDakaOrder,DakaButtonEnum dakaButton){
+                                                         boolean hasPayTomorrowDakaOrder,
+                                                         DakaButtonEnum dakaButton,
+                                                         String gameRuleUrl,
+                                                         String marqueeText){
         DakaResultUser dakaResultUser = getDakaResultUser(dakaUser);
         dakaResultUser.setHasPayTodayDakaOrder(hasPayTodayDakaOrder);
         dakaResultUser.setHasPayYesterdayDakaOrder(hasPayYesterdayDakaOrder);
@@ -73,6 +75,8 @@ public class DakaResultUser {
         dakaResultUser.setDakaBindTap(dakaButton.getBindTap());
         dakaResultUser.setDakaDisabled(dakaButton.isDisabled());
         dakaResultUser.setDakaText(dakaButton.getText());
+        dakaResultUser.setGameRuleUrl(gameRuleUrl);
+        dakaResultUser.setMarqueeText(marqueeText);
         return dakaResultUser;
     }
 
@@ -96,6 +100,21 @@ public class DakaResultUser {
         return dakaResultUser;
     }
 
+    public String getMarqueeText() {
+        return marqueeText;
+    }
+
+    public void setMarqueeText(String marqueeText) {
+        this.marqueeText = marqueeText;
+    }
+
+    public String getGameRuleUrl() {
+        return gameRuleUrl;
+    }
+
+    public void setGameRuleUrl(String gameRuleUrl) {
+        this.gameRuleUrl = gameRuleUrl;
+    }
 
     public String getDakaBindTap() {
         return dakaBindTap;
