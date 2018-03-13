@@ -3,6 +3,7 @@ package com.weibar.controller;
 import com.weibar.pojo.enu.ErrorCodeEnum;
 import com.weibar.pojo.exception.BaseException;
 import com.weibar.pojo.result.BaseResult;
+import com.weibar.service.DakaRefreshService;
 import com.weibar.service.function.DakaFreeService;
 import com.weibar.service.function.DakaService;
 import com.weibar.service.function.DakaUserRankService;
@@ -36,6 +37,9 @@ public class DakaController {
 
     @Autowired
     private DakaUserRankService dakaUserRankService;
+
+    @Autowired
+    private DakaRefreshService dakaRefreshService;
 
 
     @RequestMapping(value = "/daka/pay" ,method = {RequestMethod.POST,RequestMethod.GET})
@@ -103,7 +107,7 @@ public class DakaController {
     @RequestMapping(value = "/daka/dakaFinishSepcificDateJob" ,method = {RequestMethod.POST,RequestMethod.GET})
     public Object dakaFinishSepcificDateJob(@RequestParam Long time) throws BaseException {
         Date timeDate = new Date(time);
-        dakaService.refreshAndSendDakaMoney(timeDate);
+        dakaRefreshService.refreshAndSendDakaMoney(timeDate);
         return BaseResult.getSuccessfulResult(null);
     }
 
