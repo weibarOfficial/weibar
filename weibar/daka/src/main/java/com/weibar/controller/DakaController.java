@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
+import java.math.BigDecimal;
 import java.util.Date;
 
 /**
@@ -46,13 +47,13 @@ public class DakaController {
     public Object pay(@RequestParam String sessionKey,@RequestParam String amount,HttpServletRequest request) throws BaseException {
 
         //暂时屏蔽掉支付一元接口
-//        BigDecimal amountB = new BigDecimal(amount);
-//        //写死一元
-//        amountB = new BigDecimal(1);
-//        return BaseResult.getSuccessfulResult(dakaService.createDakaOrder(sessionKey,amountB, IpUtil.getRequestIp(request)));
+        BigDecimal amountB = new BigDecimal(amount);
+        //写死一元
+        amountB = new BigDecimal(1);
+        return BaseResult.getSuccessfulResult(dakaService.createDakaOrder(sessionKey,amountB, IpUtil.getRequestIp(request)));
         //使用免费打卡接口并抛异常
-        dakaFreeService.createDakaForFree(sessionKey, IpUtil.getRequestIp(request));
-        throw BaseException.getException(ErrorCodeEnum.DAKA_RULE_CHANGE.getCode());
+//        dakaFreeService.createDakaForFree(sessionKey, IpUtil.getRequestIp(request));
+//        throw BaseException.getException(ErrorCodeEnum.DAKA_RULE_CHANGE.getCode());
     }
 
     @RequestMapping(value = "/daka/payForFree" ,method = {RequestMethod.POST,RequestMethod.GET})
