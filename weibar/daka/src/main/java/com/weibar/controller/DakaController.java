@@ -3,11 +3,10 @@ package com.weibar.controller;
 import com.weibar.pojo.enu.ErrorCodeEnum;
 import com.weibar.pojo.exception.BaseException;
 import com.weibar.pojo.result.BaseResult;
-import com.weibar.service.DakaRefreshService;
+import com.weibar.service.function.DakaRefreshService;
 import com.weibar.service.function.DakaFreeService;
 import com.weibar.service.function.DakaService;
 import com.weibar.service.function.DakaUserRankService;
-import com.weibar.service.function.WechatMiniProgramService;
 import com.weibar.utils.IpUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,7 +17,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
-import java.math.BigDecimal;
 import java.util.Date;
 
 /**
@@ -40,6 +38,8 @@ public class DakaController {
 
     @Autowired
     private DakaRefreshService dakaRefreshService;
+
+
 
 
     @RequestMapping(value = "/daka/pay" ,method = {RequestMethod.POST,RequestMethod.GET})
@@ -121,4 +121,11 @@ public class DakaController {
     public Object getRanks() throws BaseException {
         return BaseResult.getSuccessfulResult(dakaUserRankService.getUserRanks());
     }
+
+    @RequestMapping(value = "/daka/generateAdminPay" ,method = {RequestMethod.POST,RequestMethod.GET})
+    public Object generateAdminPay() throws BaseException {
+        dakaFreeService.generateAdminPay();
+        return BaseResult.getSuccessfulResult(null);
+    }
+
 }

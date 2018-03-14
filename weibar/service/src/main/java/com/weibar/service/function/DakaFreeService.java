@@ -90,7 +90,9 @@ public class DakaFreeService {
         DakaDaySummary dakaDaySummary = dakaService.getTomorrowDakaDaySummary(now);
         dakaDaySummary.setUpdateTime(now);
         dakaDaySummary.setCount(dakaDaySummary.getCount() + 1);
+        dakaDaySummary.setPayAmount(dakaDaySummary.getPayAmount().add(amount));
         dakaDaySummaryMapper.updateByPrimaryKey(dakaDaySummary);
+
     }
 
 
