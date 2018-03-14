@@ -110,6 +110,9 @@ public class DakaService {
     public DakaOrder checkAndInsertDakaOrder(BigDecimal amount,UserBaseInfo userBaseInfo,int payState) throws BaseException {
         Calendar calendar = Calendar.getInstance();
         if(calendar.get(Calendar.HOUR_OF_DAY) == 23 && calendar.get(Calendar.MINUTE) > 55){
+            LOG.error("userBaseInfo userId " + userBaseInfo.getUserId() +
+                    " hour of day " + calendar.get(Calendar.HOUR_OF_DAY)
+                    + " MINUTE " + calendar.get(Calendar.MINUTE) + " not in daka time");
             throw BaseException.getException(ErrorCodeEnum.DAKA_NOT_PAY_TIME.getCode());
         }
         Date now = calendar.getTime();

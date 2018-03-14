@@ -98,6 +98,7 @@ public enum ErrorCodeEnum {
     WECHAT_PAY_ERROR_PARSE_NOTIFY_ERROR(-110005,"微信通知支付结果有误"),
     WECHAT_PAY_ERROR_UNKOWN_STATE(-110006,"微信支付状态未知"),
     WECHAT_PAY_ERROR_SEND_RED_PACK(-110007,"微信发送红包失败"),
+    WECHAT_PAY_ERROR_AMOUNT(-110008,"微信发送红包金额必须在1到200元之间"),
     WECHAT_PAY_ERROR_END(-120000,"登录相关错误结束段"),
 
     RECHARGE_ERROR_BEGIN(-120001,"充值相关错误开始段"),

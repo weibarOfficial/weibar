@@ -63,7 +63,11 @@ public class WechatRedPackageService {
                                       String chorderid,
                                       String openId, Long userId,
                                       String clientIp, String sceneId,
-                                      String redPacketTitle, String description) {
+                                      String redPacketTitle, String description) throws BaseException {
+
+        if(amount.compareTo(new BigDecimal(1)) < 0){
+            throw BaseException.getException(ErrorCodeEnum.WECHAT_PAY_ERROR_AMOUNT.getCode());
+        }
 
         Date now = new Date();
         WeibarRedpackageOrder weibarRedpackageOrder = new WeibarRedpackageOrder();
@@ -99,6 +103,7 @@ public class WechatRedPackageService {
 
     public void sendRedPackage(WeibarRedpackageOrder order) throws BaseException {
 
+        //这里使用微信红包
 //        WxPaySendRedpackRequest wxPaySendRedpackRequest = new WxPaySendRedpackRequest();
 //        wxPaySendRedpackRequest.setMchBillNo(order.getOrderid().toString());
 //        wxPaySendRedpackRequest.setSendName(WechatPayConsts.COMPANY_NAME);
@@ -113,6 +118,7 @@ public class WechatRedPackageService {
 //        wxPaySendRedpackRequest.setSceneId(DEFAULT_SCENE_ID);
 
 
+        //这里使用企业打款
         WxEntPayRequest wxEntPayRequest = new WxEntPayRequest();
         wxEntPayRequest.setPartnerTradeNo(order.getOrderid().toString());
         wxEntPayRequest.setOpenid(order.getOpenid());

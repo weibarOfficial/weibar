@@ -9,6 +9,8 @@ import com.weibar.pojo.exception.BaseException;
 import com.weibar.service.function.*;
 import com.weibar.service.mapper.DakaDaySummaryMapper;
 import com.weibar.service.mapper.DakaOrderMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
@@ -51,6 +53,8 @@ public class DakaRefreshService {
 
     @Autowired
     private DakaDaySummaryMapper dakaDaySummaryMapper;
+
+    private static final Logger LOG = LoggerFactory.getLogger(DakaRefreshService.class);
 
     @Transactional(propagation = Propagation.REQUIRED,isolation = Isolation.READ_COMMITTED,rollbackFor = Exception.class)
     public void refreshAndSendDakaMoney(Date date) throws BaseException {
@@ -135,15 +139,20 @@ public class DakaRefreshService {
                 gutUser = dakaUser;
             }
 
+            try{
+                wechatRedPackageService.createRedPackageOrder(dakaOrder.getGetAmount(),
+                        dakaOrder.getOrderid().toString(),
+                        dakaOrder.getOpenid(),
+                        dakaOrder.getUserId(),
+                        dakaOrder.getClientIp(),
+                        RedPackageSceneIdEnum.DAKA.getState().toString(),
+                        RedPackageSceneIdEnum.DAKA.getDesc(),
+                        "发放打卡成功奖励金");
+            }catch (BaseException e){
+                LOG.error("createRedPackageOrder error",e);
+            }
 
-            wechatRedPackageService.createRedPackageOrder(dakaOrder.getGetAmount(),
-                    dakaOrder.getOrderid().toString(),
-                    dakaOrder.getOpenid(),
-                    dakaOrder.getUserId(),
-                    dakaOrder.getClientIp(),
-                    RedPackageSceneIdEnum.DAKA.getState().toString(),
-                    RedPackageSceneIdEnum.DAKA.getDesc(),
-                    "发放打卡成功奖励金");
+
         }
 
         //更新统计表
