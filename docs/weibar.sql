@@ -341,6 +341,11 @@ CREATE TABLE `weibar_merchants_base_info` (
   `per_capita` varchar(100) DEFAULT NULL COMMENT '人均消费',
   `bar_picture` varchar(100) DEFAULT NULL COMMENT '吧图url',
   `bar_des` varchar(100) DEFAULT NULL COMMENT '吧图描述',
+  `hash_pwd` varchar(400) DEFAULT NULL COMMENT '加盐密码',
+  `hash_salt` varchar(400) DEFAULT NULL COMMENT '密码的盐',
+  `parent_merchantid` bigint(20) NOT NULL DEFAULT '0' COMMENT '父商户ID',
+  `role` int(11) DEFAULT NULL COMMENT '角色, 1杭州公司，2为代理商，3为酒吧',
+  `sharing_ratio` int(11) DEFAULT NULL COMMENT '分成比例，表示千分之几',
   `create_time` datetime NOT NULL DEFAULT '2000-01-01 00:00:00' COMMENT '创建时间',
   `update_time` datetime NOT NULL DEFAULT '2000-01-01 00:00:00' COMMENT '更新时间',
   `state` int(11) DEFAULT NULL,
@@ -348,10 +353,47 @@ CREATE TABLE `weibar_merchants_base_info` (
   PRIMARY KEY (`merchantid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+
+
 -- ----------------------------
 -- Records of weibar_merchants_base_info
 -- ----------------------------
 INSERT INTO `weibar_merchants_base_info` VALUES ('1', 'http://weibar.oss-cn-shenzhen.aliyuncs.com/419608ca6edcd52006a56195f1751e83', 'http://weibar.oss-cn-shenzhen.aliyuncs.com/419608ca6edcd52006a56195f1751e83', '', '官方频道', null, null, null, null, null, null, null, null, null, null, '2017-11-12 12:20:45', '2017-11-12 12:20:45', '1', 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxa105b2133d0dd8b0&redirect_uri=http%3A%2F%2Fwww.yylive.com%2Fwechat%2Flogin&response_type=code&scope=snsapi_userinfo&state=http%3A%2F%2Fwww.yylive.com%2Fstatic%2Findex.html%3FmerchantId%3D1#wechat_redirect');
+
+
+
+
+
+CREATE TABLE `weibar_merchants_game_setting_info` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `merchantid` bigint(20) NOT NULL DEFAULT '0' COMMENT '商户ID',
+  `gameid` varchar(10) DEFAULT NULL COMMENT '游戏ID',
+  `gamename` varchar(500) DEFAULT NULL COMMENT '游戏名称',
+  `game_img_url` varchar(1000) DEFAULT NULL COMMENT '游戏图标URL',
+  `game_url` varchar(1000) DEFAULT NULL COMMENT '游戏URL',
+  `create_time` datetime NOT NULL DEFAULT '2000-01-01 00:00:00' COMMENT '创建时间',
+  `update_time` datetime NOT NULL DEFAULT '2000-01-01 00:00:00' COMMENT '更新时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8
+
+
+
+
+CREATE TABLE `weibar_merchants_account_balance` (
+  `merchantid` bigint(20) NOT NULL COMMENT '帐号',
+  `balance` decimal(10,2) NOT NULL COMMENT '用户钱包余额',
+  `bank_name` varchar(50) NOT NULL COMMENT '银行卡开户行（如中国工商银行）',
+  `bank_card_no` varchar(50) NOT NULL COMMENT '银行卡号',
+  `bank_card_name` varchar(50) NOT NULL COMMENT '银行卡姓名（姓名或公司名称）',
+  `bank_branch` varchar(30) NOT NULL COMMENT '银行所在网点名称',
+  `subject` varchar(50) NOT NULL COMMENT '科目',
+  `create_time` datetime NOT NULL DEFAULT '2000-01-01 00:00:00' COMMENT '创建时间',
+  `update_time` datetime NOT NULL DEFAULT '2000-01-01 00:00:00' COMMENT '更新时间',
+  PRIMARY KEY (`merchantid`),
+  KEY `AK_Key_create_time` (`create_time`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='商户钱包表';
+
+
 
 
 
@@ -679,25 +721,7 @@ CREATE TABLE `weibar_wechat_login_log` (
 -- ----------------------------
 
 
--- ----------------------------
--- Table structure for `weibar_merchants_game_setting_info`
--- ----------------------------
-DROP TABLE IF EXISTS `weibar_merchants_game_setting_info`;
-CREATE TABLE `weibar_merchants_game_setting_info` (
-  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
-  `merchantid` bigint(20) NOT NULL DEFAULT '0' COMMENT '商户ID',
-  `gameid` varchar(10) DEFAULT NULL COMMENT '游戏ID',
-  `gamename` varchar(500) DEFAULT NULL COMMENT '游戏名称',
-  `game_img_url` varchar(1000) DEFAULT NULL COMMENT '游戏图标URL',
-  `game_url` varchar(1000) DEFAULT NULL COMMENT '游戏URL',
-  `create_time` datetime NOT NULL DEFAULT '2000-01-01 00:00:00' COMMENT '创建时间',
-  `update_time` datetime NOT NULL DEFAULT '2000-01-01 00:00:00' COMMENT '更新时间',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- ----------------------------
--- Records of weibar_merchants_game_setting_info
--- ----------------------------
 
 
 -- ----------------------------

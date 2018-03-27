@@ -40,6 +40,8 @@ public class BarpinService {
     @Autowired
     private PayAttachService payAttachService;
 
+    @Autowired
+    private SharingRatioService sharingRatioService;
     /**
      * 这个表的数据应该由weibar_price_time_setting_info这个表生成
      */
@@ -168,6 +170,8 @@ public class BarpinService {
         barrageService.updateBarrage(barrageInfo);
         barpinResult.setBarrageInfo(BarrageInfo.formBarrageInfo(barrageInfo));
         barpinResult.setBanlanceEnough(true);
+
+        sharingRatioService.shareBarpin(needPayAmount);
         return barpinResult;
     }
 

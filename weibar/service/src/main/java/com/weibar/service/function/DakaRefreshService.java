@@ -39,7 +39,7 @@ public class DakaRefreshService {
     private WechatRedPackageService wechatRedPackageService;
 
     @Autowired
-    private DiscountService discountService;
+    private SharingRatioService sharingRatioService;
 
     @Autowired
     private DakaOrderMapper dakaOrderMapper;
@@ -94,7 +94,7 @@ public class DakaRefreshService {
             dakaOrderMapper.updateByPrimaryKey(dakaOrder);
         }
 
-        BigDecimal sendMoneySum = discountService.getDakaDiscount(failMoney,succOrds.size());
+        BigDecimal sendMoneySum = sharingRatioService.getDakaDiscount(failMoney,succOrds.size());
 
         List<BigDecimal> succGetMoneyList = redPackageService.getRedPackageAmountList(sendMoneySum,succOrds.size(),true);
 

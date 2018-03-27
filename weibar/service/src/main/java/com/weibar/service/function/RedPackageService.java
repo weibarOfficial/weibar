@@ -31,7 +31,7 @@ public class RedPackageService {
     @Autowired
     private UserBalanceService userBalanceService;
     @Autowired
-    private DiscountService discountService;
+    private SharingRatioService sharingRatioService;
     @Autowired
     private PayAttachService payAttachService;
     @Autowired
@@ -129,7 +129,7 @@ public class RedPackageService {
         redpackageDeposit.setUpdateTime(now);
         redpackageDeposit.setSendnumber(depositTemp.getSendnumber());
         redpackageDeposit.setOpenid(depositTemp.getOpenid());
-        redpackageDeposit.setAmount(discountService.getRedPackageDiscount(depositTemp.getAmount()));
+        redpackageDeposit.setAmount(sharingRatioService.shareAndGetRedPackageDiscount(depositTemp.getAmount()));
         redpackageDeposit.setCreateTime(now);
         redpackageDeposit.setGetnumber(0);
         redpackageDeposit.setRedpackageid(depositTemp.getRedpackageid());

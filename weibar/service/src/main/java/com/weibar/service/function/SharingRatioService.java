@@ -10,7 +10,7 @@ import java.math.RoundingMode;
  * 计算各种抽水比例
  */
 @Service
-public class DiscountService {
+public class SharingRatioService {
 
     // 红包打折比例（暂时全额反给用户）
     private static BigDecimal REDPACKAGE_DISCOUNT = new BigDecimal(1);
@@ -19,13 +19,31 @@ public class DiscountService {
 
     private static BigDecimal DAKA_DISCOUNT = new BigDecimal(1);
 
-    public BigDecimal getRedPackageDiscount(BigDecimal amount){
+    /**
+     * 支付成功才能调用
+     * @param amount
+     * @return
+     */
+    public BigDecimal shareAndGetRedPackageDiscount(BigDecimal amount){
         return amount.multiply(REDPACKAGE_DISCOUNT).setScale(2, RoundingMode.DOWN);
     }
 
-    public BigDecimal getGiveDiscount(BigDecimal amount){
+    /**
+     *  支付成功才能调用
+     * @param amount
+     * @return
+     */
+    public BigDecimal shareAndGetGiveDiscount(BigDecimal amount){
         return amount.multiply(GIVE_DISCOUNT).setScale(2, RoundingMode.DOWN);
     }
+
+
+    public void shareBarpin(BigDecimal amount){
+
+    }
+
+
+
 
     public BigDecimal getDakaDiscount(BigDecimal amount,int succUserCount){
         return amount.multiply(DAKA_DISCOUNT).setScale(2, RoundingMode.DOWN);

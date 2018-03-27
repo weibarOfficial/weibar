@@ -20,6 +20,7 @@
         <module>ws</module>
         <module>shedu</module>
         <module>daka</module>
+        <module>admin</module>
     </modules>
 
     <dependencyManagement>

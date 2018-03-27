@@ -36,7 +36,7 @@ public class GiveService {
     @Autowired
     private UserConsumeOrderService userConsumeOrderService;
     @Autowired
-    private DiscountService discountService;
+    private SharingRatioService sharingRatioService;
     @Autowired
     private WechatPayService wechatPayService;
     @Autowired
@@ -86,7 +86,7 @@ public class GiveService {
         userConsumeOrderService.createUserConsumeOrder(merchantId, userGive.getUserId(), userGiven.getUserId(),
                 needPayAmount, new Date(), goodsSettingInfo.getGoodsId(), goodsSettingInfo.getGoodsName(), 1, userConsumeType, userIp);
 
-        userBalanceService.addUserBalance(userGiven.getUserId(), discountService.getGiveDiscount(needPayAmount), remarkGiven);
+        userBalanceService.addUserBalance(userGiven.getUserId(), sharingRatioService.shareAndGetGiveDiscount(needPayAmount), remarkGiven);
 
         GiveTypeEnum giveTypeEnum = GiveTypeEnum.getGiveType(giveType);
 
