@@ -86,7 +86,7 @@ public class GiveService {
         userConsumeOrderService.createUserConsumeOrder(merchantId, userGive.getUserId(), userGiven.getUserId(),
                 needPayAmount, new Date(), goodsSettingInfo.getGoodsId(), goodsSettingInfo.getGoodsName(), 1, userConsumeType, userIp);
 
-        userBalanceService.addUserBalance(userGiven.getUserId(), sharingRatioService.shareAndGetGiveDiscount(needPayAmount), remarkGiven);
+        userBalanceService.addUserBalance(userGiven.getUserId(), sharingRatioService.shareAndGetGiveDiscount(needPayAmount,merchantId), remarkGiven);
 
         GiveTypeEnum giveTypeEnum = GiveTypeEnum.getGiveType(giveType);
 

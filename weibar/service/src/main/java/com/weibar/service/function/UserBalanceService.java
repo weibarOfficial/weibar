@@ -4,6 +4,7 @@ import com.weibar.pojo.db.UserAccountBalance;
 import com.weibar.pojo.db.UserAccountBalanceCriteria;
 import com.weibar.pojo.db.UserBaseInfo;
 import com.weibar.pojo.db.UserTransaction;
+import com.weibar.pojo.enu.BalanceUserTypeEnum;
 import com.weibar.pojo.enu.ErrorCodeEnum;
 import com.weibar.pojo.enu.TransctionTypeEnum;
 import com.weibar.pojo.exception.BaseException;
@@ -177,7 +178,7 @@ public class UserBalanceService {
             userAccountBalance.setUpdateTime(now);
             userAccountBalance.setOpenid(userBaseInfo.getOpenid());
             userAccountBalance.setUserId(userBaseInfo.getUserId());
-
+            userAccountBalance.setUserType(BalanceUserTypeEnum.USER.getType());
             //科目暂时只存1
             userAccountBalance.setSubject("1");
             userAccountBalanceMapper.insert(userAccountBalance);

@@ -129,7 +129,7 @@ public class RedPackageService {
         redpackageDeposit.setUpdateTime(now);
         redpackageDeposit.setSendnumber(depositTemp.getSendnumber());
         redpackageDeposit.setOpenid(depositTemp.getOpenid());
-        redpackageDeposit.setAmount(sharingRatioService.shareAndGetRedPackageDiscount(depositTemp.getAmount()));
+        redpackageDeposit.setAmount(sharingRatioService.shareAndGetRedPackageDiscount(depositTemp.getAmount(),depositTemp.getMerchantid()));
         redpackageDeposit.setCreateTime(now);
         redpackageDeposit.setGetnumber(0);
         redpackageDeposit.setRedpackageid(depositTemp.getRedpackageid());

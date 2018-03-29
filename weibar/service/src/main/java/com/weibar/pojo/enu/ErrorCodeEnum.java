@@ -27,6 +27,7 @@ public enum ErrorCodeEnum {
 
     MERCHANT_ERROR_BEGIN(-20001,"商户相关错误开始段"),
     MERCHANT_MERCHANT_ID_NOT_EXIST(-20002,"商户ID不存在"),
+    MERCHANT_MERCHANT_SHARE_ERROR(-20003,"商户分成比例不正确，下层分成大于上层"),
     MERCHANT_ERROR_END(-30000,"用户相关错误结束段"),
 
 

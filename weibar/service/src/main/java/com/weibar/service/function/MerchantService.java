@@ -4,6 +4,7 @@ import com.weibar.pojo.consts.WechatConsts;
 import com.weibar.pojo.db.WeibarMerchantsBaseInfo;
 import com.weibar.pojo.db.WeibarMerchantsBaseInfoCriteria;
 import com.weibar.pojo.enu.ErrorCodeEnum;
+import com.weibar.pojo.enu.MerchantRoleEnum;
 import com.weibar.pojo.exception.BaseException;
 import com.weibar.pojo.result.MerchantInfo;
 import com.weibar.service.mapper.WeibarMerchantsBaseInfoMapper;
@@ -18,9 +19,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by Administrator on 2017/10/30.
@@ -90,6 +89,7 @@ public class MerchantService {
     public List<MerchantInfo> getMerchantInfos(){
         WeibarMerchantsBaseInfoCriteria weibarMerchantsBaseInfoCriteria = new WeibarMerchantsBaseInfoCriteria();
         WeibarMerchantsBaseInfoCriteria.Criteria criteria = weibarMerchantsBaseInfoCriteria.createCriteria();
+        criteria.andRoleEqualTo(MerchantRoleEnum.BAR.getType());
         List<WeibarMerchantsBaseInfo> merchantsBaseInfoList =  weibarMerchantsBaseInfoMapper.selectByExample(weibarMerchantsBaseInfoCriteria);
         return MerchantInfo.getMerchantInfos(merchantsBaseInfoList);
     }
@@ -140,6 +140,40 @@ public class MerchantService {
         }
         String url = wxService.oauth2buildAuthorizationUrl(WechatConsts.LOGIN_IN_REDIRECT_URL, WxConsts.OAUTH2_SCOPE_USER_INFO, state);
         return url;
+    }
+
+
+    /**
+     * 根据酒吧ID获取代理链，根据酒吧节点 为 酒吧--> 代理---> .... --->杭州公司
+     * @param merchantId
+     * @return
+     */
+    public List<WeibarMerchantsBaseInfo> getMerchantList(Long merchantId) throws BaseException {
+        List<WeibarMerchantsBaseInfo> merchantList = new ArrayList<>();
+        while (true){
+            WeibarMerchantsBaseInfo weibarMerchantsBaseInfo = getMerchantInfoFromDb(merchantId);
+            merchantList.add(weibarMerchantsBaseInfo);
+            Long parentMerchantId = weibarMerchantsBaseInfo.getParentMerchantid();
+            if(parentMerchantId == null || parentMerchantId <= 0){
+                break;
+            }else{
+                merchantId = parentMerchantId;
+            }
+        }
+        //Collections.reverse(merchantList);
+        for(int i = 0; i < merchantList.size() - 1; i++){
+            WeibarMerchantsBaseInfo weibarMerchantsBaseInfo = merchantList.get(i);
+            WeibarMerchantsBaseInfo weibarMerchantsBaseInfoParent = merchantList.get(i+1);
+            if((weibarMerchantsBaseInfo.getSharingRatioBarpin() > weibarMerchantsBaseInfoParent.getSharingRatioBarpin() )
+                    || (weibarMerchantsBaseInfo.getSharingRatioGive() > weibarMerchantsBaseInfoParent.getSharingRatioGive())
+                    || (weibarMerchantsBaseInfo.getSharingRatioRedp() > weibarMerchantsBaseInfoParent.getSharingRatioRedp())){
+                LOG.error("son shareRotio greter than parent." +
+                        " son merchantId " + weibarMerchantsBaseInfo.getMerchantid()
+                        + " parent Id " + weibarMerchantsBaseInfoParent.getMerchantid());
+                throw BaseException.getException(ErrorCodeEnum.MERCHANT_MERCHANT_SHARE_ERROR.getCode());
+            }
+        }
+        return merchantList;
     }
 
 

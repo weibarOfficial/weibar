@@ -171,7 +171,7 @@ public class BarpinService {
         barpinResult.setBarrageInfo(BarrageInfo.formBarrageInfo(barrageInfo));
         barpinResult.setBanlanceEnough(true);
 
-        sharingRatioService.shareBarpin(needPayAmount);
+        sharingRatioService.shareBarpin(needPayAmount,merchantId);
         return barpinResult;
     }
 

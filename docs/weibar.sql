@@ -48,6 +48,8 @@ CREATE TABLE `user_account_balance` (
   `openid` varchar(500) DEFAULT NULL COMMENT '商户对应的微信openid',
   `balance` decimal(10,2) NOT NULL COMMENT '用户钱包余额',
   `subject` varchar(50) NOT NULL COMMENT '科目',
+  `user_type` int(11) DEFAULT NULL  COMMENT '用户类型，1为普通用户，2为商户用户',
+  `merchantid` bigint(20) DEFAULT NULL  COMMENT '商户ID',
   `create_time` datetime NOT NULL DEFAULT '2000-01-01 00:00:00' COMMENT '创建时间',
   `update_time` datetime NOT NULL DEFAULT '2000-01-01 00:00:00' COMMENT '更新时间',
   PRIMARY KEY (`user_id`),
@@ -327,6 +329,8 @@ CREATE TABLE `weibar_merchants_barrage_info` (
 DROP TABLE IF EXISTS `weibar_merchants_base_info`;
 CREATE TABLE `weibar_merchants_base_info` (
   `merchantid` bigint(20) NOT NULL DEFAULT '0' COMMENT '商户ID',
+  `user_id` bigint(20) NOT NULL  COMMENT '用户ID',
+  `login_name` varchar(500) DEFAULT NULL COMMENT '登录用户名',
   `producerlogo_url` varchar(500) DEFAULT NULL COMMENT '商户log链接地址',
   `qrcode_url` varchar(500) DEFAULT NULL COMMENT '商户公众号二维码地址',
   `mp_name` varchar(500) DEFAULT NULL COMMENT '商户公众号名称',
@@ -345,12 +349,15 @@ CREATE TABLE `weibar_merchants_base_info` (
   `hash_salt` varchar(400) DEFAULT NULL COMMENT '密码的盐',
   `parent_merchantid` bigint(20) NOT NULL DEFAULT '0' COMMENT '父商户ID',
   `role` int(11) DEFAULT NULL COMMENT '角色, 1杭州公司，2为代理商，3为酒吧',
-  `sharing_ratio` int(11) DEFAULT NULL COMMENT '分成比例，表示千分之几',
+  `sharing_ratio_barpin` int(11) DEFAULT NULL COMMENT '霸屏分成比例，表示千分之几',
+  `sharing_ratio_redp` int(11) DEFAULT NULL COMMENT '红包分成比例，表示千分之几',
+  `sharing_ratio_give` int(11) DEFAULT NULL COMMENT '打赏分成比例，表示千分之几',
   `create_time` datetime NOT NULL DEFAULT '2000-01-01 00:00:00' COMMENT '创建时间',
   `update_time` datetime NOT NULL DEFAULT '2000-01-01 00:00:00' COMMENT '更新时间',
   `state` int(11) DEFAULT NULL,
   `wechat_login_url` varchar(1024) DEFAULT NULL COMMENT '微信授权登录url',
-  PRIMARY KEY (`merchantid`)
+  PRIMARY KEY (`merchantid`),
+  KEY `AK_Key_user_id` (`user_id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
