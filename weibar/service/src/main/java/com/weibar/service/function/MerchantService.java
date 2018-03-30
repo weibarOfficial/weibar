@@ -8,7 +8,8 @@ import com.weibar.pojo.enu.MerchantRoleEnum;
 import com.weibar.pojo.exception.BaseException;
 import com.weibar.pojo.result.MerchantInfo;
 import com.weibar.service.mapper.WeibarMerchantsBaseInfoMapper;
-import com.weibar.utils.JsonConverter;
+import com.weibar.utils.EncryptUtil;
+import com.weibar.utils.IdGenerator;
 import com.weibar.utils.QRCodeUtils;
 import me.chanjar.weixin.common.api.WxConsts;
 import me.chanjar.weixin.mp.api.WxMpService;
@@ -19,6 +20,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.security.SecureRandom;
 import java.util.*;
 
 /**
@@ -39,10 +41,128 @@ public class MerchantService {
     @Autowired
     private WxMpService wxService;
 
+    @Autowired
+    private UserBalanceService userBalanceService;
+
+    public static final Long MERCHANT_HANGZHOU_ID = 100L;
+    public static final String MERCHANT_HANGZHOU_NAME = "杭州秉烛公司";
+    public static final String MERCHANT_HANGZHOU_LOGIN_NAME = "hzbz";
+    public static final String MERCHANT_HANGZHOU_PWD = "888888";
+
 
     private static final String MERCHANT_URL = "http://www.yylive.com/static/index.html?merchantId=";
 
     private static final Logger LOG = LoggerFactory.getLogger(MerchantService.class);
+
+
+    /**
+     * 生成杭州公众号的函数
+     */
+    public MerchantInfo createRootMerchant() throws BaseException {
+        userService.createMerchantUser(MERCHANT_HANGZHOU_ID,MERCHANT_HANGZHOU_NAME);
+        WeibarMerchantsBaseInfo merchantsBaseInfo = new WeibarMerchantsBaseInfo();
+        merchantsBaseInfo.setMerchantid(MERCHANT_HANGZHOU_ID);
+        merchantsBaseInfo.setLoginName(MERCHANT_HANGZHOU_LOGIN_NAME);
+        merchantsBaseInfo.setMerchantsName(MERCHANT_HANGZHOU_NAME);
+        //用户登录密码【md5（md5（用户名 + 密码） + 盐）】
+        SecureRandom secureRandom = new SecureRandom();
+        merchantsBaseInfo.setParentMerchantid(0L);
+        merchantsBaseInfo.setUserId(MERCHANT_HANGZHOU_ID);
+        String hashSalt =  new Long(secureRandom.nextLong()).toString();
+        merchantsBaseInfo.setHashSalt(hashSalt);
+        merchantsBaseInfo.setHashPwd(EncryptUtil.getMD5(EncryptUtil.getMD5(MERCHANT_HANGZHOU_PWD + MERCHANT_HANGZHOU_NAME) + hashSalt));
+
+
+
+        merchantsBaseInfo.setSharingRatioBarpin(1000);
+        merchantsBaseInfo.setSharingRatioGive(500);
+        merchantsBaseInfo.setSharingRatioRedp(750);
+
+        merchantsBaseInfo.setRole(MerchantRoleEnum.HANGZHOU.getType());
+        Date now = new Date();
+        merchantsBaseInfo.setCreateTime(now);
+        merchantsBaseInfo.setUpdateTime(now);
+
+        weibarMerchantsBaseInfoMapper.insert(merchantsBaseInfo);
+
+        userBalanceService.createMerchantUserBalnceIfNotExist(MERCHANT_HANGZHOU_ID);
+        return getMerchantInfo(merchantsBaseInfo.getMerchantid());
+    }
+
+
+    /**
+     *
+     * @param loginName
+     * @param md5Pwd md5（用户名 + 密码）
+     * @param parentMerchantId
+     * @return
+     */
+    public MerchantInfo createMerchant(String loginName,String name ,String md5Pwd, Long parentMerchantId,int roleId) throws BaseException {
+
+
+        WeibarMerchantsBaseInfo weibarMerchantsBaseInfo = null;
+        try{
+            weibarMerchantsBaseInfo = getMerchantInfoByNameFromDb(loginName);
+        }catch (Exception e){
+
+        }
+
+        if(weibarMerchantsBaseInfo != null){
+            throw BaseException.getException(ErrorCodeEnum.MERCHANT_MERCHANT_NAME_EXIST.getCode());
+        }
+
+        try {
+            getMerchantInfoFromDb(parentMerchantId);
+        }catch (BaseException e){
+            throw BaseException.getException(ErrorCodeEnum.MERCHANT_MERCHANT_AGENT_ID_NOT_EXIST.getCode());
+        }
+
+
+
+        Long merchantId = IdGenerator.generateIdByTime();
+        userService.createMerchantUser(merchantId,loginName);
+
+
+        //生成数据库记录
+        WeibarMerchantsBaseInfo merchantsBaseInfo = new WeibarMerchantsBaseInfo();
+        merchantsBaseInfo.setMerchantid(merchantId);
+        merchantsBaseInfo.setMerchantsName(name);
+        merchantsBaseInfo.setLoginName(loginName);
+        //用户登录密码【md5（md5（用户名 + 密码） + 盐）】
+        SecureRandom secureRandom = new SecureRandom();
+        String hashSalt =  new Long(secureRandom.nextLong()).toString();
+        merchantsBaseInfo.setHashSalt(hashSalt);
+        merchantsBaseInfo.setHashPwd(EncryptUtil.getMD5(md5Pwd + hashSalt));
+
+
+        merchantsBaseInfo.setSharingRatioBarpin(0);
+        merchantsBaseInfo.setSharingRatioGive(0);
+        merchantsBaseInfo.setSharingRatioRedp(0);
+
+        merchantsBaseInfo.setRole(roleId);
+        //merchantsBaseInfo.setRole(MerchantRoleEnum.AGENT.getType());
+
+        // 代理上级所属,如果没有，则属于杭州公司
+        if(parentMerchantId != null && parentMerchantId != 0){
+            merchantsBaseInfo.setParentMerchantid(parentMerchantId);
+        }else{
+            merchantsBaseInfo.setParentMerchantid(MERCHANT_HANGZHOU_ID);
+        }
+        merchantsBaseInfo.setUserId(merchantId);
+
+        Date now = new Date();
+        merchantsBaseInfo.setCreateTime(now);
+        merchantsBaseInfo.setUpdateTime(now);
+        weibarMerchantsBaseInfoMapper.insert(merchantsBaseInfo);
+
+
+        userBalanceService.createMerchantUserBalnceIfNotExist(merchantId);
+        return getMerchantInfo(merchantsBaseInfo.getMerchantid());
+    }
+
+
+
+
 
 
     /**
@@ -80,6 +200,19 @@ public class MerchantService {
         }
         return merchantsBaseInfoList.get(0);
     }
+
+
+    public WeibarMerchantsBaseInfo getMerchantInfoByNameFromDb(String loginName)throws BaseException {
+        WeibarMerchantsBaseInfoCriteria weibarMerchantsBaseInfoCriteria = new WeibarMerchantsBaseInfoCriteria();
+        WeibarMerchantsBaseInfoCriteria.Criteria criteria = weibarMerchantsBaseInfoCriteria.createCriteria();
+        criteria.andLoginNameEqualTo(loginName);
+        List<WeibarMerchantsBaseInfo> merchantsBaseInfoList =  weibarMerchantsBaseInfoMapper.selectByExample(weibarMerchantsBaseInfoCriteria);
+        if(merchantsBaseInfoList == null || merchantsBaseInfoList.size() == 0){
+            throw BaseException.getException(ErrorCodeEnum.MERCHANT_MERCHANT_ID_NOT_EXIST.getCode());
+        }
+        return merchantsBaseInfoList.get(0);
+    }
+
 
 
     /**

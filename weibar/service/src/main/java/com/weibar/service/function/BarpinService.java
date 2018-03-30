@@ -153,7 +153,7 @@ public class BarpinService {
         }else{
             userConsumeType = UserConsumeTypeEnum.BAR_FOR_OTHER;
         }
-        userConsumeOrderService.createUserConsumeOrder(merchantId,userId,barrageInfo.getUserId(),
+        UserConsumeOrder userConsumeOrder = userConsumeOrderService.createUserConsumeOrder(merchantId,userId,barrageInfo.getUserId(),
                 needPayAmount,new Date(),new Long(priceTimeSettingInfo.getTimesid()),priceTimeSettingInfo.getTimesdesc(),times,userConsumeType,userIp);
 
         //修改消息
@@ -171,7 +171,7 @@ public class BarpinService {
         barpinResult.setBarrageInfo(BarrageInfo.formBarrageInfo(barrageInfo));
         barpinResult.setBanlanceEnough(true);
 
-        sharingRatioService.shareBarpin(needPayAmount,merchantId);
+        sharingRatioService.shareBarpin(needPayAmount,merchantId,new Long(userConsumeOrder.getId()));
         return barpinResult;
     }
 

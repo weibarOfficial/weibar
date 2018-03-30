@@ -10,6 +10,7 @@ import com.weibar.pojo.enu.TransctionTypeEnum;
 import com.weibar.pojo.exception.BaseException;
 import com.weibar.service.mapper.UserAccountBalanceMapper;
 import com.weibar.service.mapper.UserTransactionMapper;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
@@ -153,6 +154,35 @@ public class UserBalanceService {
     }
 
 
+
+
+
+    public UserAccountBalance createMerchantUserBalnceIfNotExist(Long userId) throws BaseException {
+        UserBaseInfo userBaseInfo = userService.getUserById(userId);
+
+        UserAccountBalanceCriteria balanceCriteria = new UserAccountBalanceCriteria();
+        UserAccountBalanceCriteria.Criteria criteria = balanceCriteria.createCriteria();
+        criteria.andUserIdEqualTo(userId);
+        List<UserAccountBalance> balanceList =  userAccountBalanceMapper.selectByExample(balanceCriteria);
+
+        if(balanceList != null && balanceList.size() != 0){
+            return balanceList.get(0);
+        }else{
+            UserAccountBalance userAccountBalance = new UserAccountBalance();
+            userAccountBalance.setBalance(new BigDecimal(0));
+            Date now = new Date();
+            userAccountBalance.setCreateTime(now);
+            userAccountBalance.setUpdateTime(now);
+            userAccountBalance.setOpenid(userBaseInfo.getOpenid());
+            userAccountBalance.setUserId(userBaseInfo.getUserId());
+            userAccountBalance.setUserType(BalanceUserTypeEnum.MERCHANT.getType());
+            //科目暂时只存1
+            userAccountBalance.setSubject("1");
+            userAccountBalanceMapper.insert(userAccountBalance);
+            return userAccountBalance;
+        }
+    }
+
     /**
      * 获取用户余额
      * @param openId
@@ -190,6 +220,13 @@ public class UserBalanceService {
 
     public UserAccountBalance getBalanceAccountByUserId(Long userId)throws BaseException {
         UserBaseInfo userBaseInfo = userService.getUserById(userId);
+
+        //对于商户用户特殊判断
+        if(StringUtils.isBlank(userBaseInfo.getOpenid()) || userBaseInfo.getOpenid().contains("nothing")){
+            return createMerchantUserBalnceIfNotExist(userBaseInfo.getUserId());
+        }
+
+
         return getUserBalanceByOpenId(userBaseInfo.getOpenid());
     }
 

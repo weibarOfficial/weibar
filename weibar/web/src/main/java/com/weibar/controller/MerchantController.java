@@ -22,6 +22,9 @@ public class MerchantController {
     private MerchantService merchantService;
 
 
+
+
+
     @RequestMapping(value = "/h5/getAllMerchants" ,method = {RequestMethod.POST,RequestMethod.GET})
     public Object getAllMerchants(HttpServletRequest request, HttpServletResponse response) throws BaseException {
         return BaseResult.getSuccessfulResult(merchantService.getMerchantInfos());

@@ -67,16 +67,25 @@ public class SharingRatioService {
         int currentRatio = 0;
         BigDecimal currentAmount = new BigDecimal(0).add(amount);
         for(int i = 0; i < merchantsBaseInfoList.size(); i++){
-            WeibarMerchantsBaseInfo merchantsBaseInfo = merchantsBaseInfoList.get(0);
+            WeibarMerchantsBaseInfo merchantsBaseInfo = merchantsBaseInfoList.get(i);
             int shareRatio = 0;
+
             switch (rechargeSceneTypeEnum){
                 case RED_PACKAGE:
                     shareRatio = merchantsBaseInfo.getSharingRatioRedp();
+                    break;
                 case GIVE:
                     shareRatio = merchantsBaseInfo.getSharingRatioGive();
+                    break;
                 case BARPING:
                     shareRatio = merchantsBaseInfo.getSharingRatioBarpin();
+                    break;
+                    default:
+                        break;
             }
+
+
+
 
             int tempRatio = shareRatio;
             //当前分成比例应该减去下层已经分成的比例，才是该层应该分到的分成比例

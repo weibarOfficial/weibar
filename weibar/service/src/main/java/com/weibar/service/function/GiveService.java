@@ -83,10 +83,11 @@ public class GiveService {
 
         //记录消费表
         UserConsumeTypeEnum userConsumeType = UserConsumeTypeEnum.GIVE_INDIV;
-        userConsumeOrderService.createUserConsumeOrder(merchantId, userGive.getUserId(), userGiven.getUserId(),
+        UserConsumeOrder userConsumeOrder = userConsumeOrderService.createUserConsumeOrder(merchantId, userGive.getUserId(), userGiven.getUserId(),
                 needPayAmount, new Date(), goodsSettingInfo.getGoodsId(), goodsSettingInfo.getGoodsName(), 1, userConsumeType, userIp);
 
-        userBalanceService.addUserBalance(userGiven.getUserId(), sharingRatioService.shareAndGetGiveDiscount(needPayAmount,merchantId), remarkGiven);
+        userBalanceService.addUserBalance(userGiven.getUserId(),
+                sharingRatioService.shareAndGetGiveDiscount(needPayAmount,merchantId,new Long(userConsumeOrder.getId())), remarkGiven);
 
         GiveTypeEnum giveTypeEnum = GiveTypeEnum.getGiveType(giveType);
 

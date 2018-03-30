@@ -8,6 +8,7 @@ import com.weibar.pojo.db.UserBaseInfoCriteria;
 import com.weibar.pojo.enu.AppEnum;
 import com.weibar.pojo.enu.ErrorCodeEnum;
 import com.weibar.pojo.enu.UserInfoStatusEnum;
+import com.weibar.pojo.enu.UserTypeEnum;
 import com.weibar.pojo.exception.BaseException;
 import com.weibar.service.mapper.MerchantsUserBaseInfoMapper;
 import com.weibar.service.mapper.UserBaseInfoMapper;
@@ -46,6 +47,33 @@ public class UserService {
     private UserService userService;
 
 
+
+
+
+
+    public UserBaseInfo createMerchantUser(Long userId,String name){
+
+        Date now = new Date();
+        UserBaseInfo userBaseInfo = new UserBaseInfo();
+        userBaseInfo.setUserId(userId);
+
+        userBaseInfo.setCreateTime(now);
+        userBaseInfo.setUpdateTime(now);
+        userBaseInfo.setNickname(name);
+        userBaseInfo.setOpenid("nothing");
+        userBaseInfo.setMiniDakaOpenid("nothing");
+        userBaseInfo.setUnionId("nothing");
+
+        userBaseInfo.setPoint(new BigDecimal(0));
+        userBaseInfo.setRemark("商户用户");
+        userBaseInfo.setStatus(UserInfoStatusEnum.SUB.getState());
+        userBaseInfo.setUserLevel("0");
+        userBaseInfo.setUserMobile("");
+        userBaseInfo.setRole(UserTypeEnum.MERCHANT.getType());
+
+        userBaseInfoMapper.insert(userBaseInfo);
+        return userBaseInfo;
+    }
 
 
 
@@ -199,6 +227,7 @@ public class UserService {
             userBaseInfo.setUserPicture(wxMaUserInfo.getAvatarUrl());
             userBaseInfo.setUnionId(wxMaUserInfo.getUnionId());
             userBaseInfo.setOpenid(wxMaUserInfo.getOpenId());
+            userBaseInfo.setRole(UserTypeEnum.USER.getType());
             switch (appEnum){
                 case WEIBA_MP:
                     break;
@@ -284,6 +313,7 @@ public class UserService {
             userBaseInfo.setUserLevel("0");
             userBaseInfo.setUserMobile("");
             userBaseInfo.setUserPicture(wxMpUser.getHeadImgUrl());
+            userBaseInfo.setRole(UserTypeEnum.USER.getType());
             userBaseInfoMapper.insert(userBaseInfo);
 
         }else{

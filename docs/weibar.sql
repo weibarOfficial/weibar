@@ -77,6 +77,7 @@ CREATE TABLE `user_base_info` (
   `province` varchar(500) DEFAULT NULL COMMENT '用户省份',
   `user_mobile` varchar(500) DEFAULT NULL COMMENT '用户手机',
   `remark` varchar(500) DEFAULT NULL COMMENT '用户备注',
+  `role` int(11) DEFAULT NULL COMMENT '角色, 1普通用户，2商户用户',
   `create_time` datetime NOT NULL DEFAULT '2000-01-01 00:00:00' COMMENT '创建时间',
   `update_time` datetime NOT NULL DEFAULT '2000-01-01 00:00:00' COMMENT '更新时间',
   `openid` varchar(1024) NOT NULL,

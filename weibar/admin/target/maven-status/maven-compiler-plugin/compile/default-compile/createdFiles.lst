@@ -1,0 +1,12 @@
+com\weibar\sbconfig\GlobalExceptionHandler.class
+com\weibar\sbconfig\WechatPayConfiguration.class
+com\weibar\sbconfig\StaticResourceConfiguration.class
+com\weibar\sbconfig\WechatPayProperties.class
+com\weibar\Application.class
+com\weibar\sbconfig\MyBatisConfig.class
+com\weibar\sbconfig\WxMaConfiguration.class
+com\weibar\sbconfig\WechatMpConfiguration.class
+com\weibar\controller\AdminMerchantController.class
+com\weibar\sbconfig\WxMaProperties.class
+com\weibar\sbconfig\WechatMpProperties.class
+com\weibar\sbconfig\StaticResourceConfiguration$1.class
