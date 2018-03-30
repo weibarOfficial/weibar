@@ -55,6 +55,10 @@ public class MerchantService {
     private static final Logger LOG = LoggerFactory.getLogger(MerchantService.class);
 
 
+
+    public
+
+
     /**
      * 生成杭州公众号的函数
      */

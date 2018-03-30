@@ -18,6 +18,17 @@ public class MerchantInfo {
         merchantInfo.setQRCodeUrl(weibarMerchantsBaseInfo.getQrcodeUrl());
         merchantInfo.setMerchantId(weibarMerchantsBaseInfo.getMerchantid());
         merchantInfo.setWechatLoginUrl(weibarMerchantsBaseInfo.getWechatLoginUrl());
+
+
+
+        private Long parentMerchantid;
+        private Integer role;
+        private Integer sharingRatio;
+        private Integer sharingRatioBarpin;
+        private Integer sharingRatioRedp;
+        private Integer sharingRatioGive;
+        private String loginName;
+        private Long userId;
         return merchantInfo;
     }
 
@@ -35,6 +46,79 @@ public class MerchantInfo {
     private String logoUrl;
     private String QRCodeUrl;
     private String wechatLoginUrl;
+    private Long parentMerchantid;
+    private Integer role;
+    private Integer sharingRatio;
+    private Integer sharingRatioBarpin;
+    private Integer sharingRatioRedp;
+    private Integer sharingRatioGive;
+    private String loginName;
+    private Long userId;
+
+
+    public Long getParentMerchantid() {
+        return parentMerchantid;
+    }
+
+    public void setParentMerchantid(Long parentMerchantid) {
+        this.parentMerchantid = parentMerchantid;
+    }
+
+    public Integer getRole() {
+        return role;
+    }
+
+    public void setRole(Integer role) {
+        this.role = role;
+    }
+
+    public Integer getSharingRatio() {
+        return sharingRatio;
+    }
+
+    public void setSharingRatio(Integer sharingRatio) {
+        this.sharingRatio = sharingRatio;
+    }
+
+    public Integer getSharingRatioBarpin() {
+        return sharingRatioBarpin;
+    }
+
+    public void setSharingRatioBarpin(Integer sharingRatioBarpin) {
+        this.sharingRatioBarpin = sharingRatioBarpin;
+    }
+
+    public Integer getSharingRatioRedp() {
+        return sharingRatioRedp;
+    }
+
+    public void setSharingRatioRedp(Integer sharingRatioRedp) {
+        this.sharingRatioRedp = sharingRatioRedp;
+    }
+
+    public Integer getSharingRatioGive() {
+        return sharingRatioGive;
+    }
+
+    public void setSharingRatioGive(Integer sharingRatioGive) {
+        this.sharingRatioGive = sharingRatioGive;
+    }
+
+    public String getLoginName() {
+        return loginName;
+    }
+
+    public void setLoginName(String loginName) {
+        this.loginName = loginName;
+    }
+
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
+    }
 
     public String getWechatLoginUrl() {
         return wechatLoginUrl;
