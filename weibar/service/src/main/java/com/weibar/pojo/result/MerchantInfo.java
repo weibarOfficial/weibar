@@ -18,17 +18,14 @@ public class MerchantInfo {
         merchantInfo.setQRCodeUrl(weibarMerchantsBaseInfo.getQrcodeUrl());
         merchantInfo.setMerchantId(weibarMerchantsBaseInfo.getMerchantid());
         merchantInfo.setWechatLoginUrl(weibarMerchantsBaseInfo.getWechatLoginUrl());
-
-
-
-        private Long parentMerchantid;
-        private Integer role;
-        private Integer sharingRatio;
-        private Integer sharingRatioBarpin;
-        private Integer sharingRatioRedp;
-        private Integer sharingRatioGive;
-        private String loginName;
-        private Long userId;
+        merchantInfo.setParentMerchantid(weibarMerchantsBaseInfo.getParentMerchantid());
+        merchantInfo.setRole(weibarMerchantsBaseInfo.getRole());
+        merchantInfo.setSharingRatio(weibarMerchantsBaseInfo.getSharingRatio());
+        merchantInfo.setSharingRatioBarpin(weibarMerchantsBaseInfo.getSharingRatioBarpin());
+        merchantInfo.setSharingRatioRedp(weibarMerchantsBaseInfo.getSharingRatioRedp());
+        merchantInfo.setSharingRatioGive(weibarMerchantsBaseInfo.getSharingRatioGive());
+        merchantInfo.setLoginName(weibarMerchantsBaseInfo.getLoginName());
+        merchantInfo.setUserId(weibarMerchantsBaseInfo.getUserId());
         return merchantInfo;
     }
 

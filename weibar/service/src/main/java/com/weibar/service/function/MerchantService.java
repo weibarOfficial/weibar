@@ -56,7 +56,7 @@ public class MerchantService {
 
 
 
-    public
+
 
 
     /**
@@ -74,8 +74,7 @@ public class MerchantService {
         merchantsBaseInfo.setUserId(MERCHANT_HANGZHOU_ID);
         String hashSalt =  new Long(secureRandom.nextLong()).toString();
         merchantsBaseInfo.setHashSalt(hashSalt);
-        merchantsBaseInfo.setHashPwd(EncryptUtil.getMD5(EncryptUtil.getMD5(MERCHANT_HANGZHOU_PWD + MERCHANT_HANGZHOU_NAME) + hashSalt));
-
+        merchantsBaseInfo.setHashPwd(EncryptUtil.getMD5(EncryptUtil.getMD5(MERCHANT_HANGZHOU_LOGIN_NAME + MERCHANT_HANGZHOU_PWD ) + hashSalt));
 
 
         merchantsBaseInfo.setSharingRatioBarpin(1000);
@@ -91,6 +90,30 @@ public class MerchantService {
 
         userBalanceService.createMerchantUserBalnceIfNotExist(MERCHANT_HANGZHOU_ID);
         return getMerchantInfo(merchantsBaseInfo.getMerchantid());
+    }
+
+
+
+    public MerchantInfo verifyPwd(String loginName,String md5Pwd)throws BaseException{
+        WeibarMerchantsBaseInfo weibarMerchantsBaseInfo = null;
+        try{
+            weibarMerchantsBaseInfo = getMerchantInfoByNameFromDb(loginName);
+        }catch (Exception e){
+
+        }
+
+        if(weibarMerchantsBaseInfo == null){
+            throw BaseException.getException(ErrorCodeEnum.MERCHANT_MERCHANT_NAME_NOT_EXIST.getCode());
+        }
+
+
+        String getPwd = EncryptUtil.getMD5(md5Pwd + weibarMerchantsBaseInfo.getHashSalt());
+
+        if(getPwd != null && getPwd.equalsIgnoreCase(weibarMerchantsBaseInfo.getHashPwd())){
+            return MerchantInfo.getMerchantInfo(weibarMerchantsBaseInfo);
+        }else{
+            throw BaseException.getException(ErrorCodeEnum.MERCHANT_MERCHANT_PWD_OR_NAME_ERROR.getCode());
+        }
     }
 
 
@@ -153,6 +176,10 @@ public class MerchantService {
             merchantsBaseInfo.setParentMerchantid(MERCHANT_HANGZHOU_ID);
         }
         merchantsBaseInfo.setUserId(merchantId);
+
+
+        merchantsBaseInfo.setQrcodeUrl(generateQRCodeImgUrl(merchantId));
+        merchantsBaseInfo.setWechatLoginUrl(getMerchantLogInUrl(merchantId));
 
         Date now = new Date();
         merchantsBaseInfo.setCreateTime(now);
