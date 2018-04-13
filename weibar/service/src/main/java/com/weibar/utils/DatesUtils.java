@@ -17,4 +17,12 @@ public class DatesUtils {
         cal.set(Calendar.MILLISECOND, 0);
         return cal.getTime();
     }
+
+    public static Date getRemovedTimeYesterday(Date date){
+        Date removed = removeTime(date);
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(removed);
+        cal.add(Calendar.DATE, -1);
+        return cal.getTime();
+    }
 }

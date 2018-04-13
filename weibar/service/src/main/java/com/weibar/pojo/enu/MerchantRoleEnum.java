@@ -13,6 +13,16 @@ public enum MerchantRoleEnum {
         this.desc = desc;
     }
 
+    public static MerchantRoleEnum getRoleByType(int type){
+        for(MerchantRoleEnum merchantRoleEnum : MerchantRoleEnum.values()){
+            if(merchantRoleEnum.getType() == type){
+                return merchantRoleEnum;
+            }
+        }
+        return null;
+    }
+
+
     public int getType() {
         return type;
     }

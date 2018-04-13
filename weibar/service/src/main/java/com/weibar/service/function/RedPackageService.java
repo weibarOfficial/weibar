@@ -5,6 +5,7 @@ import com.weibar.pojo.db.*;
 import com.weibar.pojo.enu.ErrorCodeEnum;
 import com.weibar.pojo.enu.RedPackageDepositEnum;
 import com.weibar.pojo.enu.RedPackageDetailEnum;
+import com.weibar.pojo.enu.UserConsumeTypeEnum;
 import com.weibar.pojo.exception.BaseException;
 import com.weibar.pojo.result.*;
 import com.weibar.service.mapper.WeibarRedpackageDepositDetailMapper;
@@ -43,8 +44,9 @@ public class RedPackageService {
     private WeibarRedpackageDepositMapper weibarRedpackageDepositMapper;
     @Autowired
     private WeibarRedpackageDepositDetailMapper weibarRedpackageDepositDetailMapper;
+
     @Autowired
-    private WechatRedPackageService redPackageOrderService;
+    private UserConsumeOrderService userConsumeOrderService;
 
     /**
      *
@@ -118,6 +120,12 @@ public class RedPackageService {
             throw new BaseException(ErrorCodeEnum.RED_PACKAGE_PACKAGE_ID_NOT_EXIST.getCode(),ErrorCodeEnum.RED_PACKAGE_PACKAGE_ID_NOT_EXIST.getMsg());
         }
         WeibarRedpackageDepositTemp depositTemp = tempList.get(0);
+
+
+        //生成用户消费订单
+        UserConsumeTypeEnum userConsumeType = UserConsumeTypeEnum.RED_PACKAGE;
+        UserConsumeOrder userConsumeOrder = userConsumeOrderService.createUserConsumeOrder(depositTemp.getMerchantid(), depositTemp.getUserId(), 0L,
+                depositTemp.getAmount(), new Date(), null, null, 1, userConsumeType, "127.0.0.1");
 
         //扣除余额
         userBalanceService.subtractUserBalance(userService.getUserIdByOpenId(depositTemp.getOpenid()),depositTemp.getAmount(), UserBalanceTranRemark.OUT_REDPACKAGE);

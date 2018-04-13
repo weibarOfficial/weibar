@@ -61,6 +61,37 @@ CREATE TABLE `user_account_balance` (
 -- ----------------------------
 
 
+
+
+-- ----------------------------
+-- Table structure for `merchant_income`
+-- ----------------------------
+DROP TABLE IF EXISTS `merchant_income`;
+CREATE TABLE `merchant_income` (
+  `merchantid` bigint(20) NOT NULL COMMENT '帐号',
+  `income` decimal(10,2) NOT NULL COMMENT '商户当天收入',
+  `total_income` decimal(10,2) NOT NULL COMMENT '商户总收入',
+  `total_people` int(11) NOT NULL  DEFAULT 0  COMMENT '消费总人数',
+  `people` int(11) NOT NULL  DEFAULT 0  COMMENT '消费总人数',
+  `audit_date` DATE NOT NULL  COMMENT '日期',
+  `create_time` datetime NOT NULL DEFAULT '2000-01-01 00:00:00' COMMENT '创建时间',
+  `update_time` datetime NOT NULL DEFAULT '2000-01-01 00:00:00' COMMENT '更新时间',
+  PRIMARY KEY (`merchantid`,`audit_date`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='商户收入表';
+
+-- ----------------------------
+-- Records of merchant_income
+-- ----------------------------
+
+
+
+
+
+
+
+
+
+
 -- ----------------------------
 -- Table structure for `user_base_info`
 -- ----------------------------

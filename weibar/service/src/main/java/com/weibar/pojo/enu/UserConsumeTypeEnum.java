@@ -6,7 +6,7 @@ package com.weibar.pojo.enu;
 public enum  UserConsumeTypeEnum {
 
 
-    BAR_FOR_SELF(1,"为自己霸屏"),BAR_FOR_OTHER(2,"为他人霸屏"),GIVE_INDIV(3,"打赏个人"),GIVE_STAR(4,"打赏艺人");
+    BAR_FOR_SELF(1,"为自己霸屏"),BAR_FOR_OTHER(2,"为他人霸屏"),GIVE_INDIV(3,"打赏个人"),GIVE_STAR(4,"打赏艺人"),RED_PACKAGE(5,"发红包");
     UserConsumeTypeEnum(int type, String desc) {
         this.type = type;
         this.desc = desc;

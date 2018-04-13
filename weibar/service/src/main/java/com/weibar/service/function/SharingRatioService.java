@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -28,6 +29,8 @@ public class SharingRatioService {
     private MerchantService merchantService;
     @Autowired
     private UserBalanceService userBalanceService;
+    @Autowired
+    private MerchantIncomeService merchantIncomeService;
 
     /**
      * 支付成功才能调用
@@ -98,7 +101,9 @@ public class SharingRatioService {
             String shareRemark = "商户分成:酒吧ID " + merchantId + "消费订单号:" + consumeOrderId;
             if(shareAmount.compareTo(new BigDecimal(0)) > 0){
                 userBalanceService.addUserBalance(merchantsBaseInfo.getUserId(),shareAmount,shareRemark);
+                merchantIncomeService.addMerchantIncome(new Date(),merchantsBaseInfo.getMerchantid(),shareAmount);
                 currentAmount = currentAmount.subtract(shareAmount);
+
             }
         }
         return currentAmount;

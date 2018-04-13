@@ -222,14 +222,13 @@ public class MerchantService {
      * @throws BaseException
      */
     public WeibarMerchantsBaseInfo getMerchantInfoFromDb(Long merchantId)throws BaseException {
-        WeibarMerchantsBaseInfoCriteria weibarMerchantsBaseInfoCriteria = new WeibarMerchantsBaseInfoCriteria();
-        WeibarMerchantsBaseInfoCriteria.Criteria criteria = weibarMerchantsBaseInfoCriteria.createCriteria();
-        criteria.andMerchantidEqualTo(merchantId);
-        List<WeibarMerchantsBaseInfo> merchantsBaseInfoList =  weibarMerchantsBaseInfoMapper.selectByExample(weibarMerchantsBaseInfoCriteria);
-        if(merchantsBaseInfoList == null || merchantsBaseInfoList.size() == 0){
+
+        WeibarMerchantsBaseInfo weibarMerchantsBaseInfo =  weibarMerchantsBaseInfoMapper.selectByPrimaryKey(merchantId);
+        if(weibarMerchantsBaseInfo == null){
             throw BaseException.getException(ErrorCodeEnum.MERCHANT_MERCHANT_ID_NOT_EXIST.getCode());
+        }else{
+            return weibarMerchantsBaseInfo;
         }
-        return merchantsBaseInfoList.get(0);
     }
 
 

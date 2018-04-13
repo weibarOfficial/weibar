@@ -125,6 +125,9 @@
                           identity="true"/>
         </table>
 
+        <table schema="" tableName="merchant_income" domainObjectName="MerchantIncome">
+        </table>
+
 
         <table schema="" tableName="user_transaction" domainObjectName="UserTransaction">
         </table>

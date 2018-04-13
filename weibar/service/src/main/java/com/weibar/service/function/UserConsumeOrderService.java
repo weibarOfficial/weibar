@@ -12,6 +12,7 @@ import java.util.Date;
 
 /**
  * Created by Administrator on 2017/11/22.
+ * 普通用户消费类
  */
 @Service
 public class UserConsumeOrderService {
@@ -48,6 +49,11 @@ public class UserConsumeOrderService {
         userConsumeOrder.setUserIp(userIp);
         userConsumeOrder.setMerchantid(merchantId);
         userConsumeOrderMapper.insert(userConsumeOrder);
+
+
+
+
+
         return userConsumeOrder;
     }
 }
