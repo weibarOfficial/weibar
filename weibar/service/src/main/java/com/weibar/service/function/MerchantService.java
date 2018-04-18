@@ -3,11 +3,15 @@ package com.weibar.service.function;
 import com.weibar.pojo.consts.WechatConsts;
 import com.weibar.pojo.db.WeibarMerchantsBaseInfo;
 import com.weibar.pojo.db.WeibarMerchantsBaseInfoCriteria;
+import com.weibar.pojo.db.WeibarMerchantsLoginLog;
+import com.weibar.pojo.db.WeibarMerchantsLoginLogCriteria;
 import com.weibar.pojo.enu.ErrorCodeEnum;
 import com.weibar.pojo.enu.MerchantRoleEnum;
 import com.weibar.pojo.exception.BaseException;
 import com.weibar.pojo.result.MerchantInfo;
+import com.weibar.pojo.result.MerchantsLoginLog;
 import com.weibar.service.mapper.WeibarMerchantsBaseInfoMapper;
+import com.weibar.service.mapper.WeibarMerchantsLoginLogMapper;
 import com.weibar.utils.EncryptUtil;
 import com.weibar.utils.IdGenerator;
 import com.weibar.utils.QRCodeUtils;
@@ -44,6 +48,10 @@ public class MerchantService {
     @Autowired
     private UserBalanceService userBalanceService;
 
+
+    @Autowired
+    private WeibarMerchantsLoginLogMapper weibarMerchantsLoginLogMapper;
+
     public static final Long MERCHANT_HANGZHOU_ID = 100L;
     public static final String MERCHANT_HANGZHOU_NAME = "杭州秉烛公司";
     public static final String MERCHANT_HANGZHOU_LOGIN_NAME = "hzbz";
@@ -57,6 +65,68 @@ public class MerchantService {
 
 
 
+
+
+
+    /**
+     * 获取直接下属机构
+     * @param merchantId
+     * @return
+     */
+    public List<MerchantInfo> getAffiliates(Long merchantId) throws BaseException {
+        WeibarMerchantsBaseInfoCriteria weibarMerchantsBaseInfoCriteria = new WeibarMerchantsBaseInfoCriteria();
+        WeibarMerchantsBaseInfoCriteria.Criteria criteria = weibarMerchantsBaseInfoCriteria.createCriteria();
+        criteria.andParentMerchantidEqualTo(merchantId);
+        List<WeibarMerchantsBaseInfo> weibarMerchantsBaseInfos = weibarMerchantsBaseInfoMapper.selectByExample(weibarMerchantsBaseInfoCriteria);
+        return MerchantInfo.getMerchantInfos(weibarMerchantsBaseInfos);
+    }
+
+    /**
+     * @param merchantId 当前ID
+     * @param AffiliateId 下属ID
+     * @return
+     * @throws BaseException
+     */
+    public MerchantInfo getAffiliateById(Long merchantId,Long AffiliateId) throws BaseException {
+        WeibarMerchantsBaseInfoCriteria weibarMerchantsBaseInfoCriteria = new WeibarMerchantsBaseInfoCriteria();
+        WeibarMerchantsBaseInfoCriteria.Criteria criteria = weibarMerchantsBaseInfoCriteria.createCriteria();
+        criteria.andParentMerchantidEqualTo(merchantId);
+        criteria.andMerchantidEqualTo(AffiliateId);
+        List<WeibarMerchantsBaseInfo> weibarMerchantsBaseInfos = weibarMerchantsBaseInfoMapper.selectByExample(weibarMerchantsBaseInfoCriteria);
+        if(weibarMerchantsBaseInfos == null || weibarMerchantsBaseInfos.size() == 0 ){
+            return null;
+        }else{
+            return MerchantInfo.getMerchantInfo(weibarMerchantsBaseInfos.get(0));
+        }
+    }
+
+
+
+
+
+    /**
+     * 获取酒吧用户
+     * @param merchantId
+     * @return
+     */
+    public List<MerchantsLoginLog> getMerchantUsers(Long merchantId){
+        WeibarMerchantsLoginLogCriteria merchantsLoginLogCriteria = new WeibarMerchantsLoginLogCriteria();
+        WeibarMerchantsLoginLogCriteria.Criteria criteria = merchantsLoginLogCriteria.createCriteria();
+        criteria.andMerchantidEqualTo(merchantId);
+        merchantsLoginLogCriteria.setOrderByClause(" user_id desc,update_time desc ");
+
+        List<WeibarMerchantsLoginLog> loginLogs = weibarMerchantsLoginLogMapper.selectByExample(merchantsLoginLogCriteria);
+        List<WeibarMerchantsLoginLog> results = new ArrayList<WeibarMerchantsLoginLog>();
+        long lastUserId = 0;
+        for(WeibarMerchantsLoginLog log : loginLogs){
+            if(log.getUserId().equals(lastUserId)){
+                continue;
+            }
+            lastUserId = log.getUserId();
+            results.add(log);
+        }
+        return MerchantsLoginLog.getMerchantsLoginLogs(results);
+    }
 
 
     /**
@@ -205,7 +275,7 @@ public class MerchantService {
      */
     public MerchantInfo getMerchantInfoWhenLogin(Long merchantId,String openId)throws BaseException{
         MerchantInfo merchantInfo = getMerchantInfo(merchantId);
-        userLoginLogService.addLog(merchantInfo.getMerchantId(),openId,merchantInfo.getName(),merchantInfo.getLogoUrl(),userService.getUserIdByOpenId(openId));
+        userLoginLogService.addLog(merchantInfo.getMerchantId(),openId,merchantInfo.getName(),merchantInfo.getLogoUrl(),userService.getUserByOpenId(openId));
         return merchantInfo;
     }
 
@@ -214,6 +284,11 @@ public class MerchantService {
         return merchantInfo;
     }
 
+
+
+    public void updateMerchantInfo(WeibarMerchantsBaseInfo weibarMerchantsBaseInfo){
+        weibarMerchantsBaseInfoMapper.updateByPrimaryKey(weibarMerchantsBaseInfo);
+    }
 
     /**
      * 返回商户信息

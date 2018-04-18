@@ -1,5 +1,6 @@
 package com.weibar.service.function;
 
+import com.weibar.pojo.db.UserBaseInfo;
 import com.weibar.pojo.db.WeibarMerchantsLoginLog;
 import com.weibar.pojo.db.WeibarMerchantsLoginLogCriteria;
 import com.weibar.pojo.enu.ErrorCodeEnum;
@@ -66,7 +67,7 @@ public class UserLoginLogService {
     /**
      * 增加登录记录（微信授权登录的时候调用）
      */
-    public void addLog(Long merchantId,String openId,String merchantName,String merchantImgUrl,Long userId){
+    public void addLog(Long merchantId,String openId,String merchantName,String merchantImgUrl,UserBaseInfo user){
         WeibarMerchantsLoginLog log = new WeibarMerchantsLoginLog();
         Date now = new Date();
         log.setCreateTime(now);
@@ -76,7 +77,14 @@ public class UserLoginLogService {
         log.setOpenid(openId);
         log.setMerchantsName(merchantName);
         log.setProducerlogoUrl(merchantImgUrl);
-        log.setUserId(userId);
+        log.setUserId(user.getUserId());
+
+        log.setUserPicture(user.getUserPicture());
+        log.setNickname(user.getNickname());
+        log.setSex(user.getSex());
+        log.setCity(user.getCity());
+        log.setCountry(user.getCountry());
+        log.setProvince(user.getProvince());
         weibarMerchantsLoginLogMapper.insert(log);
     }
 

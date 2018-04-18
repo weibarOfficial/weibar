@@ -18,6 +18,7 @@
             <ul class="nav pull-right">
 
 
+                <!--
                 <li class="dropdown" id="header_notification_bar">
 
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
@@ -27,7 +28,7 @@
                         <span class="badge">6</span>
 
                     </a>
-
+                    <!--
                     <ul class="dropdown-menu extended notification">
 
                         <li>
@@ -129,7 +130,7 @@
                     </ul>
 
                 </li>
-
+                -->
                 <!--
                 <li class="dropdown" id="header_inbox_bar">
 
@@ -414,7 +415,7 @@
                     </a>
 
                     <ul class="dropdown-menu">
-
+                        <!--
                         <li><a href="extra_profile.html"><i class="icon-user"></i> My Profile</a></li>
 
                         <li><a href="page_calendar.html"><i class="icon-calendar"></i> My Calendar</a></li>
@@ -426,9 +427,8 @@
                         <li class="divider"></li>
 
                         <li><a href="extra_lock.html"><i class="icon-lock"></i> Lock Screen</a></li>
-
+                        -->
                         <li><a href="/admin/logout"><i class="icon-key"></i>退出登录</a></li>
-
                     </ul>
 
                 </li>

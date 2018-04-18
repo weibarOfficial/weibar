@@ -1,8 +1,10 @@
 package com.weibar.service.function;
 
 import com.weibar.pojo.db.WeibarMerchantsBaseInfo;
+import com.weibar.pojo.enu.ErrorCodeEnum;
 import com.weibar.pojo.enu.RechargeSceneTypeEnum;
 import com.weibar.pojo.exception.BaseException;
+import com.weibar.pojo.result.MerchantInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -32,6 +34,35 @@ public class SharingRatioService {
     @Autowired
     private MerchantIncomeService merchantIncomeService;
 
+
+
+
+    public void editAffiliateShareRatio(Long merchantId,Long AffiliateId,
+                                        Integer sharingRatioBarpin,Integer sharingRatioGive,Integer sharingRatioRedp) throws BaseException {
+
+
+        if(sharingRatioBarpin < 0 || sharingRatioGive < 0 || sharingRatioRedp < 0){
+            throw BaseException.getException(ErrorCodeEnum.MERCHANT_MERCHANT_SHARE_TOO_SMALL.getCode());
+        }
+
+
+
+        WeibarMerchantsBaseInfo merchantInfo = merchantService.getMerchantInfoFromDb(merchantId);
+        WeibarMerchantsBaseInfo affiliateInfo = merchantService.getMerchantInfoFromDb(AffiliateId);
+        if(sharingRatioBarpin > merchantInfo.getSharingRatioBarpin()
+                || sharingRatioGive > merchantInfo.getSharingRatioGive()
+                || sharingRatioRedp > merchantInfo.getSharingRatioRedp()){
+            throw BaseException.getException(ErrorCodeEnum.MERCHANT_MERCHANT_SHARE_ERROR.getCode());
+        }
+        affiliateInfo.setSharingRatioBarpin(sharingRatioBarpin);
+        affiliateInfo.setSharingRatioGive(sharingRatioGive);
+        affiliateInfo.setSharingRatioRedp(sharingRatioRedp);
+        affiliateInfo.setUpdateTime(new Date());
+        merchantService.updateMerchantInfo(affiliateInfo);
+    }
+
+
+
     /**
      * 支付成功才能调用
      * @param amount
@@ -54,6 +85,8 @@ public class SharingRatioService {
     public void shareBarpin(BigDecimal amount,Long merchantId, Long consumeOrderId) throws BaseException {
          share(amount,merchantId,consumeOrderId,RechargeSceneTypeEnum.BARPING);
     }
+
+
 
 
     /**

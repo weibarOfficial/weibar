@@ -498,8 +498,15 @@ CREATE TABLE `weibar_merchants_login_log` (
   `login_time` datetime NOT NULL DEFAULT '2000-01-01 00:00:00' COMMENT '创建时间',
   `create_time` datetime NOT NULL DEFAULT '2000-01-01 00:00:00' COMMENT '创建时间',
   `update_time` datetime NOT NULL DEFAULT '2000-01-01 00:00:00' COMMENT '更新时间',
+  `user_picture` varchar(1024) DEFAULT NULL,
+  `nickname` varchar(500) DEFAULT NULL COMMENT '用户昵称',
+  `sex` varchar(500) DEFAULT NULL COMMENT '用户的性别',
+  `city` varchar(500) DEFAULT NULL COMMENT '用户城市',
+  `country` varchar(500) DEFAULT NULL COMMENT '用户国家',
+  `province` varchar(500) DEFAULT NULL COMMENT '用户省份',
   PRIMARY KEY (`id`),
-  UNIQUE KEY `AK_user_id_unq` (`user_id`,`create_time`) USING BTREE
+  UNIQUE KEY `AK_user_id_unq` (`user_id`,`create_time`) USING BTREE,
+  KEY `AK_merchantid` (`merchantid`) USING BTREE
 ) ENGINE=InnoDB AUTO_INCREMENT=545 DEFAULT CHARSET=utf8;
 
 -- ----------------------------

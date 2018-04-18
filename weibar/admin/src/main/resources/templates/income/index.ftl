@@ -7,7 +7,7 @@
 <#include "../common/navbar.ftl">
 <!-- BEGIN CONTAINER -->
 <div class="page-container">
-    <#include "../common/slide.ftl">
+    <#include "${userMenuFtl}">
     <!-- BEGIN PAGE -->
     <div class="page-content">
 
@@ -33,12 +33,12 @@
 
                         <div class="portlet-title">
 
-                            <div class="caption"><i class="icon-globe"></i>Show/Hide Columns</div>
+                            <div class="caption"><i class="icon-globe"></i>收入总览</div>
 
                             <div class="actions">
 
                                 <div class="btn-group">
-
+                                    <!--
                                     <a class="btn" href="#" data-toggle="dropdown">
 
                                         Columns
@@ -46,6 +46,7 @@
                                         <i class="icon-angle-down"></i>
 
                                     </a>
+                                    -->
                                     <!--
                                     <div id="sample_2_column_toggler" class="dropdown-menu hold-on-click dropdown-checkboxes pull-right">
 
@@ -70,28 +71,15 @@
                         <div class="portlet-body">
 
                             <table class="table table-striped table-bordered table-hover table-full-width" id="sample_2">
-
                                 <thead>
-
                                 <tr>
-
                                     <th>日期</th>
-
                                     <th>收入</th>
-
                                     <th class="hidden-480">消费人次</th>
-
                                     <th class="hidden-480">人均付费（次）</th>
-
                                 </tr>
-
                                 </thead>
-
                                 <tbody>
-
-
-
-
                                 <#list mIncomes as income>
                                 <tr>
                                     <td>${income.createTime}</td>
@@ -100,18 +88,10 @@
                                     <td >${income.perConsume}</td>
                                 </tr>
                                 </#list>
-
-
-
-
                                 </tbody>
-
                             </table>
-
                         </div>
-
                     </div>
-
                     <!-- END EXAMPLE TABLE PORTLET-->
 
                 </div>

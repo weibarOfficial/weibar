@@ -2,10 +2,14 @@ package com.weibar.controller;
 
 import com.weibar.consts.SessionConsts;
 import com.weibar.pojo.db.MerchantIncome;
+import com.weibar.pojo.db.WeibarMerchantsLoginLog;
 import com.weibar.pojo.enu.MerchantRoleEnum;
+import com.weibar.pojo.exception.BaseException;
 import com.weibar.pojo.result.MerchantIncomeResult;
 import com.weibar.pojo.result.MerchantInfo;
+import com.weibar.pojo.result.MerchantsLoginLog;
 import com.weibar.service.function.MerchantIncomeService;
+import com.weibar.service.function.MerchantService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +30,8 @@ public class PageController extends AbstractController{
 
     @Autowired
     private MerchantIncomeService merchantIncomeService;
+    @Autowired
+    private MerchantService merchantService;
 
     private static final Logger LOG = LoggerFactory.getLogger(PageController.class);
     @RequestMapping(value = "/admin/page/index", method = {RequestMethod.GET,RequestMethod.POST})
@@ -56,4 +62,41 @@ public class PageController extends AbstractController{
         model.addAttribute("mIncomes",merchantIncomeResults);
         return "income/index";
     }
+
+
+    @RequestMapping(value = "/admin/page/merchantIndex", method = {RequestMethod.GET,RequestMethod.POST})
+    public String merchantIndex(Model model,HttpServletRequest request) throws BaseException {
+        model.addAttribute(PAGE_NAME,"商户信息");
+        model.addAttribute("mInfo",merchantService.getMerchantInfo(getMerchantInfoFromSession(request).getMerchantId()));
+        return "merchant/index";
+    }
+
+
+    @RequestMapping(value = "/admin/page/getAffiliates", method = {RequestMethod.GET,RequestMethod.POST})
+    public String getAffiliates(Model model,HttpServletRequest request) throws BaseException {
+        model.addAttribute(PAGE_NAME,"下属商户");
+        List<MerchantInfo> merchantInfoList = merchantService.getAffiliates(getMerchantInfoFromSession(request).getMerchantId());
+        model.addAttribute("mAffs",merchantInfoList);
+        return "merchant/affiliates";
+    }
+
+
+    @RequestMapping(value = "/admin/page/userIndex", method = {RequestMethod.GET,RequestMethod.POST})
+    public String userIndex(Model model,HttpServletRequest request) {
+        model.addAttribute(PAGE_NAME,"用户管理");
+        List<MerchantsLoginLog> loginLogs = merchantService.getMerchantUsers(getMerchantInfoFromSession(request).getMerchantId());
+        model.addAttribute("mUsers",loginLogs);
+        return "user/index";
+    }
+
+
+
+    @RequestMapping(value = "/admin/page/barIndex", method = {RequestMethod.GET,RequestMethod.POST})
+    public String barIndex(Model model,HttpServletRequest request) throws BaseException {
+        model.addAttribute(PAGE_NAME,"酒吧信息");
+        model.addAttribute("mInfo",merchantService.getMerchantInfo(getMerchantInfoFromSession(request).getMerchantId()));
+        return "bar/index";
+    }
+
+
 }

@@ -4,6 +4,7 @@ package com.weibar.controller;
 import com.weibar.pojo.exception.BaseException;
 import com.weibar.pojo.result.BaseResult;
 import com.weibar.service.function.MerchantService;
+import com.weibar.service.function.SharingRatioService;
 import com.weibar.utils.EncryptUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,12 +24,37 @@ public class MerchantController extends AbstractController {
     @Autowired
     private MerchantService merchantService;
 
+    @Autowired
+    private SharingRatioService sharingRatioService;
+
+
+    @RequestMapping(value = "/admin/editAffiliateShareRatio" ,method = {RequestMethod.POST,RequestMethod.GET})
+    public Object editAffiliateShareRatio(HttpServletRequest request,
+                                          @RequestParam Long affiliateId,
+                                          @RequestParam Integer sharingRatioBarpin,
+                                          @RequestParam Integer sharingRatioGive,
+                                          @RequestParam Integer sharingRatioRedp) throws BaseException {
+
+
+
+
+        sharingRatioService.editAffiliateShareRatio(getMerchantInfoFromSession(request).getMerchantId(),
+                affiliateId,sharingRatioBarpin,sharingRatioGive,sharingRatioRedp);
+        return BaseResult.getSuccessfulResult(null);
+    }
+
+
+
+    @RequestMapping(value = "/admin/getAffiliateById" ,method = {RequestMethod.POST,RequestMethod.GET})
+    public Object getAffiliateById( HttpServletRequest request,@RequestParam Long affiliateId) throws BaseException {
+        return BaseResult.getSuccessfulResult(merchantService.getAffiliateById(getMerchantInfoFromSession(request).getMerchantId(),affiliateId));
+    }
 
 
 
 
     @RequestMapping(value = "/admin/getMerchantInfo" ,method = {RequestMethod.POST,RequestMethod.GET})
-    public Object getMerchantInfo( HttpServletRequest request) throws BaseException {
+    public Object getMerchantInfo( HttpServletRequest request,@RequestParam Long parentMerchantId) throws BaseException {
         return BaseResult.getSuccessfulResult(merchantService.getMerchantInfo(getMerchantInfoFromSession(request).getMerchantId()));
     }
 

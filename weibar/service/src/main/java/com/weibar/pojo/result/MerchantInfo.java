@@ -1,6 +1,7 @@
 package com.weibar.pojo.result;
 
 import com.weibar.pojo.db.WeibarMerchantsBaseInfo;
+import com.weibar.pojo.enu.MerchantRoleEnum;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,6 +10,10 @@ import java.util.List;
  * Created by Administrator on 2017/12/4.
  */
 public class MerchantInfo {
+
+
+
+
 
 
     public static MerchantInfo getMerchantInfo(WeibarMerchantsBaseInfo weibarMerchantsBaseInfo){
@@ -22,10 +27,29 @@ public class MerchantInfo {
         merchantInfo.setRole(weibarMerchantsBaseInfo.getRole());
         merchantInfo.setSharingRatio(weibarMerchantsBaseInfo.getSharingRatio());
         merchantInfo.setSharingRatioBarpin(weibarMerchantsBaseInfo.getSharingRatioBarpin());
+        if(weibarMerchantsBaseInfo.getSharingRatioBarpin() > 0) {
+            merchantInfo.setSharingRatioBarpinStr(weibarMerchantsBaseInfo.getSharingRatioBarpin()/10.0 + "%");
+        }else{
+            merchantInfo.setSharingRatioBarpinStr("0");
+        }
+        if(weibarMerchantsBaseInfo.getSharingRatioRedp() > 0){
+            merchantInfo.setSharingRatioRedpStr(weibarMerchantsBaseInfo.getSharingRatioRedp()/10.0 + "%");
+        }else{
+            merchantInfo.setSharingRatioRedpStr("0");
+        }
+        if(weibarMerchantsBaseInfo.getSharingRatioGive() > 0){
+            merchantInfo.setSharingRatioGiveStr(weibarMerchantsBaseInfo.getSharingRatioGive()/10.0 + "%");
+        }else {
+            merchantInfo.setSharingRatioGiveStr("0");
+        }
+
+
+        merchantInfo.setRoleStr(MerchantRoleEnum.getRoleByType(merchantInfo.getRole()).getDesc());
         merchantInfo.setSharingRatioRedp(weibarMerchantsBaseInfo.getSharingRatioRedp());
         merchantInfo.setSharingRatioGive(weibarMerchantsBaseInfo.getSharingRatioGive());
         merchantInfo.setLoginName(weibarMerchantsBaseInfo.getLoginName());
         merchantInfo.setUserId(weibarMerchantsBaseInfo.getUserId());
+        merchantInfo.setMerchantIdStr(merchantInfo.getMerchantId().toString());
         return merchantInfo;
     }
 
@@ -52,6 +76,21 @@ public class MerchantInfo {
     private String loginName;
     private Long userId;
 
+
+    private String sharingRatioBarpinStr;
+    private String sharingRatioRedpStr;
+    private String sharingRatioGiveStr;
+    private String roleStr;
+    private String merchantIdStr;
+
+
+    public String getRoleStr() {
+        return roleStr;
+    }
+
+    public void setRoleStr(String roleStr) {
+        this.roleStr = roleStr;
+    }
 
     public Long getParentMerchantid() {
         return parentMerchantid;
@@ -157,5 +196,39 @@ public class MerchantInfo {
 
     public void setLogoUrl(String logoUrl) {
         this.logoUrl = logoUrl;
+    }
+
+
+    public String getSharingRatioBarpinStr() {
+        return sharingRatioBarpinStr;
+    }
+
+    public void setSharingRatioBarpinStr(String sharingRatioBarpinStr) {
+        this.sharingRatioBarpinStr = sharingRatioBarpinStr;
+    }
+
+    public String getSharingRatioRedpStr() {
+        return sharingRatioRedpStr;
+    }
+
+    public void setSharingRatioRedpStr(String sharingRatioRedpStr) {
+        this.sharingRatioRedpStr = sharingRatioRedpStr;
+    }
+
+    public String getSharingRatioGiveStr() {
+        return sharingRatioGiveStr;
+    }
+
+    public void setSharingRatioGiveStr(String sharingRatioGiveStr) {
+        this.sharingRatioGiveStr = sharingRatioGiveStr;
+    }
+
+
+    public String getMerchantIdStr() {
+        return merchantIdStr;
+    }
+
+    public void setMerchantIdStr(String merchantIdStr) {
+        this.merchantIdStr = merchantIdStr;
     }
 }

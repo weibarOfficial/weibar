@@ -35,7 +35,7 @@ public class MerchantIncomeResult {
         if(merchantIncome.getPeople() == 0){
             merchantIncomeResult.setPerConsume("0");
         }else{
-            merchantIncomeResult.setPerConsume(merchantIncome.getIncome().divide(new BigDecimal(merchantIncome.getPeople())).setScale(2).toPlainString());
+            merchantIncomeResult.setPerConsume(merchantIncome.getIncome().divide(new BigDecimal(merchantIncome.getPeople())).setScale(2,BigDecimal.ROUND_HALF_UP).toPlainString());
         }
         return merchantIncomeResult;
     }
