@@ -37,6 +37,7 @@ public class LoginInterceptor implements HandlerInterceptor {
                 || req.getRequestURI().startsWith("/admin/verifyPwd")
                 || req.getRequestURI().startsWith("/admin/createMerchant")
                 || req.getRequestURI().startsWith("/error")
+                || req.getRequestURI().startsWith("/admin/createRootMerchant")
                 || req.getRequestURI().startsWith("/admin/testLogin")
                 || req.getRequestURI().startsWith("/admin/media")
                 || req.getRequestURI().startsWith("/admin/page/login")){
