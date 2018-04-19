@@ -267,7 +267,7 @@
 
     jQuery(document).ready(function () {
         App.init(); // initlayout and core plugins
-        Index.init();
+        //Index.init();
         TableAdvanced.init();
     });
 
