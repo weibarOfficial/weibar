@@ -77,7 +77,7 @@
                                          <div class="control-group">
                                             <label class="control-label">商户ID</label>
                                             <div class="controls">
-                                                <input class="m-wrap medium" type="text" value="${mInfo.merchantId}" disabled />
+                                                <input class="m-wrap medium" type="text" value="${mInfo.merchantIdStr}" disabled />
                                                 <span class="help-inline">商户在秉烛公司的唯一ID</span>
                                             </div>
                                         </div>
