@@ -46,7 +46,10 @@ public class MerchantsLoginLog {
 
         merchantsLoginLog.setLoginTime(new SimpleDateFormat("yyyy年MM月dd日 HH时mm分ss秒").format(weibarMerchantsLoginLog.getLoginTime()));
         merchantsLoginLog.setNickname(weibarMerchantsLoginLog.getNickname());
-        if(weibarMerchantsLoginLog.getSex().contains("1")){
+
+        if(weibarMerchantsLoginLog.getSex() == null){
+            merchantsLoginLog.setSex("未知");
+        }else if(weibarMerchantsLoginLog.getSex().contains("1")){
             merchantsLoginLog.setSex("男");
         }else if(weibarMerchantsLoginLog.getSex().contains("0")){
             merchantsLoginLog.setSex("女");

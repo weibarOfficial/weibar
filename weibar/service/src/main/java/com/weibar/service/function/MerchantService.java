@@ -258,6 +258,12 @@ public class MerchantService {
 
 
         userBalanceService.createMerchantUserBalnceIfNotExist(merchantId);
+
+
+        //TODO 酒吧商品和打赏时长配置
+
+
+
         return getMerchantInfo(merchantsBaseInfo.getMerchantid());
     }
 
