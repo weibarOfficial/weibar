@@ -42,11 +42,9 @@ public class BarpinService {
 
     @Autowired
     private SharingRatioService sharingRatioService;
-    /**
-     * 这个表的数据应该由weibar_price_time_setting_info这个表生成
-     */
     @Autowired
-    private WeibarMerchantsPriceTimeSettingInfoMapper weibarMerchantsPriceTimeSettingInfoMapper;
+    private PriceTimeService priceTimeService;
+
 
 
     public List<BarpinTheme> getTitles(){
@@ -56,18 +54,6 @@ public class BarpinService {
 
 
 
-    public List<PriceTimeSettingInfo> getPriceTimeSettingInfo(Long merchantId){
-        WeibarMerchantsPriceTimeSettingInfoCriteria priceTimeSettingInfoCriteria = new WeibarMerchantsPriceTimeSettingInfoCriteria();
-        WeibarMerchantsPriceTimeSettingInfoCriteria.Criteria criteria = priceTimeSettingInfoCriteria.createCriteria();
-        criteria.andMerchantidEqualTo(merchantId);
-        List<WeibarMerchantsPriceTimeSettingInfo> timeSettingInfoList = weibarMerchantsPriceTimeSettingInfoMapper.selectByExample(priceTimeSettingInfoCriteria);
-
-        List<PriceTimeSettingInfo> results = new ArrayList<>();
-        for(WeibarMerchantsPriceTimeSettingInfo w : timeSettingInfoList){
-            results.add(PriceTimeSettingInfo.getPriceTimeSettingInfo(w));
-        }
-        return results;
-    }
 
 
 
@@ -75,24 +61,8 @@ public class BarpinService {
 
 
 
-    /**
-     * 获取具体配置
-     * @param merchantId
-     * @param second
-     * @return
-     * @throws BaseException
-     */
-    public WeibarMerchantsPriceTimeSettingInfo getPriceTimeSettingInfoById(Long merchantId,Integer second) throws BaseException {
-        WeibarMerchantsPriceTimeSettingInfoCriteria priceTimeSettingInfoCriteria = new WeibarMerchantsPriceTimeSettingInfoCriteria();
-        WeibarMerchantsPriceTimeSettingInfoCriteria.Criteria criteria = priceTimeSettingInfoCriteria.createCriteria();
-        criteria.andMerchantidEqualTo(merchantId);
-        criteria.andTimesidEqualTo(second);
-        List<WeibarMerchantsPriceTimeSettingInfo> timeSettingInfoList = weibarMerchantsPriceTimeSettingInfoMapper.selectByExample(priceTimeSettingInfoCriteria);
-        if(timeSettingInfoList == null || timeSettingInfoList.size() == 0){
-            throw BaseException.getException(ErrorCodeEnum.BARPING_ERROR_NOT_SETING.getCode());
-        }
-        return timeSettingInfoList.get(0);
-    }
+
+
 
 
     /**
@@ -113,7 +83,7 @@ public class BarpinService {
             throw BaseException.getException(ErrorCodeEnum.BARPING_ERROR_HAS_BA.getCode());
         }
 
-        WeibarMerchantsPriceTimeSettingInfo priceTimeSettingInfo = getPriceTimeSettingInfoById(merchantId,second);
+        WeibarMerchantsPriceTimeSettingInfo priceTimeSettingInfo = priceTimeService.getPriceTimeSettingInfoById(merchantId,second);
 
         BigDecimal needPayAmount = priceTimeSettingInfo.getAmount().multiply(new BigDecimal(times));
 

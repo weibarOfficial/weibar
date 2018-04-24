@@ -48,6 +48,11 @@ public class MerchantService {
     @Autowired
     private UserBalanceService userBalanceService;
 
+    @Autowired
+    private GoodsService goodsService;
+    @Autowired
+    private PriceTimeService priceTimeService;
+
 
     @Autowired
     private WeibarMerchantsLoginLogMapper weibarMerchantsLoginLogMapper;
@@ -260,8 +265,9 @@ public class MerchantService {
         userBalanceService.createMerchantUserBalnceIfNotExist(merchantId);
 
 
-        //TODO 酒吧商品和打赏时长配置
-
+        //酒吧商品和打赏时长配置
+        goodsService.generateMerchantDefaultGoods(merchantId);
+        priceTimeService.generatePriceTimeSettingInfo(merchantId);
 
 
         return getMerchantInfo(merchantsBaseInfo.getMerchantid());

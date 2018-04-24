@@ -152,8 +152,7 @@
 
 
         <table schema="" tableName="weibar_merchants_barrage_info" domainObjectName="WeibarMerchantsBarrageInfo">
-            <generatedKey column="id" sqlStatement="MySql"
-                          identity="true"/>
+            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>
 
 
@@ -174,16 +173,11 @@
         <!--<table schema="" tableName="weibar_merchants_horse_race_lamp_setting_info" domainObjectName="WeibarMerchantsHorseRaceLampSettingInfo">
         </table>-->
 
-        <table schema="" tableName="weibar_merchants_mtv_setting_info" domainObjectName="WeibarMerchantsMtvSettingInfo">
-        </table>
 
         <table schema="" tableName="weibar_merchants_price_time_setting_info"
                domainObjectName="WeibarMerchantsPriceTimeSettingInfo">
         </table>
 
-        <table schema="" tableName="weibar_merchants_seat_setting_info"
-               domainObjectName="WeibarMerchantsSeatSettingInfo">
-        </table>
 
         <table schema="" tableName="weibar_merchants_setting_info" domainObjectName="WeibarMerchantsSettingInfo">
         </table>

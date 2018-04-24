@@ -17,6 +17,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Administrator on 2018/1/5.
@@ -31,8 +32,32 @@ public class GoodsService {
 
 
 
+    public void updateMerchantGoods(Long merchantId, Map<Long,BigDecimal> goodsPrices){
+        if(goodsPrices == null){
+            return;
+        }
+        for(Long goodsId : goodsPrices.keySet()){
+            updateMerchantSingleGoods(merchantId,goodsId,goodsPrices.get(goodsId));
+        }
+    }
 
-    public void generateDefaultGoods(Long merchantId){
+
+    public void updateMerchantSingleGoods(Long merchantId,Long goodsId,BigDecimal price){
+        WeibarMerchantsGoodsSettingInfoCriteria merchantsGoodsSettingInfoCriteria = new WeibarMerchantsGoodsSettingInfoCriteria();
+        WeibarMerchantsGoodsSettingInfoCriteria.Criteria criteria = merchantsGoodsSettingInfoCriteria.createCriteria();
+        criteria.andMerchantidEqualTo(merchantId);
+        criteria.andGoodsidEqualTo(goodsId);
+        List<WeibarMerchantsGoodsSettingInfo> merchantsGoodsSettingInfos = weibarMerchantsGoodsSettingInfoMapper.selectByExample(merchantsGoodsSettingInfoCriteria);
+        if(merchantsGoodsSettingInfos != null && merchantsGoodsSettingInfos.size() != 0){
+            WeibarMerchantsGoodsSettingInfo merchantsGoodsSettingInfo = merchantsGoodsSettingInfos.get(0);
+            merchantsGoodsSettingInfo.setAmount(price);
+            weibarMerchantsGoodsSettingInfoMapper.updateByPrimaryKey(merchantsGoodsSettingInfo);
+        }
+    }
+
+
+
+    public void generateMerchantDefaultGoods(Long merchantId){
         WeibarGoodsSettingInfoCriteria weibarGoodsSettingInfoCriteria = new WeibarGoodsSettingInfoCriteria();
         List<WeibarGoodsSettingInfo> goodsSettingInfoList = weibarGoodsSettingInfoMapper.selectByExample(weibarGoodsSettingInfoCriteria);
         for(WeibarGoodsSettingInfo weibarGoodsSettingInfo : goodsSettingInfoList){

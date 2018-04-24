@@ -21,6 +21,8 @@ public class GoodsSettingInfo {
         goodsSettingInfo.setHeight(info.getHeight());
         goodsSettingInfo.setTime(info.getTime());
         goodsSettingInfo.setGoodsMsg(info.getGoodsMsg());
+        goodsSettingInfo.setGoodsIdStr(info.getGoodsid().toString());
+        goodsSettingInfo.setGoodsAmountStr(info.getAmount().toPlainString());
         return goodsSettingInfo;
     }
 
@@ -36,6 +38,26 @@ public class GoodsSettingInfo {
     private Integer time;
     private String goodsMsg;
 
+
+    private String goodsIdStr;
+    private String goodsAmountStr;
+
+
+    public String getGoodsIdStr() {
+        return goodsIdStr;
+    }
+
+    public void setGoodsIdStr(String goodsIdStr) {
+        this.goodsIdStr = goodsIdStr;
+    }
+
+    public String getGoodsAmountStr() {
+        return goodsAmountStr;
+    }
+
+    public void setGoodsAmountStr(String goodsAmountStr) {
+        this.goodsAmountStr = goodsAmountStr;
+    }
 
     public String getGoodsBigUrl() {
         return goodsBigUrl;

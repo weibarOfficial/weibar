@@ -8,8 +8,10 @@ import com.weibar.pojo.exception.BaseException;
 import com.weibar.pojo.result.MerchantIncomeResult;
 import com.weibar.pojo.result.MerchantInfo;
 import com.weibar.pojo.result.MerchantsLoginLog;
+import com.weibar.service.function.GoodsService;
 import com.weibar.service.function.MerchantIncomeService;
 import com.weibar.service.function.MerchantService;
+import com.weibar.service.function.PriceTimeService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +34,10 @@ public class PageController extends AbstractController{
     private MerchantIncomeService merchantIncomeService;
     @Autowired
     private MerchantService merchantService;
+    @Autowired
+    private GoodsService goodsService;
+    @Autowired
+    private PriceTimeService priceTimeService;
 
     private static final Logger LOG = LoggerFactory.getLogger(PageController.class);
     @RequestMapping(value = "/admin/page/index", method = {RequestMethod.GET,RequestMethod.POST})
@@ -98,5 +104,20 @@ public class PageController extends AbstractController{
         return "bar/index";
     }
 
+
+
+    @RequestMapping(value = "/admin/page/goodsIndex", method = {RequestMethod.GET,RequestMethod.POST})
+    public String goodsIndex(Model model,HttpServletRequest request) throws BaseException {
+        model.addAttribute(PAGE_NAME,"商品信息");
+        model.addAttribute("mInfo",goodsService.getGoodsSettingInfo(getMerchantInfoFromSession(request).getMerchantId()));
+        return "goods/index";
+    }
+
+    @RequestMapping(value = "/admin/page/timePriceIndex", method = {RequestMethod.GET,RequestMethod.POST})
+    public String timePriceIndex(Model model,HttpServletRequest request) throws BaseException {
+        model.addAttribute(PAGE_NAME,"打赏时长");
+        model.addAttribute("mInfo",priceTimeService.getPriceTimeSettingInfo(getMerchantInfoFromSession(request).getMerchantId()));
+        return "time/index";
+    }
 
 }

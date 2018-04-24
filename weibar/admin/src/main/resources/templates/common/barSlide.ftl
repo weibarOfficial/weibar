@@ -36,18 +36,28 @@
 
 
             <li class="">
-                <a href="javascript:;">
-                    <i class="icon-briefcase"></i>
-                    <span class="title">酒吧管理</span>
-                    <span class="arrow "></span>
-                </a>
-                <ul class="sub-menu">
-                    <li>
-                        <a href="/admin/page/barIndex">
-                            <i class="icon-time"></i>
-                            信息总览</a>
-                    </li>
-                </ul>
+            <a href="javascript:;">
+                <i class="icon-briefcase"></i>
+                <span class="title">酒吧管理</span>
+                <span class="arrow "></span>
+            </a>
+            <ul class="sub-menu">
+                <li>
+                    <a href="/admin/page/barIndex">
+                        <i class="icon-time"></i>
+                        信息总览</a>
+                </li>
+                <li>
+                    <a href="/admin/page/goodsIndex">
+                        <i class="icon-time"></i>
+                        商品信息</a>
+                </li>
+                <li>
+                    <a href="/admin/page/timePriceIndex">
+                        <i class="icon-time"></i>
+                        打赏配置</a>
+                </li>
+            </ul>
             </li>
 
             <li class="last">

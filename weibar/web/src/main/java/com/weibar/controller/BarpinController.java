@@ -3,6 +3,7 @@ package com.weibar.controller;
 import com.weibar.pojo.exception.BaseException;
 import com.weibar.pojo.result.BaseResult;
 import com.weibar.service.function.BarpinService;
+import com.weibar.service.function.PriceTimeService;
 import com.weibar.service.function.UserService;
 import com.weibar.utils.IpUtil;
 import com.weibar.utils.LoginUserUtil;
@@ -25,11 +26,13 @@ public class BarpinController {
     private BarpinService barpinService;
     @Autowired
     private UserService userService;
+    @Autowired
+    private PriceTimeService priceTimeService;
 
 
     @RequestMapping(value = "/h5/priceTimeInfo" ,method = {RequestMethod.POST,RequestMethod.GET})
     public Object priceTimeInfo(@RequestParam Long merchantId) throws BaseException {
-        return BaseResult.getSuccessfulResult(barpinService.getPriceTimeSettingInfo(merchantId));
+        return BaseResult.getSuccessfulResult(priceTimeService.getPriceTimeSettingInfo(merchantId));
     }
 
     /**

@@ -38,7 +38,7 @@ public class GoodsController {
 
     @RequestMapping(value = "/h5/generateGoodsMerchant" ,method = {RequestMethod.POST,RequestMethod.GET})
     public Object generateGoodsMerchant(@RequestParam Long merchantId) throws BaseException {
-        goodsService.generateDefaultGoods(merchantId);
+        goodsService.generateMerchantDefaultGoods(merchantId);
         return BaseResult.getSuccessfulResult(null);
     }
 }
