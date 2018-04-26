@@ -3,6 +3,7 @@ package com.weibar.controller;
 import com.weibar.pojo.exception.BaseException;
 import com.weibar.pojo.result.BaseResult;
 import com.weibar.service.function.GoodsService;
+import com.weibar.service.function.PriceTimeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -18,6 +19,8 @@ public class GoodsController {
 
     @Autowired
     private GoodsService goodsService;
+    @Autowired
+    private PriceTimeService priceTimeService;
 
     @RequestMapping(value = "/h5/goodsSettingInfo" ,method = {RequestMethod.POST,RequestMethod.GET})
     public Object goodsSettingInfo(@RequestParam Long merchantId) throws BaseException {
@@ -39,6 +42,13 @@ public class GoodsController {
     @RequestMapping(value = "/h5/generateGoodsMerchant" ,method = {RequestMethod.POST,RequestMethod.GET})
     public Object generateGoodsMerchant(@RequestParam Long merchantId) throws BaseException {
         goodsService.generateMerchantDefaultGoods(merchantId);
+        return BaseResult.getSuccessfulResult(null);
+    }
+
+
+    @RequestMapping(value = "/h5/generatePriceTimeSettingInfo" ,method = {RequestMethod.POST,RequestMethod.GET})
+    public Object generatePriceTimeSettingInfo(@RequestParam Long merchantId) throws BaseException {
+        priceTimeService.generatePriceTimeSettingInfo(merchantId);
         return BaseResult.getSuccessfulResult(null);
     }
 }

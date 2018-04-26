@@ -31,22 +31,29 @@ public class PriceTimeService {
 
 
 
-    public void updatePriceTimeSettingInfo(Long merchantId,Map<Integer,BigDecimal> timePrices){
+    public void updatePriceTimeSettingInfos(Long merchantId,Map<Integer,BigDecimal> timePrices){
         if(timePrices == null){
             return;
         }
         for(Integer timeId : timePrices.keySet()){
-            WeibarMerchantsPriceTimeSettingInfoCriteria merchantsGoodsSettingInfoCriteria = new WeibarMerchantsPriceTimeSettingInfoCriteria();
-            WeibarMerchantsPriceTimeSettingInfoCriteria.Criteria criteria = merchantsGoodsSettingInfoCriteria.createCriteria();
-            criteria.andMerchantidEqualTo(merchantId);
-            criteria.andTimesidEqualTo(timeId);
-            List<WeibarMerchantsPriceTimeSettingInfo> merchantsGoodsSettingInfos = weibarMerchantsPriceTimeSettingInfoMapper.selectByExample(merchantsGoodsSettingInfoCriteria);
-            if(merchantsGoodsSettingInfos != null && merchantsGoodsSettingInfos.size() != 0){
-                WeibarMerchantsPriceTimeSettingInfo merchantsGoodsSettingInfo = merchantsGoodsSettingInfos.get(0);
-                merchantsGoodsSettingInfo.setAmount(timePrices.get(timeId));
-                weibarMerchantsPriceTimeSettingInfoMapper.updateByPrimaryKey(merchantsGoodsSettingInfo);
-            }
+            updatePriceTimeSettingInfo(timeId,merchantId,timePrices.get(timeId));
         }
+    }
+
+
+    public void updatePriceTimeSettingInfo(Integer timeId,Long merchantId,BigDecimal amount){
+
+        WeibarMerchantsPriceTimeSettingInfoCriteria merchantsGoodsSettingInfoCriteria = new WeibarMerchantsPriceTimeSettingInfoCriteria();
+        WeibarMerchantsPriceTimeSettingInfoCriteria.Criteria criteria = merchantsGoodsSettingInfoCriteria.createCriteria();
+        criteria.andMerchantidEqualTo(merchantId);
+        criteria.andTimesidEqualTo(timeId);
+        List<WeibarMerchantsPriceTimeSettingInfo> merchantsGoodsSettingInfos = weibarMerchantsPriceTimeSettingInfoMapper.selectByExample(merchantsGoodsSettingInfoCriteria);
+        if(merchantsGoodsSettingInfos != null && merchantsGoodsSettingInfos.size() != 0){
+            WeibarMerchantsPriceTimeSettingInfo merchantsGoodsSettingInfo = merchantsGoodsSettingInfos.get(0);
+            merchantsGoodsSettingInfo.setAmount(amount);
+            weibarMerchantsPriceTimeSettingInfoMapper.updateByPrimaryKey(merchantsGoodsSettingInfo);
+        }
+
     }
 
 
@@ -68,12 +75,11 @@ public class PriceTimeService {
     }
 
 
-    public List<PriceTimeSettingInfo> getPriceTimeSettingInfo(Long merchantId){
+    public List<PriceTimeSettingInfo> getPriceTimeSettingInfos(Long merchantId){
         WeibarMerchantsPriceTimeSettingInfoCriteria priceTimeSettingInfoCriteria = new WeibarMerchantsPriceTimeSettingInfoCriteria();
         WeibarMerchantsPriceTimeSettingInfoCriteria.Criteria criteria = priceTimeSettingInfoCriteria.createCriteria();
         criteria.andMerchantidEqualTo(merchantId);
         List<WeibarMerchantsPriceTimeSettingInfo> timeSettingInfoList = weibarMerchantsPriceTimeSettingInfoMapper.selectByExample(priceTimeSettingInfoCriteria);
-
         List<PriceTimeSettingInfo> results = new ArrayList<>();
         for(WeibarMerchantsPriceTimeSettingInfo w : timeSettingInfoList){
             results.add(PriceTimeSettingInfo.getPriceTimeSettingInfo(w));
@@ -85,21 +91,24 @@ public class PriceTimeService {
     /**
      * 获取具体配置
      * @param merchantId
-     * @param second
+     * @param timeId
      * @return
      * @throws BaseException
      */
-    public WeibarMerchantsPriceTimeSettingInfo getPriceTimeSettingInfoById(Long merchantId,Integer second) throws BaseException {
+
+
+
+    public PriceTimeSettingInfo getPriceTimeSettingInfoById(Long merchantId,Integer timeId) throws BaseException {
 
         WeibarMerchantsPriceTimeSettingInfoCriteria priceTimeSettingInfoCriteria = new WeibarMerchantsPriceTimeSettingInfoCriteria();
         WeibarMerchantsPriceTimeSettingInfoCriteria.Criteria criteria = priceTimeSettingInfoCriteria.createCriteria();
         criteria.andMerchantidEqualTo(merchantId);
-        criteria.andTimesidEqualTo(second);
+        criteria.andTimesidEqualTo(timeId);
         List<WeibarMerchantsPriceTimeSettingInfo> timeSettingInfoList = weibarMerchantsPriceTimeSettingInfoMapper.selectByExample(priceTimeSettingInfoCriteria);
         if(timeSettingInfoList == null || timeSettingInfoList.size() == 0){
             throw BaseException.getException(ErrorCodeEnum.BARPING_ERROR_NOT_SETING.getCode());
         }
-        return timeSettingInfoList.get(0);
+        return PriceTimeSettingInfo.getPriceTimeSettingInfo(timeSettingInfoList.get(0));
     }
 
 }

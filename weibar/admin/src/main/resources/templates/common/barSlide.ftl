@@ -55,7 +55,7 @@
                 <li>
                     <a href="/admin/page/timePriceIndex">
                         <i class="icon-time"></i>
-                        打赏配置</a>
+                        霸屏时长</a>
                 </li>
             </ul>
             </li>

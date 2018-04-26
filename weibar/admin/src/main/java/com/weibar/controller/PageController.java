@@ -116,7 +116,7 @@ public class PageController extends AbstractController{
     @RequestMapping(value = "/admin/page/timePriceIndex", method = {RequestMethod.GET,RequestMethod.POST})
     public String timePriceIndex(Model model,HttpServletRequest request) throws BaseException {
         model.addAttribute(PAGE_NAME,"打赏时长");
-        model.addAttribute("mInfo",priceTimeService.getPriceTimeSettingInfo(getMerchantInfoFromSession(request).getMerchantId()));
+        model.addAttribute("mInfo",priceTimeService.getPriceTimeSettingInfos(getMerchantInfoFromSession(request).getMerchantId()));
         return "time/index";
     }
 

@@ -268,8 +268,6 @@ public class MerchantService {
         //酒吧商品和打赏时长配置
         goodsService.generateMerchantDefaultGoods(merchantId);
         priceTimeService.generatePriceTimeSettingInfo(merchantId);
-
-
         return getMerchantInfo(merchantsBaseInfo.getMerchantid());
     }
 

@@ -32,7 +32,7 @@ public class BarpinController {
 
     @RequestMapping(value = "/h5/priceTimeInfo" ,method = {RequestMethod.POST,RequestMethod.GET})
     public Object priceTimeInfo(@RequestParam Long merchantId) throws BaseException {
-        return BaseResult.getSuccessfulResult(priceTimeService.getPriceTimeSettingInfo(merchantId));
+        return BaseResult.getSuccessfulResult(priceTimeService.getPriceTimeSettingInfos(merchantId));
     }
 
     /**

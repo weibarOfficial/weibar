@@ -83,9 +83,9 @@ public class BarpinService {
             throw BaseException.getException(ErrorCodeEnum.BARPING_ERROR_HAS_BA.getCode());
         }
 
-        WeibarMerchantsPriceTimeSettingInfo priceTimeSettingInfo = priceTimeService.getPriceTimeSettingInfoById(merchantId,second);
+        PriceTimeSettingInfo priceTimeSettingInfo = priceTimeService.getPriceTimeSettingInfoById(merchantId,second);
 
-        BigDecimal needPayAmount = priceTimeSettingInfo.getAmount().multiply(new BigDecimal(times));
+        BigDecimal needPayAmount = priceTimeSettingInfo.getPrice().multiply(new BigDecimal(times));
 
         UserBaseInfo userBaseInfo = userService.getUserById(userId);
 
@@ -124,7 +124,7 @@ public class BarpinService {
             userConsumeType = UserConsumeTypeEnum.BAR_FOR_OTHER;
         }
         UserConsumeOrder userConsumeOrder = userConsumeOrderService.createUserConsumeOrder(merchantId,userId,barrageInfo.getUserId(),
-                needPayAmount,new Date(),new Long(priceTimeSettingInfo.getTimesid()),priceTimeSettingInfo.getTimesdesc(),times,userConsumeType,userIp);
+                needPayAmount,new Date(),new Long(priceTimeSettingInfo.getTimeId()),priceTimeSettingInfo.getTimeDesc(),times,userConsumeType,userIp);
 
         //修改消息
         barrageInfo.setStatus(BarrageStatusEnum.BA.getState());

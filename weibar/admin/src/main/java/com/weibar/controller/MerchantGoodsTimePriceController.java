@@ -55,7 +55,24 @@ public class MerchantGoodsTimePriceController extends AbstractController{
 
 
 
+    @RequestMapping(value = "/admin/getPriceTimeSettingInfos" ,method = {RequestMethod.POST,RequestMethod.GET})
+    public Object getPriceTimeSettingInfos(HttpServletRequest request) throws BaseException {
+        return BaseResult.getSuccessfulResult(priceTimeService.getPriceTimeSettingInfos(getMerchantInfoFromSession(request).getMerchantId()));
+    }
 
 
+    @RequestMapping(value = "/admin/getPriceTimeSettingInfo" ,method = {RequestMethod.POST,RequestMethod.GET})
+    public Object getPriceTimeSettingInfo(HttpServletRequest request,@RequestParam Integer timeId) throws BaseException {
+        return BaseResult.getSuccessfulResult(priceTimeService.getPriceTimeSettingInfoById(getMerchantInfoFromSession(request).getMerchantId(),timeId));
+    }
+
+
+    @RequestMapping(value = "/admin/updatePriceTimeSettingInfo" ,method = {RequestMethod.POST,RequestMethod.GET})
+    public Object updatePriceTimeSettingInfo(HttpServletRequest request,
+                                             @RequestParam Integer timeId,
+                                             @RequestParam BigDecimal timePrice) throws BaseException {
+        priceTimeService.updatePriceTimeSettingInfo(timeId,getMerchantInfoFromSession(request).getMerchantId(),timePrice);
+        return BaseResult.getSuccessfulResult(null);
+    }
 
 }
