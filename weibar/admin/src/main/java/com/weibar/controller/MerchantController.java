@@ -3,7 +3,9 @@ package com.weibar.controller;
 
 import com.weibar.pojo.exception.BaseException;
 import com.weibar.pojo.result.BaseResult;
+import com.weibar.service.function.GoodsService;
 import com.weibar.service.function.MerchantService;
+import com.weibar.service.function.PriceTimeService;
 import com.weibar.service.function.SharingRatioService;
 import com.weibar.utils.EncryptUtil;
 import org.slf4j.Logger;
@@ -26,6 +28,11 @@ public class MerchantController extends AbstractController {
 
     @Autowired
     private SharingRatioService sharingRatioService;
+
+    @Autowired
+    private GoodsService goodsService;
+    @Autowired
+    private PriceTimeService priceTimeService;
 
 
     @RequestMapping(value = "/admin/editAffiliateShareRatio" ,method = {RequestMethod.POST,RequestMethod.GET})
@@ -54,7 +61,7 @@ public class MerchantController extends AbstractController {
 
 
     @RequestMapping(value = "/admin/getMerchantInfo" ,method = {RequestMethod.POST,RequestMethod.GET})
-    public Object getMerchantInfo( HttpServletRequest request,@RequestParam Long parentMerchantId) throws BaseException {
+    public Object getMerchantInfo( HttpServletRequest request) throws BaseException {
         return BaseResult.getSuccessfulResult(merchantService.getMerchantInfo(getMerchantInfoFromSession(request).getMerchantId()));
     }
 
@@ -72,6 +79,17 @@ public class MerchantController extends AbstractController {
 
         String md5pwd = EncryptUtil.getMD5(loginName + pwd);
         return BaseResult.getSuccessfulResult(merchantService.createMerchant(loginName,name,md5pwd,parentMerchantId,roleId));
+    }
+
+
+    @RequestMapping(value = "/admin/generateTimeAndGoodsInfo" ,method = {RequestMethod.POST,RequestMethod.GET})
+    public Object generateTimeAndGoodsInfo( HttpServletRequest request) throws BaseException {
+
+        Long merchantId = getMerchantInfoFromSession(request).getMerchantId();
+        goodsService.generateMerchantDefaultGoods(merchantId);
+        priceTimeService.generatePriceTimeSettingInfo(merchantId);
+        return BaseResult.getSuccessfulResult(null);
+        
     }
 
 
