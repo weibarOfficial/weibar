@@ -21,7 +21,7 @@
                 <div class="span12">
                     <h3 class="page-title">
                         商户管理
-                        <small>信息总览</small>
+                        <small>修改密码</small>
                     </h3>
                 </div>
             </div>
@@ -36,35 +36,12 @@
 
                         <div class="portlet-title">
 
-                            <div class="caption"><i class="icon-globe"></i>信息总览</div>
+                            <div class="caption"><i class="icon-globe"></i>修改密码</div>
 
                             <div class="actions">
 
                                 <div class="btn-group">
-                                    <!--
-                                    <a class="btn" href="#" data-toggle="dropdown">
 
-                                        Columns
-
-                                        <i class="icon-angle-down"></i>
-
-                                    </a>
-                                    -->
-                                    <!--
-                                    <div id="sample_2_column_toggler" class="dropdown-menu hold-on-click dropdown-checkboxes pull-right">
-
-                                        <label><input type="checkbox" checked data-column="0">Rendering engine</label>
-
-                                        <label><input type="checkbox" checked data-column="1">Browser</label>
-
-                                        <label><input type="checkbox" checked data-column="2">Platform(s)</label>
-
-                                        <label><input type="checkbox" checked data-column="3">Engine version</label>
-
-                                        <label><input type="checkbox" checked data-column="4">CSS grade</label>
-
-                                    </div>
-                                    -->
                                 </div>
 
                             </div>
@@ -74,7 +51,7 @@
                             <div class="tab-content table-full-width">
                                 <div class="tab-pane active" id="portlet_tab1">
                                     <form action="#" class="form-horizontal">
-                                         <div class="control-group">
+                                        <div class="control-group">
                                             <label class="control-label">商户ID</label>
                                             <div class="controls">
                                                 <input class="m-wrap medium" type="text" value="${mInfo.merchantIdStr}" disabled />
@@ -96,42 +73,36 @@
                                             </div>
                                         </div>
                                         <div class="control-group">
-                                            <label class="control-label">霸屏分成比例</label>
+                                            <label class="control-label">原密码</label>
                                             <div class="controls">
-                                                <input class="m-wrap medium" type="text" value="${mInfo.sharingRatioBarpinStr}" disabled />
+                                                <input class="m-wrap medium" id="oldPwd" type="password" value=""  />
                                                 <span class="help-inline"></span>
                                             </div>
                                         </div>
                                         <div class="control-group">
-                                            <label class="control-label">红包分成比例</label>
+                                            <label class="control-label">新密码</label>
                                             <div class="controls">
-                                                <input class="m-wrap medium" type="text" value="${mInfo.sharingRatioRedpStr}" disabled />
+                                                <input class="m-wrap medium" id="newPwd" type="password" value=""/>
                                                 <span class="help-inline"></span>
                                             </div>
                                         </div>
                                         <div class="control-group">
-                                            <label class="control-label">打赏分成比例</label>
+                                            <label class="control-label">再输新密码</label>
                                             <div class="controls">
-                                                <input class="m-wrap medium" type="text" value="${mInfo.sharingRatioGiveStr}" disabled />
+                                                <input class="m-wrap medium" id="newPwdConfirm" type="password" value="" />
                                                 <span class="help-inline"></span>
                                             </div>
                                         </div>
 
 
-                                        <div class="control-group">
-                                            <label class="control-label">商户二维码</label>
-                                            <div class="controls">
-                                                <img src="${mInfo.QRCodeUrl}"  alt="" width="200px" height="200px" />
-                                            </div>
-                                        </div>
-                                        <!--
+
                                         <div class="form-actions">
 
-                                            <button type="submit" class="btn blue"><i class="icon-ok"></i> Save</button>
+                                            <button type="submit" class="btn blue" id="btnModifyPwd"><i class="icon-ok"></i> 修改密码</button>
 
-                                            <button type="button" class="btn">Cancel</button>
+                                            <!-- <button type="button" class="btn">Cancel</button> -->
 
-                                        </div>-->
+                                        </div>
                                     </form>
                                 </div>
                             </div>
@@ -152,52 +123,31 @@
 
 <#include "../common/footer.ftl">
 <script src="media/js/app.js"></script>
-
+<script src="media/js/index.js" type="text/javascript"></script>
 <script>
 
     jQuery(document).ready(function () {
         App.init(); // initlayout and core plugins
         //TableAdvanced.init();
+
+        Index.init();
     });
 
 
 
-    $(".editShare").click(function(){
-        var merchantid = $(this).data("merchantid");
 
+    $("#btnModifyPwd").click(function(){
+
+        var oldPwd = $("#oldPwd").val();
+        var newPwd = $("#newPwd").val();
+        var newPwdConfirm = $("#newPwdConfirm").val();
         $.ajax({
             method: "POST",
-            url: "/admin/getAffiliateById",
-            data: { affiliateId: merchantid }
-        }).done(function( msg ) {
-            console.log(msg);
-            if(msg.code != 0){
-                alert("错误码:" + msg.code + " " + msg.message);
-                return;
-            }
-            $("#editSharingRatioBarpin").val(msg.data.sharingRatioBarpin/10.0);
-            $("#editSharingRatioGive").val(msg.data.sharingRatioGive/10.0);
-            $("#editSharingRatioRedp").val(msg.data.sharingRatioRedp/10.0);
-            $("#editAffiliateId").val(merchantid);
-
-        });
-    });
-
-    $(".editButton").click(function(){
-        console.log($(this).parent().parent().find("#editAffiliateId").val());
-        console.log($(this).parent().parent().find("#editSharingRatioBarpin").val());
-        var affiliateId = $(this).parent().parent().find("#editAffiliateId").val();
-        var sharingRatioBarpin = Math.floor($(this).parent().parent().find("#editSharingRatioBarpin").val() * 10);
-        var sharingRatioGive = Math.floor($(this).parent().parent().find("#editSharingRatioGive").val()* 10);
-        var sharingRatioRedp = Math.floor($(this).parent().parent().find("#editSharingRatioRedp").val()* 10);
-        $.ajax({
-            method: "POST",
-            url: "/admin/editAffiliateShareRatio",
+            url: "/admin/modifyPwd",
             data: {
-                affiliateId: affiliateId,
-                sharingRatioBarpin:sharingRatioBarpin,
-                sharingRatioGive:sharingRatioGive,
-                sharingRatioRedp:sharingRatioRedp
+                oldPwd: oldPwd,
+                newPwd: newPwd,
+                newPwdConfirm:newPwdConfirm
             }
         }).done(function( msg ) {
             console.log(msg);

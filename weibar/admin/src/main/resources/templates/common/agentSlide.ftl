@@ -49,10 +49,16 @@
                             信息总览</a>
                     </li>
                     <li>
+                        <a href="/admin/page/modifyPwd">
+                            <i class="icon-time"></i>
+                            修改密码</a>
+                    </li>
+                    <li>
                         <a href="/admin/page/getAffiliates">
                             <i class="icon-time"></i>
                             下属商户</a>
                     </li>
+
                 </ul>
             </li>
         </ul>

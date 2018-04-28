@@ -37,30 +37,7 @@
                             <div class="actions">
 
                                 <div class="btn-group">
-                                    <!--
-                                    <a class="btn" href="#" data-toggle="dropdown">
 
-                                        Columns
-
-                                        <i class="icon-angle-down"></i>
-
-                                    </a>
-                                    -->
-                                    <!--
-                                    <div id="sample_2_column_toggler" class="dropdown-menu hold-on-click dropdown-checkboxes pull-right">
-
-                                        <label><input type="checkbox" checked data-column="0">Rendering engine</label>
-
-                                        <label><input type="checkbox" checked data-column="1">Browser</label>
-
-                                        <label><input type="checkbox" checked data-column="2">Platform(s)</label>
-
-                                        <label><input type="checkbox" checked data-column="3">Engine version</label>
-
-                                        <label><input type="checkbox" checked data-column="4">CSS grade</label>
-
-                                    </div>
-                                    -->
                                 </div>
 
                             </div>

@@ -105,6 +105,14 @@ public class PageController extends AbstractController{
     }
 
 
+    @RequestMapping(value = "/admin/page/modifyPwd", method = {RequestMethod.GET,RequestMethod.POST})
+    public String modifyPwd(Model model,HttpServletRequest request) throws BaseException {
+        model.addAttribute(PAGE_NAME,"修改密码");
+        model.addAttribute("mInfo",merchantService.getMerchantInfo(getMerchantInfoFromSession(request).getMerchantId()));
+        return "merchant/modifyPwd";
+    }
+
+
 
     @RequestMapping(value = "/admin/page/goodsIndex", method = {RequestMethod.GET,RequestMethod.POST})
     public String goodsIndex(Model model,HttpServletRequest request) throws BaseException {

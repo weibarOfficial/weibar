@@ -1,8 +1,10 @@
 package com.weibar.controller;
 
 
+import com.weibar.pojo.enu.ErrorCodeEnum;
 import com.weibar.pojo.exception.BaseException;
 import com.weibar.pojo.result.BaseResult;
+import com.weibar.pojo.result.MerchantInfo;
 import com.weibar.service.function.GoodsService;
 import com.weibar.service.function.MerchantService;
 import com.weibar.service.function.PriceTimeService;
@@ -25,10 +27,8 @@ public class MerchantController extends AbstractController {
 
     @Autowired
     private MerchantService merchantService;
-
     @Autowired
     private SharingRatioService sharingRatioService;
-
     @Autowired
     private GoodsService goodsService;
     @Autowired
@@ -41,9 +41,6 @@ public class MerchantController extends AbstractController {
                                           @RequestParam Integer sharingRatioBarpin,
                                           @RequestParam Integer sharingRatioGive,
                                           @RequestParam Integer sharingRatioRedp) throws BaseException {
-
-
-
 
         sharingRatioService.editAffiliateShareRatio(getMerchantInfoFromSession(request).getMerchantId(),
                 affiliateId,sharingRatioBarpin,sharingRatioGive,sharingRatioRedp);
@@ -81,6 +78,19 @@ public class MerchantController extends AbstractController {
         return BaseResult.getSuccessfulResult(merchantService.createMerchant(loginName,name,md5pwd,parentMerchantId,roleId));
     }
 
+    @RequestMapping(value = "/admin/modifyPwd" ,method = {RequestMethod.POST,RequestMethod.GET})
+    public Object modifyPwd(HttpServletRequest request,
+                                 @RequestParam String oldPwd,@RequestParam String newPwd,@RequestParam String newPwdConfirm) throws BaseException {
+
+        if(!newPwd.equals(newPwdConfirm)){
+            throw BaseException.getException(ErrorCodeEnum.MERCHANT_MERCHANT_PWD_CONFIRM_ERROR.getCode());
+        }
+        MerchantInfo merchantInfo = merchantService.getMerchantInfo(getMerchantInfoFromSession(request).getMerchantId());
+        String md5pwd = EncryptUtil.getMD5(merchantInfo.getLoginName() + oldPwd);
+        return BaseResult.getSuccessfulResult(merchantService.modifyPwd(merchantInfo.getLoginName(),md5pwd,newPwd));
+    }
+
+
 
     @RequestMapping(value = "/admin/generateTimeAndGoodsInfo" ,method = {RequestMethod.POST,RequestMethod.GET})
     public Object generateTimeAndGoodsInfo( HttpServletRequest request) throws BaseException {
@@ -89,7 +99,7 @@ public class MerchantController extends AbstractController {
         goodsService.generateMerchantDefaultGoods(merchantId);
         priceTimeService.generatePriceTimeSettingInfo(merchantId);
         return BaseResult.getSuccessfulResult(null);
-        
+
     }
 
 

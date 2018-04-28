@@ -73,6 +73,10 @@ public class MerchantService {
 
 
 
+
+
+
+
     /**
      * 获取直接下属机构
      * @param merchantId
@@ -165,6 +169,15 @@ public class MerchantService {
 
         userBalanceService.createMerchantUserBalnceIfNotExist(MERCHANT_HANGZHOU_ID);
         return getMerchantInfo(merchantsBaseInfo.getMerchantid());
+    }
+
+
+    public MerchantInfo modifyPwd(String loginName,String md5Pwd,String newPwd) throws BaseException {
+        verifyPwd(loginName,md5Pwd);
+        WeibarMerchantsBaseInfo merchantInfo = getMerchantInfosByLoginName(loginName);
+        merchantInfo.setHashPwd(EncryptUtil.getMD5(EncryptUtil.getMD5(loginName + newPwd ) + merchantInfo.getHashSalt()));
+        weibarMerchantsBaseInfoMapper.updateByPrimaryKey(merchantInfo);
+        return MerchantInfo.getMerchantInfo(merchantInfo);
     }
 
 
@@ -354,6 +367,20 @@ public class MerchantService {
         criteria.andMerchantsNameLike("%" + name + "%");
         List<WeibarMerchantsBaseInfo> merchantsBaseInfoList =  weibarMerchantsBaseInfoMapper.selectByExample(weibarMerchantsBaseInfoCriteria);
         return MerchantInfo.getMerchantInfos(merchantsBaseInfoList);
+    }
+
+
+    public WeibarMerchantsBaseInfo getMerchantInfosByLoginName(String loginName) throws BaseException {
+        WeibarMerchantsBaseInfoCriteria weibarMerchantsBaseInfoCriteria = new WeibarMerchantsBaseInfoCriteria();
+        WeibarMerchantsBaseInfoCriteria.Criteria criteria = weibarMerchantsBaseInfoCriteria.createCriteria();
+        criteria.andLoginNameEqualTo(loginName);
+        List<WeibarMerchantsBaseInfo> merchantsBaseInfoList =  weibarMerchantsBaseInfoMapper.selectByExample(weibarMerchantsBaseInfoCriteria);
+        if(merchantsBaseInfoList == null || merchantsBaseInfoList.size() == 0){
+            throw BaseException.getException(ErrorCodeEnum.MERCHANT_MERCHANT_NAME_NOT_EXIST.getCode());
+        }else{
+            return merchantsBaseInfoList.get(0);
+        }
+
     }
 
 

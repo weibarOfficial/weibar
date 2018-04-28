@@ -48,6 +48,11 @@
                         信息总览</a>
                 </li>
                 <li>
+                    <a href="/admin/page/modifyPwd">
+                        <i class="icon-time"></i>
+                        修改密码</a>
+                </li>
+                <li>
                     <a href="/admin/page/goodsIndex">
                         <i class="icon-time"></i>
                         商品信息</a>
@@ -57,6 +62,7 @@
                         <i class="icon-time"></i>
                         霸屏时长</a>
                 </li>
+
             </ul>
             </li>
 
